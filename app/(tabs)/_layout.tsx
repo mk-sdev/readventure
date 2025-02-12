@@ -1,15 +1,14 @@
-import React from 'react'
+import Feather from '@expo/vector-icons/Feather'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
+import Octicons from '@expo/vector-icons/Octicons'
 import { Link, Tabs } from 'expo-router'
+import React from 'react'
 import { Pressable } from 'react-native'
 
-import Octicons from '@expo/vector-icons/Octicons'
-import Feather from '@expo/vector-icons/Feather'
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
-
-import Colors from '@/constants/Colors'
-import { useColorScheme } from '@/components/useColorScheme'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
+import { useColorScheme } from '@/components/useColorScheme'
+import Colors from '@/constants/Colors'
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {

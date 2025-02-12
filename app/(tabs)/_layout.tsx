@@ -1,22 +1,36 @@
-import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
+import React from 'react'
+import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { Link, Tabs } from 'expo-router'
+import { Pressable } from 'react-native'
 
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import Octicons from '@expo/vector-icons/Octicons'
+import Feather from '@expo/vector-icons/Feather'
+import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
+
+import Colors from '@/constants/Colors'
+import { useColorScheme } from '@/components/useColorScheme'
+import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
+  name: 'home' | 'settings' | 'last-texts'
+  color: string
 }) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
+  switch (props.name) {
+    case 'home':
+      return <Octicons name="home" size={24} color={props.color} />
+    case 'settings':
+      return <Feather name="settings" size={24} color={props.color} />
+    case 'last-texts':
+      return <FontAwesome5 name="history" size={24} color={props.color} />
+    default:
+      return <FontAwesome name="home" color={props.color} /> // Default to home icon if not specified.
+  }
+  //return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />
 }
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme()
 
   return (
     <Tabs
@@ -25,35 +39,47 @@ export default function TabLayout() {
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
         headerShown: useClientOnlyValue(false, true),
-      }}>
+      }}
+    >
       <Tabs.Screen
-        name="index"
+        name="settings"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: 'Settings',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="settings" color={color} />
           ),
         }}
       />
       <Tabs.Screen
-        name="two"
+        name="index"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Home',
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
+          // headerRight: () => (
+          //   <Link href="/modal" asChild>
+          //     <Pressable>
+          //       {({ pressed }) => (
+          //         <FontAwesome
+          //           name="info-circle"
+          //           size={25}
+          //           color={Colors[colorScheme ?? 'light'].text}
+          //           style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+          //         />
+          //       )}
+          //     </Pressable>
+          //   </Link>
+          //),
+        }}
+      />
+      <Tabs.Screen
+        name="last-texts"
+        options={{
+          title: 'Last texts',
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon name="last-texts" color={color} />
+          ),
         }}
       />
     </Tabs>
-  );
+  )
 }

@@ -3,38 +3,12 @@ import { useEffect, useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 
 import { Text, View } from '@/components/Themed'
+import { translations } from '@/constants/translations'
 import { clearAsyncStorage, getValue, setValue } from '@/utils/async-storage'
 
-const translations = {
-  en: {
-    chooseHomeLanguage: 'Choose your home language',
-    homeLanguageInfo:
-      "If you don't see your home language, choose the one you're most familiar with",
-    chooseForeignLanguage:
-      'Which of these languages are you most interested in?',
-    foreignLanguages: {
-      de: 'German',
-      it: 'Italian',
-      pl: 'Polish',
-      es: 'Spanish',
-    },
-  },
-  pl: {
-    chooseHomeLanguage: 'Wybierz swój język ojczysty',
-    homeLanguageInfo:
-      'Jeśli nie widzisz swojego języka ojczystego, wybierz ten, który znasz najlepiej',
-    chooseForeignLanguage: 'Które z tych języków Cię najbardziej interesują?',
-    foreignLanguages: {
-      en: 'Angielski',
-      es: 'Hiszpański',
-      de: 'Niemiecki',
-      it: 'Włoski',
-    },
-  },
-}
-
 const DEFAULT_HOME_LANGUAGE = 'en'
-const LANGUAGE_STORAGE_KEY = 'appLanguage'
+const HOME_LANGUAGE_STORAGE_KEY = 'appLanguage'
+const INTEREST_LANGUAGES_STORAGE_KEY = 'interestLanguages'
 
 const homeLanguages = ['en', 'pl'] as const
 
@@ -106,12 +80,13 @@ export default function SettingsScreen() {
   useEffect(() => {
     const loadLanguages = async () => {
       const storedHomeLang = (await AsyncStorage.getItem(
-        LANGUAGE_STORAGE_KEY,
+        HOME_LANGUAGE_STORAGE_KEY,
       )) as homeLanguages
       setSelectedHomeLanguage(storedHomeLang ? storedHomeLang : 'en')
 
-      const storedForeignLangs: foreignLanguages[] =
-        await getValue('interestLanguages')
+      const storedForeignLangs: foreignLanguages[] = await getValue(
+        INTEREST_LANGUAGES_STORAGE_KEY,
+      )
       setSelectedForeignLanguages(storedForeignLangs ? storedForeignLangs : [])
     }
     loadLanguages()
@@ -120,12 +95,12 @@ export default function SettingsScreen() {
   // Zmiana języka ojczystego
   const handleSelectHomeLanguage = (lang: homeLanguages) => {
     setSelectedHomeLanguage(lang)
-    AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, lang)
+    AsyncStorage.setItem(HOME_LANGUAGE_STORAGE_KEY, lang)
   }
 
   // Zmiana języków obcych
   async function handleSelectForeignLanguages(lang: foreignLanguages) {
-    let interestLanguages = await getValue('interestLanguages')
+    let interestLanguages = await getValue(INTEREST_LANGUAGES_STORAGE_KEY)
     interestLanguages ||= []
     if (interestLanguages.includes(lang)) {
       interestLanguages = interestLanguages.filter(
@@ -156,39 +131,24 @@ export default function SettingsScreen() {
       <Text style={styles.title}>
         {translations[selectedHomeLanguage].chooseForeignLanguage}
       </Text>
-      {selectedHomeLanguage === 'pl' &&
-        Object.keys(translations.pl.foreignLanguages).map(key => {
-          const languageKey =
-            key as keyof typeof translations.pl.foreignLanguages
-          let lang =
-            translations[selectedHomeLanguage].foreignLanguages[languageKey]
-          return (
-            <ForeignOption
-              key={languageKey}
-              selectedForeignLanguages={selectedForeignLanguages}
-              lang={languageKey}
-              text={lang}
-              onPress={() => handleSelectForeignLanguages(languageKey)}
-            />
-          )
-        })}
 
-      {selectedHomeLanguage === 'en' &&
-        Object.keys(translations.en.foreignLanguages).map(key => {
-          const languageKey =
-            key as keyof typeof translations.en.foreignLanguages
-          let lang =
-            translations[selectedHomeLanguage].foreignLanguages[languageKey]
+      {Object.keys(translations[selectedHomeLanguage].foreignLanguages).map(
+        key => {
+          const langCode = key as foreignLanguages
+          let langText: string =
+            // @ts-ignore
+            translations[selectedHomeLanguage].foreignLanguages[langCode]
           return (
             <ForeignOption
-              key={languageKey}
+              key={langCode}
               selectedForeignLanguages={selectedForeignLanguages}
-              lang={languageKey}
-              text={lang}
-              onPress={() => handleSelectForeignLanguages(languageKey)}
+              lang={langCode}
+              text={langText}
+              onPress={() => handleSelectForeignLanguages(langCode)}
             />
           )
-        })}
+        },
+      )}
     </View>
   )
 }

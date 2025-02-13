@@ -11,6 +11,7 @@ import {
 import { translations } from '@/constants/translations'
 import { foreignLanguages, homeLanguages } from '@/constants/Types'
 import { clearAsyncStorage, getValue, setValue } from '@/utils/async-storage'
+import returnFlag from '@/utils/functions'
 
 //const homeLanguages = ['en', 'pl'] as const
 
@@ -35,6 +36,7 @@ function HomeOption({
         pressed && styles.pressed,
       ]}
     >
+      {returnFlag(lang)}
       <Text>{text}</Text>
     </Pressable>
   )
@@ -64,6 +66,7 @@ function ForeignOption({
         pressed && styles.pressed,
       ]}
     >
+      {returnFlag(lang)}
       <Text>{text}</Text>
     </Pressable>
   )
@@ -174,6 +177,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#ddd',
     width: '80%',
     alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10
   },
   pressed: {
     backgroundColor: '#bbb',

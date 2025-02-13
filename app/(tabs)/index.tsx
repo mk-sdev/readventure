@@ -2,6 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, TextInput } from 'react-native'
+import { Image } from 'react-native'
 import DropDownPicker from 'react-native-dropdown-picker'
 
 import { Text, View } from '@/components/Themed'
@@ -13,6 +14,7 @@ import {
 import { translations } from '@/constants/translations'
 import { foreignLanguages, homeLanguages } from '@/constants/Types'
 import { getValue } from '@/utils/async-storage'
+import returnFlag from '@/utils/functions'
 
 export default function HomeScreen() {
   const [selectedHomeLanguage, setSelectedHomeLanguage] =
@@ -62,7 +64,6 @@ export default function HomeScreen() {
         item => !selectedForeignLanguages.includes(item.value),
       ),
     ]
-
     setItems(newItems)
     setValue(newItems[0].value)
   }, [selectedForeignLanguages, selectedHomeLanguage])
@@ -80,7 +81,7 @@ export default function HomeScreen() {
         }
         style={styles.input}
       />
-
+      {value && returnFlag(value)}
       <View style={{ width: '90%', marginTop: 30 }}>
         <Text style={styles.label}>
           {translations[selectedHomeLanguage].languageLabel}

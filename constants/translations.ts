@@ -11,6 +11,10 @@ export const translations = {
       pl: 'Polish',
       es: 'Spanish',
     },
+    textDescriptionLabel: 'Description of your text',
+    textDescriptionPlaceholder:
+      'e.g., A story about a brave knight and its adventures',
+    languageLabel: 'Choose a language',
   },
   pl: {
     chooseHomeLanguage: 'Wybierz swój język ojczysty',
@@ -23,5 +27,9 @@ export const translations = {
       de: 'Niemiecki',
       it: 'Włoski',
     },
+    textDescriptionLabel: 'Opis twojego tekstu',
+    textDescriptionPlaceholder:
+      'np. Opowieść o odważnym rycerzu i jego przygodach',
+    languageLabel: 'Wybierz język',
   },
 }

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 
 import { Text, View } from '@/components/Themed'
-import { getValue, setValue } from '@/utils/async-storage'
+import { clearAsyncStorage, getValue, setValue } from '@/utils/async-storage'
 
 const translations = {
   en: {
@@ -71,10 +71,12 @@ function ForeignOption({
   lang,
   onPress,
   selectedForeignLanguages,
+  text,
 }: {
   lang: foreignLanguages
   onPress: () => void
   selectedForeignLanguages: foreignLanguages[]
+  text: string
 }) {
   return (
     <Pressable
@@ -89,7 +91,7 @@ function ForeignOption({
         pressed && styles.pressed,
       ]}
     >
-      <Text>{lang}</Text>
+      <Text>{text}</Text>
     </Pressable>
   )
 }
@@ -103,8 +105,14 @@ export default function SettingsScreen() {
 
   useEffect(() => {
     const loadLanguages = async () => {
-      const storedHomeLang = await AsyncStorage.getItem(LANGUAGE_STORAGE_KEY)
-      if (storedHomeLang) setSelectedHomeLanguage(storedHomeLang as 'en' | 'pl')
+      const storedHomeLang = (await AsyncStorage.getItem(
+        LANGUAGE_STORAGE_KEY,
+      )) as homeLanguages
+      setSelectedHomeLanguage(storedHomeLang ? storedHomeLang : 'en')
+
+      const storedForeignLangs: foreignLanguages[] =
+        await getValue('interestLanguages')
+      setSelectedForeignLanguages(storedForeignLangs ? storedForeignLangs : [])
     }
     loadLanguages()
   }, [])
@@ -159,6 +167,7 @@ export default function SettingsScreen() {
               key={languageKey}
               selectedForeignLanguages={selectedForeignLanguages}
               lang={languageKey}
+              text={lang}
               onPress={() => handleSelectForeignLanguages(languageKey)}
             />
           )
@@ -175,6 +184,7 @@ export default function SettingsScreen() {
               key={languageKey}
               selectedForeignLanguages={selectedForeignLanguages}
               lang={languageKey}
+              text={lang}
               onPress={() => handleSelectForeignLanguages(languageKey)}
             />
           )

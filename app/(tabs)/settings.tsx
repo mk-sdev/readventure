@@ -3,17 +3,16 @@ import { useEffect, useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 
 import { Text, View } from '@/components/Themed'
+import {
+  DEFAULT_HOME_LANGUAGE,
+  HOME_LANGUAGE_STORAGE_KEY,
+  INTEREST_LANGUAGES_STORAGE_KEY,
+} from '@/constants/StoregeKeys'
 import { translations } from '@/constants/translations'
+import { foreignLanguages, homeLanguages } from '@/constants/Types'
 import { clearAsyncStorage, getValue, setValue } from '@/utils/async-storage'
 
-const DEFAULT_HOME_LANGUAGE = 'en'
-const HOME_LANGUAGE_STORAGE_KEY = 'appLanguage'
-const INTEREST_LANGUAGES_STORAGE_KEY = 'interestLanguages'
-
-const homeLanguages = ['en', 'pl'] as const
-
-type homeLanguages = 'en' | 'pl'
-type foreignLanguages = 'en' | 'pl' | 'es' | 'it' | 'de'
+//const homeLanguages = ['en', 'pl'] as const
 
 function HomeOption({
   lang,
@@ -82,7 +81,9 @@ export default function SettingsScreen() {
       const storedHomeLang = (await AsyncStorage.getItem(
         HOME_LANGUAGE_STORAGE_KEY,
       )) as homeLanguages
-      setSelectedHomeLanguage(storedHomeLang ? storedHomeLang : 'en')
+      setSelectedHomeLanguage(
+        storedHomeLang ? storedHomeLang : DEFAULT_HOME_LANGUAGE,
+      )
 
       const storedForeignLangs: foreignLanguages[] = await getValue(
         INTEREST_LANGUAGES_STORAGE_KEY,
@@ -119,7 +120,8 @@ export default function SettingsScreen() {
         {translations[selectedHomeLanguage].chooseHomeLanguage}
       </Text>
       <Text>{translations[selectedHomeLanguage].homeLanguageInfo}</Text>
-      {homeLanguages.map(lang => (
+
+      {(['en', 'pl'] as homeLanguages[]).map(lang => (
         <HomeOption
           key={lang}
           lang={lang}

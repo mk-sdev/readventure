@@ -2,16 +2,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, TextInput } from 'react-native'
-import { Image } from 'react-native'
+import { Pressable } from 'react-native'
 import DropDownPicker from 'react-native-dropdown-picker'
 
 import { Text, View } from '@/components/Themed'
 import {
   DEFAULT_HOME_LANGUAGE,
+  FAV_LANGUAGES_STORAGE_KEY,
   HOME_LANGUAGE_STORAGE_KEY,
-  INTEREST_LANGUAGES_STORAGE_KEY,
-} from '@/constants/StoregeKeys'
-import { translations } from '@/constants/translations'
+} from '@/constants/StorageKeys'
+import { translations } from '@/constants/Translations'
 import { foreignLanguages, homeLanguages } from '@/constants/Types'
 import { getValue } from '@/utils/async-storage'
 import returnFlag from '@/utils/functions'
@@ -23,9 +23,9 @@ export default function HomeScreen() {
     foreignLanguages[]
   >([])
 
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState<foreignLanguages | null>(null)
-  const [items, setItems] = useState<{ label: string; value: string }[]>([])
+  const [openDropDown, setOpenDropDown] = useState(false)
+  const [dropDownValue, setDropDownValue] = useState<foreignLanguages | null>(null)
+  const [dropDownItems, setDropDownItems] = useState<{ label: string; value: string }[]>([])
 
   useFocusEffect(
     useCallback(() => {
@@ -38,7 +38,7 @@ export default function HomeScreen() {
         )
 
         const storedForeignLangs: foreignLanguages[] = await getValue(
-          INTEREST_LANGUAGES_STORAGE_KEY,
+          FAV_LANGUAGES_STORAGE_KEY,
         )
         setSelectedForeignLanguages(
           storedForeignLangs ? storedForeignLangs : [],
@@ -64,8 +64,8 @@ export default function HomeScreen() {
         item => !selectedForeignLanguages.includes(item.value),
       ),
     ]
-    setItems(newItems)
-    setValue(newItems[0].value)
+    setDropDownItems(newItems)
+    setDropDownValue(newItems[0].value)
   }, [selectedForeignLanguages, selectedHomeLanguage])
 
   return (
@@ -81,19 +81,48 @@ export default function HomeScreen() {
         }
         style={styles.input}
       />
-      {value && returnFlag(value)}
+      {dropDownValue && returnFlag(dropDownValue)}
       <View style={{ width: '90%', marginTop: 30 }}>
         <Text style={styles.label}>
           {translations[selectedHomeLanguage].languageLabel}
         </Text>
         <DropDownPicker
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
+          open={openDropDown}
+          value={dropDownValue}
+          items={dropDownItems}
+          setOpen={setOpenDropDown}
+          setValue={setDropDownValue}
+          setItems={setDropDownItems}
         />
+      </View>
+      <View
+        style={{
+          flexDirection: 'row',
+          flexWrap: 'wrap',
+          gap: 10,
+          width: '90%',
+          marginTop: 10,
+          justifyContent: 'center',
+        }}
+      >
+        <Pressable>
+          <Text style={styles.level}>A1</Text>
+        </Pressable>
+        <Pressable>
+          <Text style={styles.level}>A2</Text>
+        </Pressable>
+        <Pressable>
+          <Text style={styles.level}>B1</Text>
+        </Pressable>
+        <Pressable>
+          <Text style={styles.level}>B2</Text>
+        </Pressable>
+        <Pressable>
+          <Text style={styles.level}>C1</Text>
+        </Pressable>
+        <Pressable>
+          <Text style={styles.level}>C2</Text>
+        </Pressable>
       </View>
     </View>
   )
@@ -117,5 +146,9 @@ const styles = StyleSheet.create({
     width: '90%',
     padding: 10,
     borderRadius: 5,
+  },
+  level: {
+    backgroundColor: 'red',
+    fontSize: 30,
   },
 })

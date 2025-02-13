@@ -1,17 +1,16 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useEffect, useState } from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useEffect, useState } from 'react';
+import { Pressable, StyleSheet } from 'react-native';
 
-import { Text, View } from '@/components/Themed'
-import {
-  DEFAULT_HOME_LANGUAGE,
-  HOME_LANGUAGE_STORAGE_KEY,
-  INTEREST_LANGUAGES_STORAGE_KEY,
-} from '@/constants/StoregeKeys'
-import { translations } from '@/constants/translations'
-import { foreignLanguages, homeLanguages } from '@/constants/Types'
-import { clearAsyncStorage, getValue, setValue } from '@/utils/async-storage'
-import returnFlag from '@/utils/functions'
+
+
+import { Text, View } from '@/components/Themed';
+import { DEFAULT_HOME_LANGUAGE, FAV_LANGUAGES_STORAGE_KEY, HOME_LANGUAGE_STORAGE_KEY } from '@/constants/StorageKeys';
+import { translations } from '@/constants/Translations';
+import { foreignLanguages, homeLanguages } from '@/constants/Types';
+import { clearAsyncStorage, getValue, setValue } from '@/utils/async-storage';
+import returnFlag from '@/utils/functions';
+
 
 //const homeLanguages = ['en', 'pl'] as const
 
@@ -41,7 +40,7 @@ function HomeOption({
     </Pressable>
   )
 }
-
+// clearAsyncStorage()
 function ForeignOption({
   lang,
   onPress,
@@ -89,7 +88,7 @@ export default function SettingsScreen() {
       )
 
       const storedForeignLangs: foreignLanguages[] = await getValue(
-        INTEREST_LANGUAGES_STORAGE_KEY,
+        FAV_LANGUAGES_STORAGE_KEY,
       )
       setSelectedForeignLanguages(storedForeignLangs ? storedForeignLangs : [])
     }
@@ -104,7 +103,7 @@ export default function SettingsScreen() {
 
   // Zmiana języków obcych
   async function handleSelectForeignLanguages(lang: foreignLanguages) {
-    let interestLanguages = await getValue(INTEREST_LANGUAGES_STORAGE_KEY)
+    let interestLanguages = await getValue(FAV_LANGUAGES_STORAGE_KEY)
     interestLanguages ||= []
     if (interestLanguages.includes(lang)) {
       interestLanguages = interestLanguages.filter(
@@ -114,7 +113,7 @@ export default function SettingsScreen() {
       interestLanguages.push(lang)
     }
     setSelectedForeignLanguages(interestLanguages)
-    setValue('interestLanguages', interestLanguages)
+    setValue(FAV_LANGUAGES_STORAGE_KEY, interestLanguages)
   }
 
   return (
@@ -179,7 +178,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
-    gap: 10
+    gap: 10,
   },
   pressed: {
     backgroundColor: '#bbb',

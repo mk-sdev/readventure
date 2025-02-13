@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 
 import { Text, View } from '@/components/Themed'
+import { getValue, setValue } from '@/utils/async-storage'
 
 const translations = {
   en: {
@@ -12,10 +13,10 @@ const translations = {
     chooseForeignLanguage:
       'Which of these languages are you most interested in?',
     foreignLanguages: {
-      German: 'German',
-      Italian: 'Italian',
-      Polish: 'Polish',
-      Spanish: 'Spanish',
+      de: 'German',
+      it: 'Italian',
+      pl: 'Polish',
+      es: 'Spanish',
     },
   },
   pl: {
@@ -24,25 +25,69 @@ const translations = {
       'Jeśli nie widzisz swojego języka ojczystego, wybierz ten, który znasz najlepiej',
     chooseForeignLanguage: 'Które z tych języków Cię najbardziej interesują?',
     foreignLanguages: {
-      English: 'Angielski',
-      Spanish: 'Hiszpański',
-      German: 'Niemiecki',
-      Italian: 'Włoski',
+      en: 'Angielski',
+      es: 'Hiszpański',
+      de: 'Niemiecki',
+      it: 'Włoski',
     },
   },
 }
 
-// 📌 set English as default
 const DEFAULT_HOME_LANGUAGE = 'en'
 const LANGUAGE_STORAGE_KEY = 'appLanguage'
 
-const homeLanguages = ['English', 'Polish'] as const
+const homeLanguages = ['en', 'pl'] as const
 
-function Option({ lang, onPress }: { lang: string; onPress: () => void }) {
+type homeLanguages = 'en' | 'pl'
+type foreignLanguages = 'en' | 'pl' | 'es' | 'it' | 'de'
+
+function HomeOption({
+  lang,
+  onPress,
+  isSelected,
+}: {
+  lang: homeLanguages
+  onPress: () => void
+  isSelected: boolean
+}) {
+  const text = lang === 'pl' ? 'Polski' : 'English'
   return (
     <Pressable
       onPress={onPress}
-      style={({ pressed }) => [styles.option, pressed && styles.pressed]}
+      style={({ pressed }) => [
+        styles.option,
+        {
+          backgroundColor: isSelected ? 'red' : '#ddd',
+        },
+        pressed && styles.pressed,
+      ]}
+    >
+      <Text>{text}</Text>
+    </Pressable>
+  )
+}
+
+function ForeignOption({
+  lang,
+  onPress,
+  selectedForeignLanguages,
+}: {
+  lang: foreignLanguages
+  onPress: () => void
+  selectedForeignLanguages: foreignLanguages[]
+}) {
+  return (
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.option,
+        {
+          backgroundColor: selectedForeignLanguages.includes(lang)
+            ? 'red'
+            : '#ddd',
+        },
+        pressed && styles.pressed,
+      ]}
     >
       <Text>{lang}</Text>
     </Pressable>
@@ -50,9 +95,11 @@ function Option({ lang, onPress }: { lang: string; onPress: () => void }) {
 }
 
 export default function SettingsScreen() {
-  const [selectedHomeLanguage, setSelectedHomeLanguage] = useState<'en' | 'pl'>(
-    DEFAULT_HOME_LANGUAGE,
-  )
+  const [selectedHomeLanguage, setSelectedHomeLanguage] =
+    useState<homeLanguages>(DEFAULT_HOME_LANGUAGE)
+  const [selectedForeignLanguages, setSelectedForeignLanguages] = useState<
+    foreignLanguages[]
+  >([])
 
   useEffect(() => {
     const loadLanguages = async () => {
@@ -62,11 +109,25 @@ export default function SettingsScreen() {
     loadLanguages()
   }, [])
 
-  // 📌 Zmiana języka i zapisanie do AsyncStorage
-  const handleSelectHomeLanguage = (lang: string) => {
-    const newLang = lang === 'Polish' ? 'pl' : 'en'
-    setSelectedHomeLanguage(newLang)
-    AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, newLang)
+  // Zmiana języka ojczystego
+  const handleSelectHomeLanguage = (lang: homeLanguages) => {
+    setSelectedHomeLanguage(lang)
+    AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, lang)
+  }
+
+  // Zmiana języków obcych
+  async function handleSelectForeignLanguages(lang: foreignLanguages) {
+    let interestLanguages = await getValue('interestLanguages')
+    interestLanguages ||= []
+    if (interestLanguages.includes(lang)) {
+      interestLanguages = interestLanguages.filter(
+        (item: foreignLanguages) => item !== lang,
+      )
+    } else {
+      interestLanguages.push(lang)
+    }
+    setSelectedForeignLanguages(interestLanguages)
+    setValue('interestLanguages', interestLanguages)
   }
 
   return (
@@ -76,10 +137,11 @@ export default function SettingsScreen() {
       </Text>
       <Text>{translations[selectedHomeLanguage].homeLanguageInfo}</Text>
       {homeLanguages.map(lang => (
-        <Option
+        <HomeOption
           key={lang}
           lang={lang}
           onPress={() => handleSelectHomeLanguage(lang)}
+          isSelected={selectedHomeLanguage === lang}
         />
       ))}
 
@@ -90,13 +152,14 @@ export default function SettingsScreen() {
         Object.keys(translations.pl.foreignLanguages).map(key => {
           const languageKey =
             key as keyof typeof translations.pl.foreignLanguages
+          let lang =
+            translations[selectedHomeLanguage].foreignLanguages[languageKey]
           return (
-            <Option
+            <ForeignOption
               key={languageKey}
-              lang={
-                translations[selectedHomeLanguage].foreignLanguages[languageKey]
-              }
-              onPress={() => console.log(`Selected ${languageKey}`)}
+              selectedForeignLanguages={selectedForeignLanguages}
+              lang={languageKey}
+              onPress={() => handleSelectForeignLanguages(languageKey)}
             />
           )
         })}
@@ -105,13 +168,14 @@ export default function SettingsScreen() {
         Object.keys(translations.en.foreignLanguages).map(key => {
           const languageKey =
             key as keyof typeof translations.en.foreignLanguages
+          let lang =
+            translations[selectedHomeLanguage].foreignLanguages[languageKey]
           return (
-            <Option
+            <ForeignOption
               key={languageKey}
-              lang={
-                translations[selectedHomeLanguage].foreignLanguages[languageKey]
-              }
-              onPress={() => console.log(`Selected ${languageKey}`)}
+              selectedForeignLanguages={selectedForeignLanguages}
+              lang={languageKey}
+              onPress={() => handleSelectForeignLanguages(languageKey)}
             />
           )
         })}

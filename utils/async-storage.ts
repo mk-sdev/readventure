@@ -29,3 +29,13 @@ export async function removeKey(key: string): Promise<boolean> {
     return false
   }
 }
+
+//* dev mode *//
+export async function clearAsyncStorage() {
+  try {
+    await AsyncStorage.clear()
+    console.log('AsyncStorage został wyczyszczony.')
+  } catch (error) {
+    console.error('Błąd podczas czyszczenia AsyncStorage:', error)
+  }
+}

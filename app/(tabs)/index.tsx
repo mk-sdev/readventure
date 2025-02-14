@@ -1,19 +1,20 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
-import { StyleSheet, TextInput } from 'react-native'
+import { Button, StyleSheet, TextInput } from 'react-native'
 import { Pressable } from 'react-native'
 import DropDownPicker from 'react-native-dropdown-picker'
 
 import { Text, View } from '@/components/Themed'
 import {
+  ADVANCEMENT_LEVELS_STORAGE_KEY,
   DEFAULT_HOME_LANGUAGE,
   FAV_LANGUAGES_STORAGE_KEY,
   HOME_LANGUAGE_STORAGE_KEY,
 } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import { foreignLanguages, homeLanguages } from '@/constants/Types'
-import { getValue } from '@/utils/async-storage'
+import { getValue, setValue } from '@/utils/async-storage'
 import returnFlag from '@/utils/functions'
 
 export default function HomeScreen() {
@@ -24,8 +25,33 @@ export default function HomeScreen() {
   >([])
 
   const [openDropDown, setOpenDropDown] = useState(false)
-  const [dropDownValue, setDropDownValue] = useState<foreignLanguages | null>(null)
-  const [dropDownItems, setDropDownItems] = useState<{ label: string; value: string }[]>([])
+  const [dropDownValue, setDropDownValue] = useState<foreignLanguages | null>(
+    null,
+  )
+  const [dropDownItems, setDropDownItems] = useState<
+    { label: string; value: string }[]
+  >([])
+
+  const [advancementLevel, setAdvancementLevel] = useState('A1')
+  const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const
+
+  async function handleSubmit() {
+    let storedLevels: {} = await getValue(ADVANCEMENT_LEVELS_STORAGE_KEY)
+    if (!storedLevels) {
+      storedLevels = {}
+      storedLevels[dropDownValue] = advancementLevel
+    } else storedLevels[dropDownValue] = advancementLevel
+    setValue(ADVANCEMENT_LEVELS_STORAGE_KEY, storedLevels)
+  }
+
+  useEffect(() => {
+    ;(async () => {
+      let storedLevels: {} = await getValue(ADVANCEMENT_LEVELS_STORAGE_KEY)
+      if (!storedLevels || !storedLevels[dropDownValue])
+        setAdvancementLevel('A1')
+      else setAdvancementLevel(storedLevels[dropDownValue])
+    })()
+  }, [dropDownValue])
 
   useFocusEffect(
     useCallback(() => {
@@ -65,7 +91,7 @@ export default function HomeScreen() {
       ),
     ]
     setDropDownItems(newItems)
-    setDropDownValue(newItems[0].value)
+    setDropDownValue(dropDownValue || newItems[0].value)
   }, [selectedForeignLanguages, selectedHomeLanguage])
 
   return (
@@ -105,25 +131,22 @@ export default function HomeScreen() {
           justifyContent: 'center',
         }}
       >
-        <Pressable>
-          <Text style={styles.level}>A1</Text>
-        </Pressable>
-        <Pressable>
-          <Text style={styles.level}>A2</Text>
-        </Pressable>
-        <Pressable>
-          <Text style={styles.level}>B1</Text>
-        </Pressable>
-        <Pressable>
-          <Text style={styles.level}>B2</Text>
-        </Pressable>
-        <Pressable>
-          <Text style={styles.level}>C1</Text>
-        </Pressable>
-        <Pressable>
-          <Text style={styles.level}>C2</Text>
-        </Pressable>
+        {levels.map(level => (
+          <Pressable key={level} onPress={() => setAdvancementLevel(level)}>
+            <Text
+              style={[
+                styles.level,
+                {
+                  backgroundColor: level === advancementLevel ? 'red' : '#ddd',
+                },
+              ]}
+            >
+              {level}
+            </Text>
+          </Pressable>
+        ))}
       </View>
+      <Button onPress={handleSubmit} title="submit"></Button>
     </View>
   )
 }

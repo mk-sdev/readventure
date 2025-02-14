@@ -1,9 +1,23 @@
+import { useFocusEffect } from 'expo-router'
+import { useCallback } from 'react'
 import { StyleSheet } from 'react-native'
 
-import EditScreenInfo from '@/components/EditScreenInfo'
 import { Text, View } from '@/components/Themed'
+import { HOME_LANGUAGE_STORAGE_KEY } from '@/constants/StorageKeys'
+import { getValue } from '@/utils/async-storage'
 
 export default function LastTextsScreen() {
+  useFocusEffect(
+    useCallback(() => {
+      const loadLanguage = async () => {
+        const storeLang = await getValue(HOME_LANGUAGE_STORAGE_KEY)
+        console.log('Stored language:', storeLang)
+      }
+
+      loadLanguage()
+    }, []),
+  )
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Here will be lastly generated texts</Text>

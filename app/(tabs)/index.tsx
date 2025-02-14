@@ -1,25 +1,28 @@
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
-import { Button, ScrollView, StyleSheet, TextInput } from 'react-native'
-import { Pressable } from 'react-native'
+import {
+  Button,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+} from 'react-native'
 import DropDownPicker from 'react-native-dropdown-picker'
 
 import { Text, View } from '@/components/Themed'
 import {
   ADVANCEMENT_LEVELS_STORAGE_KEY,
-  DEFAULT_HOME_LANGUAGE,
   FAV_LANGUAGES_STORAGE_KEY,
-  HOME_LANGUAGE_STORAGE_KEY,
 } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
-import { foreignLanguages, homeLanguages } from '@/constants/Types'
+import { foreignLanguages } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 import returnFlag from '@/utils/functions'
+import useStore from '@/utils/zustand'
 
 export default function HomeScreen() {
-  const [selectedHomeLanguage, setSelectedHomeLanguage] =
-    useState<homeLanguages>(DEFAULT_HOME_LANGUAGE)
+  const appLang = useStore(state => state.appLang)
+
   const [selectedForeignLanguages, setSelectedForeignLanguages] = useState<
     foreignLanguages[]
   >([])
@@ -56,13 +59,6 @@ export default function HomeScreen() {
   useFocusEffect(
     useCallback(() => {
       const loadLanguages = async () => {
-        const storedHomeLang = (await AsyncStorage.getItem(
-          HOME_LANGUAGE_STORAGE_KEY,
-        )) as homeLanguages
-        setSelectedHomeLanguage(
-          storedHomeLang ? storedHomeLang : DEFAULT_HOME_LANGUAGE,
-        )
-
         const storedForeignLangs: foreignLanguages[] = await getValue(
           FAV_LANGUAGES_STORAGE_KEY,
         )
@@ -71,17 +67,19 @@ export default function HomeScreen() {
         )
       }
       loadLanguages()
+
+      console.log('appLang: ', appLang)
     }, []),
   )
 
   useEffect(() => {
     // get available languages
-    let newItems = Object.entries(
-      translations[selectedHomeLanguage].foreignLanguages,
-    ).map(([key, value]) => ({
-      label: value,
-      value: key as foreignLanguages,
-    }))
+    let newItems = Object.entries(translations[appLang].foreignLanguages).map(
+      ([key, value]) => ({
+        label: value,
+        value: key as foreignLanguages,
+      }),
+    )
 
     // place favourite languages at the beginning
     newItems = [
@@ -92,7 +90,7 @@ export default function HomeScreen() {
     ]
     setDropDownItems(newItems)
     setDropDownValue(dropDownValue || newItems[0].value)
-  }, [selectedForeignLanguages, selectedHomeLanguage])
+  }, [selectedForeignLanguages, appLang])
 
   const [text, setText] = useState('')
 
@@ -102,24 +100,18 @@ export default function HomeScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>
-        {translations[selectedHomeLanguage].textDescriptionLabel}
-      </Text>
+      <Text style={styles.label}>{translations[appLang].textDescriptionLabel}</Text>
       <TextInput
         multiline={true}
         numberOfLines={10}
-        placeholder={
-          translations[selectedHomeLanguage].textDescriptionPlaceholder
-        }
+        placeholder={translations[appLang].textDescriptionPlaceholder}
         style={styles.input}
         value={text}
         onChangeText={setText}
       />
       {dropDownValue && returnFlag(dropDownValue)}
       <View style={{ width: '90%', marginTop: 30 }}>
-        <Text style={styles.label}>
-          {translations[selectedHomeLanguage].languageLabel}
-        </Text>
+        <Text style={styles.label}>{translations[appLang].languageLabel}</Text>
         <DropDownPicker
           open={openDropDown}
           value={dropDownValue}

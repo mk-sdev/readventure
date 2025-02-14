@@ -1,5 +1,6 @@
 export const translations = {
   en: {
+    settings: 'settings',
     chooseHomeLanguage: 'Choose your home language',
     homeLanguageInfo:
       "If you don't see your home language, choose the one you're most familiar with",
@@ -17,6 +18,7 @@ export const translations = {
     languageLabel: 'Choose a language',
   },
   pl: {
+    settings: 'ustawienia',
     chooseHomeLanguage: 'Wybierz swój język ojczysty',
     homeLanguageInfo:
       'Jeśli nie widzisz swojego języka ojczystego, wybierz ten, który znasz najlepiej',

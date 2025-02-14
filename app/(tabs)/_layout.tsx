@@ -2,9 +2,8 @@ import Feather from '@expo/vector-icons/Feather'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 import Octicons from '@expo/vector-icons/Octicons'
-import { Link, Tabs } from 'expo-router'
+import { Tabs } from 'expo-router'
 import React from 'react'
-import { Pressable } from 'react-native'
 
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 import { useColorScheme } from '@/components/useColorScheme'
@@ -25,7 +24,6 @@ function TabBarIcon(props: {
     default:
       return <FontAwesome name="home" color={props.color} /> // Default to home icon if not specified.
   }
-  //return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />
 }
 
 export default function TabLayout() {
@@ -55,20 +53,6 @@ export default function TabLayout() {
           tabBarHideOnKeyboard: true,
           title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
-          // headerRight: () => (
-          //   <Link href="/modal" asChild>
-          //     <Pressable>
-          //       {({ pressed }) => (
-          //         <FontAwesome
-          //           name="info-circle"
-          //           size={25}
-          //           color={Colors[colorScheme ?? 'light'].text}
-          //           style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-          //         />
-          //       )}
-          //     </Pressable>
-          //   </Link>
-          //),
         }}
       />
       <Tabs.Screen

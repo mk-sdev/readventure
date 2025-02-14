@@ -8,6 +8,8 @@ import React from 'react'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 import { useColorScheme } from '@/components/useColorScheme'
 import Colors from '@/constants/Colors'
+import useStore from '@/utils/zustand'
+import { translations } from '@/constants/Translations'
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -28,7 +30,8 @@ function TabBarIcon(props: {
 
 export default function TabLayout() {
   const colorScheme = useColorScheme()
-
+  const appLang = useStore(state => state.appLang)
+  
   return (
     <Tabs
       screenOptions={{
@@ -41,7 +44,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
+          title: translations[appLang].settings,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="settings" color={color} />
           ),
@@ -51,14 +54,14 @@ export default function TabLayout() {
         name="index"
         options={{
           tabBarHideOnKeyboard: true,
-          title: 'Home',
+          title: translations[appLang].home,
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
       <Tabs.Screen
         name="last-texts"
         options={{
-          title: 'Last texts',
+          title: translations[appLang].lastTexts,
           tabBarIcon: ({ color }) => (
             <TabBarIcon name="last-texts" color={color} />
           ),

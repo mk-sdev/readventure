@@ -74,24 +74,23 @@ export default function HomeScreen() {
     setDropDownValue(dropDownValue || newItems[0].value)
   }, [favLangs, appLang])
 
-  const [text, setText] = useState('')
-
-  useEffect(() => {
-    console.log(text)
-  }, [text])
+  const [description, setDescription] = useState('')
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.label}>
         {translations[appLang].textDescriptionLabel}
       </Text>
+      <Text>
+        {translations[appLang].textDescriptionInfo}
+      </Text>
       <TextInput
         multiline={true}
         numberOfLines={10}
         placeholder={translations[appLang].textDescriptionPlaceholder}
         style={styles.input}
-        value={text}
-        onChangeText={setText}
+        value={description}
+        onChangeText={setDescription}
       />
       {dropDownValue && returnFlag(dropDownValue)}
       <View style={{ width: '90%', marginTop: 30 }}>

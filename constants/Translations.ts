@@ -15,6 +15,7 @@ export const translations = {
       es: 'Spanish',
     },
     textDescriptionLabel: 'Description of your text',
+    textDescriptionInfo: "If you don't sepcify anything, a random story will be generated",
     textDescriptionPlaceholder:
       'e.g., A story about a brave knight and its adventures',
     languageLabel: 'Choose a language',
@@ -34,6 +35,7 @@ export const translations = {
       it: 'Włoski',
     },
     textDescriptionLabel: 'Opis twojego tekstu',
+    textDescriptionInfo: "Jeśli nic tu nie napiszesz, losowy tekst zostanie wygenerowany.",
     textDescriptionPlaceholder:
       'np. Opowieść o odważnym rycerzu i jego przygodach',
     languageLabel: 'Wybierz język',

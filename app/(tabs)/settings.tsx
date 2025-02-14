@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 
 import { Text, View } from '@/components/Themed'
@@ -10,6 +10,7 @@ import { translations } from '@/constants/Translations'
 import { foreignLanguages, homeLanguages } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 import returnFlag from '@/utils/functions'
+import useFavLangs from '@/utils/useFavLangs'
 import useStore from '@/utils/zustand'
 
 function HomeOption({
@@ -70,21 +71,12 @@ function ForeignOption({
 }
 
 export default function SettingsScreen() {
-  const [selectedForeignLanguages, setSelectedForeignLanguages] = useState<
-    foreignLanguages[]
-  >([])
-
-  const setAppLang = useStore(state => state.setAppLang)
   const appLang = useStore(state => state.appLang)
+  const setAppLang = useStore(state => state.setAppLang)
+  const { loadFavLangs, favLangs, setFavLangs } = useFavLangs()
 
   useEffect(() => {
-    const loadLanguages = async () => {
-      const storedForeignLangs: foreignLanguages[] = await getValue(
-        FAV_LANGUAGES_STORAGE_KEY,
-      )
-      setSelectedForeignLanguages(storedForeignLangs ? storedForeignLangs : [])
-    }
-    loadLanguages()
+    loadFavLangs()
   }, [])
 
   useEffect(() => {
@@ -104,7 +96,7 @@ export default function SettingsScreen() {
     } else {
       interestLanguages.push(lang)
     }
-    setSelectedForeignLanguages(interestLanguages)
+    setFavLangs(interestLanguages)
     setValue(FAV_LANGUAGES_STORAGE_KEY, interestLanguages)
   }
 
@@ -136,7 +128,7 @@ export default function SettingsScreen() {
         return (
           <ForeignOption
             key={langCode}
-            selectedForeignLanguages={selectedForeignLanguages}
+            selectedForeignLanguages={favLangs}
             lang={langCode}
             text={langText}
             onPress={() => handleSelectForeignLanguages(langCode)}

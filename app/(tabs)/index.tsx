@@ -10,23 +10,17 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker'
 
 import { Text, View } from '@/components/Themed'
-import {
-  ADVANCEMENT_LEVELS_STORAGE_KEY,
-  FAV_LANGUAGES_STORAGE_KEY,
-} from '@/constants/StorageKeys'
+import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import { foreignLanguages } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 import returnFlag from '@/utils/functions'
+import useFavLangs from '@/utils/useFavLangs'
 import useStore from '@/utils/zustand'
 
 export default function HomeScreen() {
   const appLang = useStore(state => state.appLang)
-
-  const [selectedForeignLanguages, setSelectedForeignLanguages] = useState<
-    foreignLanguages[]
-  >([])
-
+  const { loadFavLangs, favLangs } = useFavLangs()
   const [openDropDown, setOpenDropDown] = useState(false)
   const [dropDownValue, setDropDownValue] = useState<foreignLanguages | null>(
     null,
@@ -58,17 +52,7 @@ export default function HomeScreen() {
 
   useFocusEffect(
     useCallback(() => {
-      const loadLanguages = async () => {
-        const storedForeignLangs: foreignLanguages[] = await getValue(
-          FAV_LANGUAGES_STORAGE_KEY,
-        )
-        setSelectedForeignLanguages(
-          storedForeignLangs ? storedForeignLangs : [],
-        )
-      }
-      loadLanguages()
-
-      console.log('appLang: ', appLang)
+      loadFavLangs()
     }, []),
   )
 
@@ -83,14 +67,12 @@ export default function HomeScreen() {
 
     // place favourite languages at the beginning
     newItems = [
-      ...newItems.filter(item => selectedForeignLanguages.includes(item.value)),
-      ...newItems.filter(
-        item => !selectedForeignLanguages.includes(item.value),
-      ),
+      ...newItems.filter(item => favLangs.includes(item.value)),
+      ...newItems.filter(item => !favLangs.includes(item.value)),
     ]
     setDropDownItems(newItems)
     setDropDownValue(dropDownValue || newItems[0].value)
-  }, [selectedForeignLanguages, appLang])
+  }, [favLangs, appLang])
 
   const [text, setText] = useState('')
 
@@ -100,7 +82,9 @@ export default function HomeScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.label}>{translations[appLang].textDescriptionLabel}</Text>
+      <Text style={styles.label}>
+        {translations[appLang].textDescriptionLabel}
+      </Text>
       <TextInput
         multiline={true}
         numberOfLines={10}

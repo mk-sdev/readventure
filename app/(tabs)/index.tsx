@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useFocusEffect } from 'expo-router'
 import { useCallback, useEffect, useState } from 'react'
-import { Button, StyleSheet, TextInput } from 'react-native'
+import { Button, ScrollView, StyleSheet, TextInput } from 'react-native'
 import { Pressable } from 'react-native'
 import DropDownPicker from 'react-native-dropdown-picker'
 
@@ -94,8 +94,14 @@ export default function HomeScreen() {
     setDropDownValue(dropDownValue || newItems[0].value)
   }, [selectedForeignLanguages, selectedHomeLanguage])
 
+  const [text, setText] = useState('')
+
+  useEffect(() => {
+    console.log(text)
+  }, [text])
+
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.label}>
         {translations[selectedHomeLanguage].textDescriptionLabel}
       </Text>
@@ -106,6 +112,8 @@ export default function HomeScreen() {
           translations[selectedHomeLanguage].textDescriptionPlaceholder
         }
         style={styles.input}
+        value={text}
+        onChangeText={setText}
       />
       {dropDownValue && returnFlag(dropDownValue)}
       <View style={{ width: '90%', marginTop: 30 }}>
@@ -147,7 +155,7 @@ export default function HomeScreen() {
         ))}
       </View>
       <Button onPress={handleSubmit} title="submit"></Button>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -155,7 +163,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   label: {
     fontSize: 16,

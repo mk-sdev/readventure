@@ -8,12 +8,16 @@ import useStore from '@/utils/zustand'
 export default function HomeScreen() {
   const appLang = useStore(state => state.appLang)
   const [showStory, setShowStory] = useState(false)
+  const [request, setRequest] = useState("")
+
+
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {showStory ? (
-        <StoryViewer appLang={appLang} setShowStory={setShowStory}></StoryViewer>
+        <StoryViewer appLang={appLang} setShowStory={setShowStory} request={request}></StoryViewer>
       ) : (
-        <StorySetup appLang={appLang} setShowStory={setShowStory}></StorySetup>
+        <StorySetup appLang={appLang} setShowStory={setShowStory} setRequest={setRequest}></StorySetup>
       )}
     </ScrollView>
   )

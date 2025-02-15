@@ -12,7 +12,12 @@ import DropDownPicker from 'react-native-dropdown-picker'
 
 import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
-import { foreignLanguages, homeLanguages } from '@/constants/Types'
+import {
+  foreignLanguages,
+  homeLanguages,
+  levels,
+  request,
+} from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 import returnFlag from '@/utils/functions'
 import useFavLangs from '@/utils/useFavLangs'
@@ -20,10 +25,14 @@ import useFavLangs from '@/utils/useFavLangs'
 export default function StorySetup({
   appLang,
   setShowStory,
+  setRequest,
 }: {
   appLang: homeLanguages
   setShowStory: Function
+  setRequest: Function
 }) {
+  const [description, setDescription] = useState('')
+
   const [openDropDown, setOpenDropDown] = useState(false)
   const [dropDownValue, setDropDownValue] = useState<foreignLanguages | null>(
     null,
@@ -33,11 +42,18 @@ export default function StorySetup({
   >([])
   const { loadFavLangs, favLangs } = useFavLangs()
 
-  const [advancementLevel, setAdvancementLevel] = useState('A1')
-  const levels = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const
+  const [advancementLevel, setAdvancementLevel] = useState<levels>('A1')
+  const levels: levels[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const
 
   async function handleSubmit() {
     setShowStory(true)
+    const request: request = {
+      description,
+      lang: dropDownValue as foreignLanguages,
+      homeLang: appLang,
+      level: advancementLevel,
+    }
+    setRequest(JSON.stringify(request))
     let storedLevels: {} = await getValue(ADVANCEMENT_LEVELS_STORAGE_KEY)
     if (!storedLevels) {
       storedLevels = {}
@@ -79,7 +95,6 @@ export default function StorySetup({
     setDropDownValue(dropDownValue || newItems[0].value)
   }, [favLangs, appLang])
 
-  const [description, setDescription] = useState('')
   return (
     <React.Fragment>
       <Text style={styles.label}>

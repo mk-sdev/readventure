@@ -1,3 +1,4 @@
+import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Button, StyleSheet, Text } from 'react-native'
 
@@ -14,10 +15,28 @@ export default function StoryViewer({
   request: string
 }) {
   const [req, setReq] = useState<request | null>(null)
+
   useEffect(() => {
     const req: request = JSON.parse(request)
     setReq(req)
+    fetchData(req)
   }, [])
+
+  const fetchData = async (reqData: request) => {
+    try {
+      const response = await axios.get('http://localhost:8080/api/data', {
+        params: {
+          lang: reqData.lang,
+          homeLang: reqData.homeLang,
+          level: reqData.level,
+        },
+      })
+      console.log(response.data)
+    } catch (error) {
+      console.error('Błąd podczas pobierania danych:', error)
+    }
+  }
+
   return (
     <React.Fragment>
       <Button onPress={() => setShowStory(false)} title="go back"></Button>
@@ -29,7 +48,3 @@ export default function StoryViewer({
   )
 }
 
-const styles = StyleSheet.create({})
-function loadFavLangs() {
-  throw new Error('Function not implemented.')
-}

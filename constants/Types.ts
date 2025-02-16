@@ -9,3 +9,10 @@ export type request = {
   level: levels
 }
 export type response = { text: string; translation: string }
+export type storedText = {
+  id: string
+  lang: foreignLanguages
+  transLang: homeLanguages
+  text: string
+  translation: string
+}

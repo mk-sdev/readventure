@@ -2,8 +2,15 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Alert, Button, StyleSheet, Text } from 'react-native'
 
-import { request, response } from '@/constants/Types'
+import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
+import {
+  foreignLanguages,
+  request,
+  response,
+  storedText,
+} from '@/constants/Types'
 import { homeLanguages } from '@/constants/Types'
+import { getValue, setValue } from '@/utils/async-storage'
 
 export default function StoryViewer({
   appLang,
@@ -31,14 +38,35 @@ export default function StoryViewer({
 
   const fetchData = async (reqData: request) => {
     try {
-      const response = await axios.get('http://localhost:8080/api/data', {
-        params: {
-          lang: reqData.lang,
-          homeLang: reqData.homeLang,
-          level: reqData.level,
+      // const response = await axios.get('http://localhost:8080/api/data', {
+      //   params: {
+      //     lang: reqData.lang,
+      //     homeLang: reqData.homeLang,
+      //     level: reqData.level,
+      //   },
+      // })
+      // console.log(response.data)
+
+      const response = {
+        data: {
+          text: 'Hello World. This is a test text. Its purpose is to test something.',
+          translation:
+            'Witaj Świecie. To jest tekst testowy. Jego celem jest przetestować coś.',
         },
-      })
-      console.log(response.data)
+      }
+      const id = JSON.stringify(Math.random()) //TODO: change this line
+      const text: string = response.data.text
+      const translation: string = response.data.translation
+      const lang: foreignLanguages = reqData.lang
+      const transLang: homeLanguages = appLang
+      const newText = { id, text, translation, lang, transLang }
+      let lastTexts: storedText[] = await getValue(STORED_TEXTS_STORAGE_KEY)
+
+      if (!lastTexts) lastTexts = [newText]
+      else lastTexts.push(newText)
+      if (lastTexts.length > 10) lastTexts.pop()
+
+      await setValue(STORED_TEXTS_STORAGE_KEY, lastTexts)
     } catch (error) {
       console.error('Błąd podczas pobierania danych:', error)
     }
@@ -46,11 +74,6 @@ export default function StoryViewer({
 
   return (
     <React.Fragment>
-      {/* <Text>opis: {req?.description}</Text>
-      <Text>język docelowy: {req?.lang}</Text>
-      <Text>język ojczysty: {req?.homeLang}</Text>
-      <Text>poziom zaawansowania: {req?.level}</Text> */}
-
       {shouldTranslate ? (
         <Text style={{ fontSize: 30 }}>{res?.translation}</Text>
       ) : (

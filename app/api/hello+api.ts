@@ -2,10 +2,10 @@ import { foreignLanguages, homeLanguages, levels } from '@/constants/Types'
 
 export async function POST(request: Request) {
   const body = await request.json()
-  const description = body.description
-  const lang = body.lang
-  const homeLang = body.homeLang
-  const level = body.level
+  const description = body.params.description
+  const lang = body.params.lang
+  const homeLang = body.params.homeLang
+  const level = body.params.level
 
   const res = await fetchData(description, lang, homeLang, level)
   console.log('🚀 ~ GET ~ res:', res)
@@ -38,7 +38,7 @@ function fetchData(
         content: `Napisz historyjkę na podany temat: ${description} w języku ${lang} na poziomie: ${level}. Następnie na jej końcu postaw znaki "###". Po nich podaj tłumaczenie na język: ${homeLang}.`,
       },
     ],
-    max_tokens: 100, // Maksymalna liczba tokenów
+    max_tokens: 300, // Maksymalna liczba tokenów
   }
 
   const data_ = fetch('https://api.openai.com/v1/chat/completions', {
@@ -50,7 +50,7 @@ function fetchData(
     .then(responseData => {
       console.log('Full response:', responseData) // Logowanie całej odpowiedzi
       if (responseData.choices && responseData.choices.length > 0) {
-        // console.log(responseData.choices[0].message.content)
+         console.log(responseData.choices[0].message.content)
       } else {
         console.error('No choices found in response:', responseData)
       }

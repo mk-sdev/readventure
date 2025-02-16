@@ -29,31 +29,21 @@ export default function StoryViewer({
     const req: request = JSON.parse(request)
     setReq(req)
     fetchData(req)
-    const text =
-      'Hello World. This is a test text. Its purpose is to test something.'
-    const translation =
-      'Witaj Świecie. To jest tekst testowy. Jego celem jest przetestować coś.'
-    setRes({ text, translation })
   }, [])
 
   const fetchData = async (reqData: request) => {
     try {
-      // const response = await axios.get('http://localhost:8080/api/data', {
-      //   params: {
-      //     lang: reqData.lang,
-      //     homeLang: reqData.homeLang,
-      //     level: reqData.level,
-      //   },
-      // })
-      // console.log(response.data)
-
-      const response = {
-        data: {
-          text: 'Hello World. This is a test text. Its purpose is to test something.',
-          translation:
-            'Witaj Świecie. To jest tekst testowy. Jego celem jest przetestować coś.',
+      const response = await axios.post('http://localhost:8082/api/hello', {
+        params: {
+          description: reqData.description,
+          lang: reqData.lang,
+          homeLang: reqData.homeLang,
+          level: reqData.level,
         },
-      }
+      })
+      console.log(response.data)
+      setRes(response.data)
+
       const id = JSON.stringify(Math.random()) //TODO: change this line
       const text: string = response.data.text
       const translation: string = response.data.translation

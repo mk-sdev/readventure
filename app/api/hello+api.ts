@@ -1,20 +1,24 @@
+import axios from 'axios'
+
 import { foreignLanguages, homeLanguages, levels } from '@/constants/Types'
 
 export async function POST(request: Request) {
-  const body = await request.json()
-  const description = body.params.description
-  const lang = body.params.lang
-  const homeLang = body.params.homeLang
-  const level = body.params.level
+  const { description, lang, homeLang, level } = await request
+    .json()
+    .then(body => body.params)
 
-  const res = await fetchData(description, lang, homeLang, level)
-  console.log('🚀 ~ GET ~ res:', res)
-  const respo = res.split('###')
-  const response = {
-    text: respo[0],
-    translation: respo[1],
+  try {
+    const generatedText = await generateText(description, lang, homeLang, level)
+    const [text, translation] = generatedText.split('###')
+
+    return Response.json({ text, translation })
+  } catch (error) {
+    console.error('Error generating text:', error)
+    return Response.json(
+      { error: 'An error occurred while processing your request.' },
+      { status: 500 },
+    )
   }
-  return Response.json(response)
 }
 
 const apiKey = process.env.OPENAI_API_KEY
@@ -24,40 +28,37 @@ const headers = {
   Authorization: `Bearer ${apiKey}`,
 }
 
-function fetchData(
+async function generateText(
   description: string,
   lang: foreignLanguages,
   homeLang: homeLanguages,
   level: levels,
-) {
+): Promise<string> {
+  const content = description
+    ? `Napisz historyjkę na około sto słów na podany temat: ${description} w języku ${lang} na poziomie: ${level}. Następnie na jej końcu postaw znaki "###". Po nich podaj tłumaczenie na język: ${homeLang} odwzorowując strukturę zdań.`
+    : `Napisz historyjkę na około sto słów na dowolny temat w języku ${lang} na poziomie: ${level}. Następnie na jej końcu postaw znaki "###". Po nich podaj tłumaczenie na język: ${homeLang} odwzorowując strukturę zdań.`
+
   const data = {
-    model: 'gpt-3.5-turbo', // Możesz zmienić na inne modele (np. gpt-4)
-    messages: [
-      {
-        role: 'user',
-        content: `Napisz historyjkę na podany temat: ${description} w języku ${lang} na poziomie: ${level}. Następnie na jej końcu postaw znaki "###". Po nich podaj tłumaczenie na język: ${homeLang}.`,
-      },
-    ],
-    max_tokens: 300, // Maksymalna liczba tokenów
+    model: 'gpt-3.5-turbo', 
+    messages: [{ role: 'user', content }],
+    max_tokens: 350, 
   }
 
-  const data_ = fetch('https://api.openai.com/v1/chat/completions', {
-    method: 'POST',
-    headers: headers,
-    body: JSON.stringify(data),
-  })
-    .then(response => response.json())
-    .then(responseData => {
-      console.log('Full response:', responseData) // Logowanie całej odpowiedzi
-      if (responseData.choices && responseData.choices.length > 0) {
-         console.log(responseData.choices[0].message.content)
-      } else {
-        console.error('No choices found in response:', responseData)
-      }
+  try {
+    const response = await axios.post(
+      'https://api.openai.com/v1/chat/completions',
+      data,
+      { headers },
+    )
+
+    const responseData = response.data
+    if (responseData.choices && responseData.choices.length > 0) {
       return responseData.choices[0].message.content
-    })
-    .catch(error => {
-      console.error('Error:', error)
-    })
-  return data_
+    } else {
+      throw new Error('No choices found in response')
+    }
+  } catch (error) {
+    console.error('Error during API request:', error)
+    throw error
+  }
 }

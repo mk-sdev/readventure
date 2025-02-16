@@ -27,7 +27,7 @@ export default function StorySetup({
   setRequest,
 }: {
   appLang: homeLanguages
-  setRequest: Function
+  setRequest: React.Dispatch<React.SetStateAction<string>>
 }) {
   const [description, setDescription] = useState('')
 
@@ -54,7 +54,9 @@ export default function StorySetup({
     let storedLevels: {} = await getValue(ADVANCEMENT_LEVELS_STORAGE_KEY)
     if (!storedLevels) {
       storedLevels = {}
+      //@ts-ignore
       storedLevels[dropDownValue] = advancementLevel
+      //@ts-ignore
     } else storedLevels[dropDownValue] = advancementLevel
     setValue(ADVANCEMENT_LEVELS_STORAGE_KEY, storedLevels)
   }
@@ -62,8 +64,10 @@ export default function StorySetup({
   useEffect(() => {
     ;(async () => {
       let storedLevels: {} = await getValue(ADVANCEMENT_LEVELS_STORAGE_KEY)
+      //@ts-ignore
       if (!storedLevels || !storedLevels[dropDownValue])
         setAdvancementLevel('A1')
+      //@ts-ignore
       else setAdvancementLevel(storedLevels[dropDownValue])
     })()
   }, [dropDownValue])
@@ -167,6 +171,3 @@ const styles = StyleSheet.create({
     fontSize: 30,
   },
 })
-function loadFavLangs() {
-  throw new Error('Function not implemented.')
-}

@@ -39,7 +39,7 @@ function HomeOption({
     </Pressable>
   )
 }
-// clearAsyncStorage()
+
 function ForeignOption({
   lang,
   onPress,

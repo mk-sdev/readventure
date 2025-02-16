@@ -24,11 +24,9 @@ import useFavLangs from '@/utils/useFavLangs'
 
 export default function StorySetup({
   appLang,
-  setShowStory,
   setRequest,
 }: {
   appLang: homeLanguages
-  setShowStory: Function
   setRequest: Function
 }) {
   const [description, setDescription] = useState('')
@@ -46,7 +44,6 @@ export default function StorySetup({
   const levels: levels[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const
 
   async function handleSubmit() {
-    setShowStory(true)
     const request: request = {
       description,
       lang: dropDownValue as foreignLanguages,

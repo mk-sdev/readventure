@@ -1,15 +1,15 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Alert, Button, StyleSheet, Text } from 'react-native'
+import { Alert, Button, Text } from 'react-native'
 
 import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import {
   foreignLanguages,
+  homeLanguages,
   request,
   response,
   storedText,
 } from '@/constants/Types'
-import { homeLanguages } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 
 export default function StoryViewer({
@@ -54,7 +54,7 @@ export default function StoryViewer({
 
       if (!lastTexts) lastTexts = [newText]
       else lastTexts.push(newText)
-      if (lastTexts.length > 10) lastTexts.pop()
+      if (lastTexts.length > 3) lastTexts.pop()
 
       await setValue(STORED_TEXTS_STORAGE_KEY, lastTexts)
     } catch (error) {

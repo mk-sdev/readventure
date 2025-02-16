@@ -8,3 +8,4 @@ export type request = {
   homeLang: homeLanguages
   level: levels
 }
+export type response = { text: string; translation: string }

@@ -1,8 +1,8 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import { Button, StyleSheet, Text } from 'react-native'
+import { Alert, Button, StyleSheet, Text } from 'react-native'
 
-import { request } from '@/constants/Types'
+import { request, response } from '@/constants/Types'
 import { homeLanguages } from '@/constants/Types'
 
 export default function StoryViewer({
@@ -15,11 +15,18 @@ export default function StoryViewer({
   request: string
 }) {
   const [req, setReq] = useState<request | null>(null)
+  const [res, setRes] = useState<response | null>(null)
+  const [shouldTranslate, setShouldTranslate] = useState(false)
 
   useEffect(() => {
     const req: request = JSON.parse(request)
     setReq(req)
     fetchData(req)
+    const text =
+      'Hello World. This is a test text. Its purpose is to test something.'
+    const translation =
+      'Witaj Świecie. To jest tekst testowy. Jego celem jest przetestować coś.'
+    setRes({ text, translation })
   }, [])
 
   const fetchData = async (reqData: request) => {
@@ -39,12 +46,36 @@ export default function StoryViewer({
 
   return (
     <React.Fragment>
-      <Button onPress={() => setShowStory(false)} title="go back"></Button>
-      <Text>opis: {req?.description}</Text>
+      {/* <Text>opis: {req?.description}</Text>
       <Text>język docelowy: {req?.lang}</Text>
       <Text>język ojczysty: {req?.homeLang}</Text>
-      <Text>poziom zaawansowania: {req?.level}</Text>
+      <Text>poziom zaawansowania: {req?.level}</Text> */}
+
+      {shouldTranslate ? (
+        <Text style={{ fontSize: 30 }}>{res?.translation}</Text>
+      ) : (
+        <Text>
+          {res?.text.split('.').map((sentence, i) => (
+            <Text
+              style={{ fontSize: 30 }}
+              onPress={() =>
+                Alert.alert(
+                  sentence + '.',
+                  res?.translation.split('.')[i] + '.',
+                )
+              }
+            >
+              {sentence}.
+            </Text>
+          ))}
+        </Text>
+      )}
+
+      <Button
+        onPress={() => setShouldTranslate(prev => !prev)}
+        title={shouldTranslate ? 'show original text' : 'translate'}
+      ></Button>
+      <Button onPress={() => setShowStory(false)} title="go back"></Button>
     </React.Fragment>
   )
 }
-

@@ -4,6 +4,7 @@ import { ScrollView, StyleSheet } from 'react-native'
 import StorySetup from '@/components/StorySetup'
 import StoryViewer from '@/components/StoryViewer'
 import useStore from '@/utils/zustand'
+import { setStory } from '@/utils/async-storage'
 
 export default function HomeScreen() {
   const appLang = useStore(state => state.appLang)
@@ -13,7 +14,7 @@ export default function HomeScreen() {
   useEffect(() => {
     if (request) setShowStory(true)
   }, [request])
-
+// setStory()
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {showStory ? (

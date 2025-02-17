@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import { Alert, Button, Text, TextInput } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react';
+import { Button, Text } from 'react-native';
 
-import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
-import { homeLanguages, request, storedText } from '@/constants/Types'
-import { getValue } from '@/utils/async-storage'
-import useFetchText from '@/utils/useFetchText'
+import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys';
+import { homeLanguages, request, storedText } from '@/constants/Types';
+import { getValue } from '@/utils/async-storage';
+import useFetchText from '@/utils/useFetchText';
+import { Sentence } from './BottomSheets/BottomSheet';
 
 export default function StoryViewer({
   appLang, // index.tsx only
@@ -35,6 +36,15 @@ export default function StoryViewer({
     return
   }, [])
 
+  const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null);
+  const [sentence, setSentence] = useState("")
+
+  function handleSentencePress(sentence:string){
+    //Alert.alert(sentence)
+    bottomSheetRef.current?.open()
+    setSentence(sentence)
+  }
+
   return (
     <React.Fragment>
       {res || index !== undefined ? (
@@ -46,12 +56,7 @@ export default function StoryViewer({
               {res?.text.split('.').map((sentence, i) => (
                 <Text
                   style={{ fontSize: 30 }}
-                  onPress={() =>
-                    Alert.alert(
-                      sentence + '.',
-                      res?.translation.split('.')[i] + '.',
-                    )
-                  }
+                  onPress={()=>handleSentencePress(res?.translation.split('.')[i])                  }
                 >
                   {sentence}.
                 </Text>
@@ -67,6 +72,9 @@ export default function StoryViewer({
         <Text>Your read-venture is being generated</Text>
       )}
       <Button onPress={() => setShowStory(false)} title="go back"></Button>
+      <Sentence ref={bottomSheetRef} sentence={sentence}  />      
     </React.Fragment>
   )
 }
+
+

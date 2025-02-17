@@ -1,5 +1,4 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
   DarkTheme,
   DefaultTheme,
@@ -13,16 +12,14 @@ import 'react-native-reanimated'
 
 import { useColorScheme } from '@/components/useColorScheme'
 import {
-  DEFAULT_HOME_LANGUAGE,
-  HOME_LANGUAGE_STORAGE_KEY,
+  HOME_LANGUAGE_STORAGE_KEY
 } from '@/constants/StorageKeys'
-import { homeLanguages } from '@/constants/Types'
-import { clearAsyncStorage, getValue } from '@/utils/async-storage'
+import { getValue } from '@/utils/async-storage'
 import useStore from '@/utils/zustand'
-
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
+  ErrorBoundary
 } from 'expo-router'
 
 export const unstable_settings = {
@@ -72,11 +69,14 @@ function RootLayoutNav() {
 
   // clearAsyncStorage()
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <GestureHandlerRootView style={{flex:1}}>
+      <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <Stack>
+          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+          <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        </Stack>
+      </ThemeProvider>
+    </GestureHandlerRootView>
+    
   )
 }

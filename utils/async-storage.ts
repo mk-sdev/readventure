@@ -42,3 +42,12 @@ export async function clearAsyncStorage() {
     console.error('Błąd podczas czyszczenia AsyncStorage:', error)
   }
 }
+
+export async function setStory(){
+  try{
+    const lastTexts = [{text: "Hello World", translation: "Witaj świecie"}]
+    await AsyncStorage.setItem('lastTexts', JSON.stringify(lastTexts))
+  } catch (error) {
+    console.error('Błąd podczas dodawania historyjki do AsyncStorage:', error)
+  }
+}

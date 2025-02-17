@@ -8,41 +8,44 @@ import useFetchText from '@/utils/useFetchText';
 import { Sentence } from './BottomSheets/BottomSheet';
 
 export default function StoryViewer({
-  appLang, // index.tsx only
+  appLang,
   setShowStory,
-  request, // index.tsx only
-  index, // last-texts.tsx only
+  request,
+  index,
 }: {
-  appLang?: homeLanguages
-  setShowStory: React.Dispatch<React.SetStateAction<boolean>>
-  request?: string
-  index?: number
+  appLang?: homeLanguages;
+  setShowStory: React.Dispatch<React.SetStateAction<boolean>>;
+  request?: string;
+  index?: number;
 }) {
-  const [shouldTranslate, setShouldTranslate] = useState(false)
-  const { res, setRes, fetchData } = useFetchText(appLang as homeLanguages)
+  const [shouldTranslate, setShouldTranslate] = useState(false);
+  const { res, setRes, fetchData } = useFetchText(appLang as homeLanguages);
+
   useEffect(() => {
-    // if inside index.tsx
     if (request) {
-      const req: request = JSON.parse(request as string)
-      fetchData(req)
-      return
+      const req: request = JSON.parse(request as string);
+      fetchData(req);
+      return;
     }
 
-    // if inside last-texts.tsx
-    ;(async () => {
-      const lastTexts: storedText[] = await getValue(STORED_TEXTS_STORAGE_KEY)
-      setRes(lastTexts[index as number])
-    })()
-    return
-  }, [])
+    (async () => {
+      const lastTexts: storedText[] = await getValue(STORED_TEXTS_STORAGE_KEY);
+      setRes(lastTexts[index as number]);
+    })();
+  }, []);
 
   const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null);
-  const [sentence, setSentence] = useState("")
+  const [sentence, setSentence] = useState('');
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // index of the selected sentence
 
-  function handleSentencePress(sentence:string){
-    //Alert.alert(sentence)
-    bottomSheetRef.current?.open()
-    setSentence(sentence)
+  function handleSentencePress(sentence: string, i: number) {
+    setSentence(sentence);
+    setSelectedIndex(i); 
+    bottomSheetRef.current?.open();
+  }
+
+  function handleClose() {
+    setSelectedIndex(null); 
   }
 
   return (
@@ -55,8 +58,12 @@ export default function StoryViewer({
             <Text>
               {res?.text.split('.').map((sentence, i) => (
                 <Text
-                  style={{ fontSize: 30 }}
-                  onPress={()=>handleSentencePress(res?.translation.split('.')[i])                  }
+                  key={i}
+                  style={{
+                    fontSize: 30,
+                    backgroundColor: selectedIndex === i ? 'green' : 'transparent', 
+                  }}
+                  onPress={() => handleSentencePress(res?.translation.split('.')[i], i)}
                 >
                   {sentence}.
                 </Text>
@@ -66,15 +73,14 @@ export default function StoryViewer({
           <Button
             onPress={() => setShouldTranslate(prev => !prev)}
             title={shouldTranslate ? 'show original text' : 'translate'}
-          ></Button>
+          />
         </React.Fragment>
       ) : (
         <Text>Your read-venture is being generated</Text>
       )}
-      <Button onPress={() => setShowStory(false)} title="go back"></Button>
-      <Sentence ref={bottomSheetRef} sentence={sentence}  />      
+      <Button onPress={() => setShowStory(false)} title="go back" />
+      
+      <Sentence ref={bottomSheetRef} sentence={sentence} onClose={handleClose} />
     </React.Fragment>
-  )
+  );
 }
-
-

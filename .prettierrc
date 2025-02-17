@@ -9,6 +9,5 @@
   "singleQuote": true,
   "arrowParens": "avoid",
   "editor.formatOnPaste": true,
-  "editor.formatOnSave": true,
   "plugins": ["@trivago/prettier-plugin-sort-imports"]
 }

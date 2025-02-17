@@ -1,14 +1,9 @@
 import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  Button,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native'
+import { Button, Pressable, StyleSheet, TextInput, View } from 'react-native'
 
+import { Text } from '@/components/Themed'
+import Colors from '@/constants/Colors'
 import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import {
@@ -26,9 +21,11 @@ import { LanguagePickerBottomSheet } from './BottomSheets/LanguagePickerBottomSh
 export default function StorySetup({
   appLang,
   setRequest,
+  theme,
 }: {
   appLang: homeLanguages
   setRequest: React.Dispatch<React.SetStateAction<string>>
+  theme: 'dark' | 'light'
 }) {
   const [description, setDescription] = useState('')
   const [dropDownValue, setDropDownValue] = useState<foreignLanguages | null>(
@@ -91,51 +88,110 @@ export default function StorySetup({
     setDropDownValue(dropDownValue || newItems[0]?.value)
   }, [favLangs, appLang])
 
+  function setButtonBackground(
+    isSelected: boolean,
+    pressed: boolean,
+    theme: 'dark' | 'light',
+  ) {
+    if (isSelected && !pressed && theme === 'light') return Colors[theme].button
+    if (!isSelected && !pressed && theme === 'light')
+      return Colors[theme].buttonSecondary
+    if (isSelected && pressed && theme === 'light')
+      return Colors[theme].buttonSecondary
+    if (!isSelected && pressed && theme === 'light')
+      return Colors[theme].buttonSecondary
+  }
+
   return (
     <React.Fragment>
-      <Text style={styles.label}>
+      <Text style={styles.title}>
         {translations[appLang].textDescriptionLabel}
       </Text>
-      <Text>{translations[appLang].textDescriptionInfo}</Text>
+      <Text style={styles.smallText}>
+        {translations[appLang].textDescriptionInfo}
+      </Text>
       <TextInput
         multiline
         numberOfLines={10}
         placeholder={translations[appLang].textDescriptionPlaceholder}
-        style={styles.input}
+        style={[
+          styles.input,
+          {
+            backgroundColor: Colors[theme].inputBg,
+            borderColor: Colors[theme].button,
+          },
+        ]}
         value={description}
         onChangeText={setDescription}
       />
 
-      <Text style={styles.label}>{translations[appLang].languageLabel}</Text>
+      <Text style={styles.title}>{translations[appLang].languageLabel}</Text>
       <Pressable
-        style={styles.languageSelector}
+        style={[
+          styles.languageSelector,
+          { backgroundColor: Colors[theme].button },
+        ]}
         onPress={() => bottomSheetRef.current?.open()}
       >
         {dropDownValue && returnFlag(dropDownValue)}
-        <Text style={styles.languageText}>
+        <Text
+          style={[styles.languageText, { color: Colors[theme].background }]}
+        >
           {dropDownItems.find(item => item.value === dropDownValue)?.label ||
             'Select Language'}
         </Text>
       </Pressable>
 
+      <Text style={styles.title}>{translations[appLang].chooseLevel}</Text>
       <View style={styles.levelContainer}>
         {levels.map(level => (
-          <Pressable key={level} onPress={() => setAdvancementLevel(level)}>
-            <Text
-              style={[
-                styles.level,
-                {
-                  backgroundColor: level === advancementLevel ? 'red' : '#ddd',
-                },
-              ]}
-            >
-              {level}
-            </Text>
+          <Pressable
+            key={level}
+            onPress={() => setAdvancementLevel(level)}
+            style={({ pressed }) => [
+              styles.option,
+              {
+                elevation: level === advancementLevel ? 5 : 0,
+                backgroundColor: setButtonBackground(
+                  level === advancementLevel,
+                  pressed,
+                  theme,
+                ),
+              },
+            ]}
+          >
+            <Text style={[styles.level]}>{level}</Text>
           </Pressable>
         ))}
       </View>
 
-      <Button onPress={handleSubmit} title="submit" />
+      <Pressable
+        onPress={handleSubmit}
+        style={({ pressed }) => [
+          {
+            backgroundColor: Colors[theme].button,
+            margin: 20,
+            borderRadius: 10,
+            elevation: pressed ? 0 : 2,
+            width: '80%',
+            maxWidth: 300,
+            height: 50,
+            justifyContent: 'center',
+          },
+        ]}
+      >
+        <Text
+          style={{
+            fontSize: 20,
+            textAlign: 'center',
+            fontWeight: 'bold',
+            opacity: 0.95,
+            color: Colors[theme].background,
+          }}
+        >
+          {translations[appLang].submit}
+        </Text>
+      </Pressable>
 
       <LanguagePickerBottomSheet
         ref={bottomSheetRef}
@@ -148,29 +204,48 @@ export default function StorySetup({
 }
 
 const styles = StyleSheet.create({
-  label: {
-    fontSize: 16,
+  title: {
+    fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 5,
+    marginTop: 20,
+    marginBottom: 10,
+    width: '90%',
+    maxWidth: 300,
+    textAlign: 'center',
+  },
+  smallText: {
+    width: '95%',
+    maxWidth: 300,
+    fontSize: 15,
+    marginBottom: 10,
+    marginTop: -5,
+    opacity: 0.7,
+    lineHeight: 20,
+    textAlign: 'center',
   },
   input: {
-    height: 200,
+    height: 125,
     textAlignVertical: 'top',
-    backgroundColor: '#eee',
+    // backgroundColor: '#eee',
+    borderWidth: 1,
     width: '90%',
+    maxWidth: 500,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
+    fontSize: 18,
   },
   languageSelector: {
     padding: 15,
-    backgroundColor: '#ddd',
     flexDirection: 'row',
     alignItems: 'center',
-    borderRadius: 5,
+    borderRadius: 10,
+    elevation: 1,
   },
   languageText: {
     fontSize: 16,
     marginLeft: 10,
+    fontWeight: 'bold',
+    opacity: 0.95,
   },
   levelContainer: {
     flexDirection: 'row',
@@ -179,7 +254,22 @@ const styles = StyleSheet.create({
     marginTop: 10,
     justifyContent: 'center',
   },
+  option: {
+    // padding: 10,
+    marginVertical: 5,
+    borderRadius: 10,
+    // backgroundColor: '#ddd',
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    textAlign: 'center',
+    // flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10,
+  },
   level: {
-    fontSize: 30,
+    fontSize: 20,
+    fontWeight: 'bold',
+    opacity: 0.9,
   },
 })

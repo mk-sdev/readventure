@@ -3,8 +3,8 @@ import { ScrollView, StyleSheet } from 'react-native'
 
 import StorySetup from '@/components/StorySetup'
 import StoryViewer from '@/components/StoryViewer'
-import useStore from '@/utils/zustand'
 import { setStory } from '@/utils/async-storage'
+import useStore from '@/utils/zustand'
 
 export default function HomeScreen() {
   const appLang = useStore(state => state.appLang)
@@ -14,9 +14,16 @@ export default function HomeScreen() {
   useEffect(() => {
     if (request) setShowStory(true)
   }, [request])
-// setStory()
+
+  const theme = useStore(state => state.theme)
+  // setStory()
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { backgroundColor: theme === 'light' ? 'white' : 'black' },
+      ]}
+    >
       {showStory ? (
         <StoryViewer
           appLang={appLang}
@@ -24,7 +31,11 @@ export default function HomeScreen() {
           request={request}
         ></StoryViewer>
       ) : (
-        <StorySetup appLang={appLang} setRequest={setRequest}></StorySetup>
+        <StorySetup
+          theme={theme}
+          appLang={appLang}
+          setRequest={setRequest}
+        ></StorySetup>
       )}
     </ScrollView>
   )
@@ -32,7 +43,7 @@ export default function HomeScreen() {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
+    height: '100%'
   },
 })

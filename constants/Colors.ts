@@ -10,6 +10,7 @@ const Colors = {
     tint: tintColorLight,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorLight,
+    inputBg: '#e4f0ef',
   },
   dark: {
     text: '#fff',
@@ -19,6 +20,7 @@ const Colors = {
     tint: tintColorDark,
     tabIconDefault: '#ccc',
     tabIconSelected: tintColorDark,
+    inputBg: '#fff',
   },
 }
 

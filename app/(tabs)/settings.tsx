@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Pressable, StyleSheet } from 'react-native'
+import { Pressable, StyleSheet, Switch } from 'react-native'
 
 import { Text, View } from '@/components/Themed'
 import {
+  COLOR_THEME_STORAGE_KEY,
   FAV_LANGUAGES_STORAGE_KEY,
   HOME_LANGUAGE_STORAGE_KEY,
 } from '@/constants/StorageKeys'
@@ -72,7 +73,10 @@ function ForeignOption({
 
 export default function SettingsScreen() {
   const setAppLang = useStore(state => state.setAppLang)
+  const setTheme = useStore(state => state.setTheme)
   const appLang = useStore(state => state.appLang)
+  const theme = useStore(state => state.theme)
+
   const {
     loadFavLangs,
     favLangs,
@@ -81,11 +85,16 @@ export default function SettingsScreen() {
     localAppLang, // appLang that is a helper variable used only in this file
     setLocalAppLang,
     loadAppLang,
+    // the same case as above
+    loadTheme,
+    localTheme,
+    setLocalTheme,
   } = useStoredData()
 
   useEffect(() => {
     loadFavLangs()
     loadAppLang()
+    loadTheme()
   }, [])
 
   useEffect(() => {
@@ -96,6 +105,15 @@ export default function SettingsScreen() {
     saveAppLang()
     setAppLang(localAppLang)
   }, [localAppLang])
+
+  useEffect(() => {
+    // updating global theme and storing it in the memory
+    const saveTheme = async () => {
+      await setValue(COLOR_THEME_STORAGE_KEY, localTheme)
+    }
+    saveTheme()
+    setTheme(localTheme)
+  }, [localTheme])
 
   async function handleSelectForeignLanguages(lang: foreignLanguages) {
     let interestLanguages = await getValue(FAV_LANGUAGES_STORAGE_KEY)
@@ -113,6 +131,12 @@ export default function SettingsScreen() {
 
   return (
     <View style={styles.container}>
+      <Switch
+        value={theme === 'light'}
+        onValueChange={() =>
+          setLocalTheme(localTheme === 'light' ? 'dark' : 'light')
+        }
+      />
       <Text style={styles.title}>
         {translations[appLang].chooseHomeLanguage}
       </Text>

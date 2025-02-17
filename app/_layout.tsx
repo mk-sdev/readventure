@@ -8,18 +8,20 @@ import { useFonts } from 'expo-font'
 import { Stack } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { useEffect } from 'react'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import 'react-native-reanimated'
 
 import { useColorScheme } from '@/components/useColorScheme'
 import {
-  HOME_LANGUAGE_STORAGE_KEY
+  COLOR_THEME_STORAGE_KEY,
+  HOME_LANGUAGE_STORAGE_KEY,
 } from '@/constants/StorageKeys'
 import { getValue } from '@/utils/async-storage'
 import useStore from '@/utils/zustand'
-import { GestureHandlerRootView } from 'react-native-gesture-handler'
+
 export {
   // Catch any errors thrown by the Layout component.
-  ErrorBoundary
+  ErrorBoundary,
 } from 'expo-router'
 
 export const unstable_settings = {
@@ -58,18 +60,23 @@ function RootLayoutNav() {
   const colorScheme = useColorScheme()
 
   const setAppLang = useStore(state => state.setAppLang)
+  const setTheme = useStore(state => state.setTheme)
 
   useEffect(() => {
     ;(async () => {
       const storedHomeLang = await getValue(HOME_LANGUAGE_STORAGE_KEY)
       if (storedHomeLang) setAppLang(storedHomeLang)
+
+      const storedTheme = await getValue(COLOR_THEME_STORAGE_KEY)
+      if (storedTheme) setTheme(storedTheme)
+      // else if (colorScheme) setTheme(colorScheme)
       //console.log('🚀 ~ ; ~ storedHomeLang:', storedHomeLang)
     })()
   }, [])
 
   // clearAsyncStorage()
   return (
-    <GestureHandlerRootView style={{flex:1}}>
+    <GestureHandlerRootView style={{ flex: 1 }}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
@@ -77,6 +84,5 @@ function RootLayoutNav() {
         </Stack>
       </ThemeProvider>
     </GestureHandlerRootView>
-    
   )
 }

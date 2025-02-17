@@ -1,47 +1,30 @@
-import { useFocusEffect } from 'expo-router'
-import React, { useCallback, useEffect, useState } from 'react'
-import {
-  Button,
-  Pressable,
-  StyleSheet,
-  Text,
-  TextInput,
-  View,
-} from 'react-native'
-import DropDownPicker from 'react-native-dropdown-picker'
+import { useFocusEffect } from 'expo-router';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Button, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
-import { translations } from '@/constants/Translations'
-import {
-  foreignLanguages,
-  homeLanguages,
-  levels,
-  request,
-} from '@/constants/Types'
-import { getValue, setValue } from '@/utils/async-storage'
-import returnFlag from '@/utils/functions'
-import useFavLangs from '@/utils/useFavLangs'
+import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys';
+import { translations } from '@/constants/Translations';
+import { foreignLanguages, homeLanguages, levels, request } from '@/constants/Types';
+import { getValue, setValue } from '@/utils/async-storage';
+import returnFlag from '@/utils/functions';
+import useFavLangs from '@/utils/useFavLangs';
+import { LanguagePickerBottomSheet } from './BottomSheets/LanguagePickerBottomSheet';
 
 export default function StorySetup({
   appLang,
   setRequest,
 }: {
-  appLang: homeLanguages
-  setRequest: React.Dispatch<React.SetStateAction<string>>
+  appLang: homeLanguages;
+  setRequest: React.Dispatch<React.SetStateAction<string>>;
 }) {
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState('');
+  const [dropDownValue, setDropDownValue] = useState<foreignLanguages | null>(null);
+  const { loadFavLangs, favLangs } = useFavLangs();
+  const [advancementLevel, setAdvancementLevel] = useState<levels>('A1');
+  const levels: levels[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const;
 
-  const [openDropDown, setOpenDropDown] = useState(false)
-  const [dropDownValue, setDropDownValue] = useState<foreignLanguages | null>(
-    null,
-  )
-  const [dropDownItems, setDropDownItems] = useState<
-    { label: string; value: string }[]
-  >([])
-  const { loadFavLangs, favLangs } = useFavLangs()
-
-  const [advancementLevel, setAdvancementLevel] = useState<levels>('A1')
-  const levels: levels[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const
+  const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null);
+  const [dropDownItems, setDropDownItems] = useState<{ label: string; value: foreignLanguages }[]>([]);
 
   async function handleSubmit() {
     const request: request = {
@@ -49,107 +32,83 @@ export default function StorySetup({
       lang: dropDownValue as foreignLanguages,
       homeLang: appLang,
       level: advancementLevel,
-    }
-    setRequest(JSON.stringify(request))
-    let storedLevels: {} = await getValue(ADVANCEMENT_LEVELS_STORAGE_KEY)
-    if (!storedLevels) {
-      storedLevels = {}
-      //@ts-ignore
-      storedLevels[dropDownValue] = advancementLevel
-      //@ts-ignore
-    } else storedLevels[dropDownValue] = advancementLevel
-    setValue(ADVANCEMENT_LEVELS_STORAGE_KEY, storedLevels)
+    };
+    setRequest(JSON.stringify(request));
+
+    let storedLevels: Record<string, levels> = await getValue(ADVANCEMENT_LEVELS_STORAGE_KEY);
+    if (!storedLevels) storedLevels = {};
+    storedLevels[dropDownValue as string] = advancementLevel;
+    setValue(ADVANCEMENT_LEVELS_STORAGE_KEY, storedLevels);
   }
 
   useEffect(() => {
-    ;(async () => {
-      let storedLevels: {} = await getValue(ADVANCEMENT_LEVELS_STORAGE_KEY)
-      //@ts-ignore
-      if (!storedLevels || !storedLevels[dropDownValue])
-        setAdvancementLevel('A1')
-      //@ts-ignore
-      else setAdvancementLevel(storedLevels[dropDownValue])
-    })()
-  }, [dropDownValue])
+    (async () => {
+      let storedLevels: Record<string, levels> = await getValue(ADVANCEMENT_LEVELS_STORAGE_KEY);
+      setAdvancementLevel(storedLevels?.[dropDownValue as string] ?? 'A1');
+    })();
+  }, [dropDownValue]);
 
   useFocusEffect(
     useCallback(() => {
-      loadFavLangs()
-    }, []),
-  )
+      loadFavLangs();
+    }, [])
+  );
 
   useEffect(() => {
-    // get available languages
-    let newItems = Object.entries(translations[appLang].foreignLanguages).map(
-      ([key, value]) => ({
-        label: value,
-        value: key as foreignLanguages,
-      }),
-    )
+    let newItems = Object.entries(translations[appLang].foreignLanguages).map(([key, value]) => ({
+      label: value,
+      value: key as foreignLanguages,
+    }));
 
-    // place favourite languages at the beginning
     newItems = [
       ...newItems.filter(item => favLangs.includes(item.value)),
       ...newItems.filter(item => !favLangs.includes(item.value)),
-    ]
-    setDropDownItems(newItems)
-    setDropDownValue(dropDownValue || newItems[0].value)
-  }, [favLangs, appLang])
+    ];
+    setDropDownItems(newItems);
+    setDropDownValue(dropDownValue || newItems[0]?.value);
+  }, [favLangs, appLang]);
 
   return (
     <React.Fragment>
-      <Text style={styles.label}>
-        {translations[appLang].textDescriptionLabel}
-      </Text>
+      <Text style={styles.label}>{translations[appLang].textDescriptionLabel}</Text>
       <Text>{translations[appLang].textDescriptionInfo}</Text>
       <TextInput
-        multiline={true}
+        multiline
         numberOfLines={10}
         placeholder={translations[appLang].textDescriptionPlaceholder}
         style={styles.input}
         value={description}
         onChangeText={setDescription}
       />
-      {dropDownValue && returnFlag(dropDownValue)}
-      <View style={{ width: '90%', marginTop: 30 }}>
-        <Text style={styles.label}>{translations[appLang].languageLabel}</Text>
-        <DropDownPicker
-          open={openDropDown}
-          value={dropDownValue}
-          items={dropDownItems}
-          setOpen={setOpenDropDown}
-          setValue={setDropDownValue}
-          setItems={setDropDownItems}
-        />
-      </View>
-      <View
-        style={{
-          flexDirection: 'row',
-          flexWrap: 'wrap',
-          gap: 10,
-          width: '90%',
-          marginTop: 10,
-          justifyContent: 'center',
-        }}
-      >
+      
+      <Text style={styles.label}>{translations[appLang].languageLabel}</Text>
+      <Pressable style={styles.languageSelector} onPress={() => bottomSheetRef.current?.open()}>
+        {dropDownValue && returnFlag(dropDownValue)}
+        <Text style={styles.languageText}>
+          {dropDownItems.find(item => item.value === dropDownValue)?.label || 'Select Language'}
+        </Text>
+      </Pressable>
+
+      <View style={styles.levelContainer}>
         {levels.map(level => (
           <Pressable key={level} onPress={() => setAdvancementLevel(level)}>
-            <Text
-              style={[
-                styles.level,
-                {
-                  backgroundColor: level === advancementLevel ? 'red' : '#ddd',
-                },
-              ]}
-            >
+            <Text style={[styles.level, { backgroundColor: level === advancementLevel ? 'red' : '#ddd' }]}>
               {level}
             </Text>
           </Pressable>
         ))}
       </View>
-      <Button onPress={handleSubmit} title="submit"></Button>
+
+      <Button onPress={handleSubmit} title="submit" />
+
+      <LanguagePickerBottomSheet
+        ref={bottomSheetRef}
+        languages={dropDownItems}
+        selectedLanguage={dropDownValue}
+        onSelect={setDropDownValue}
+      />
     </React.Fragment>
-  )
+  );
 }
 
 const styles = StyleSheet.create({
@@ -166,8 +125,25 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
   },
+  languageSelector: {
+    padding: 15,
+    backgroundColor: '#ddd',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 5,
+  },
+  languageText: {
+    fontSize: 16,
+    marginLeft: 10,
+  },
+  levelContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    width: '90%',
+    marginTop: 10,
+    justifyContent: 'center',
+  },
   level: {
-    backgroundColor: 'red',
     fontSize: 30,
   },
-})
+});

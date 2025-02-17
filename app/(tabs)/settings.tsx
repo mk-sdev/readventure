@@ -1,7 +1,8 @@
-import { useEffect, useState } from 'react'
-import { Pressable, StyleSheet, Switch } from 'react-native'
+import { useEffect } from 'react'
+import { Pressable, ScrollView, StyleSheet, Switch } from 'react-native'
 
 import { Text, View } from '@/components/Themed'
+import Colors from '@/constants/Colors'
 import {
   COLOR_THEME_STORAGE_KEY,
   FAV_LANGUAGES_STORAGE_KEY,
@@ -14,14 +15,30 @@ import returnFlag from '@/utils/functions'
 import useStoredData from '@/utils/useStoredData'
 import useStore from '@/utils/zustand'
 
+function setButtonBackground(
+  isSelected: boolean,
+  pressed: boolean,
+  theme: 'dark' | 'light',
+) {
+  if (isSelected && !pressed && theme === 'light') return Colors[theme].button
+  if (!isSelected && !pressed && theme === 'light')
+    return Colors[theme].buttonSecondary
+  if (isSelected && pressed && theme === 'light')
+    return Colors[theme].buttonSecondary
+  if (!isSelected && pressed && theme === 'light')
+    return Colors[theme].buttonSecondary
+}
+
 function HomeOption({
   lang,
   onPress,
   isSelected,
+  theme,
 }: {
   lang: homeLanguages
   onPress: () => void
   isSelected: boolean
+  theme: 'light' | 'dark'
 }) {
   const text = lang === 'pl' ? 'Polski' : 'English'
   return (
@@ -30,13 +47,15 @@ function HomeOption({
       style={({ pressed }) => [
         styles.option,
         {
-          backgroundColor: isSelected ? 'red' : '#ddd',
+          elevation: isSelected ? 1 : 0,
+          backgroundColor: setButtonBackground(isSelected, pressed, theme),
         },
-        pressed && styles.pressed,
       ]}
     >
-      {returnFlag(lang)}
-      <Text>{text}</Text>
+      <View style={styles.optionView}>
+        {returnFlag(lang)}
+        <Text style={{ fontWeight: 'bold' }}>{text}</Text>
+      </View>
     </Pressable>
   )
 }
@@ -46,11 +65,13 @@ function ForeignOption({
   onPress,
   selectedForeignLanguages,
   text,
+  theme,
 }: {
   lang: foreignLanguages
   onPress: () => void
   selectedForeignLanguages: foreignLanguages[]
   text: string
+  theme: 'light' | 'dark'
 }) {
   return (
     <Pressable
@@ -58,15 +79,19 @@ function ForeignOption({
       style={({ pressed }) => [
         styles.option,
         {
-          backgroundColor: selectedForeignLanguages.includes(lang)
-            ? 'red'
-            : '#ddd',
+          elevation: selectedForeignLanguages.includes(lang) ? 1 : 0,
+          backgroundColor: setButtonBackground(
+            selectedForeignLanguages.includes(lang),
+            pressed,
+            theme,
+          ),
         },
-        pressed && styles.pressed,
       ]}
     >
-      {returnFlag(lang)}
-      <Text>{text}</Text>
+      <View style={styles.optionView}>
+        {returnFlag(lang)}
+        <Text style={{ fontWeight: 'bold' }}>{text}</Text>
+      </View>
     </Pressable>
   )
 }
@@ -130,17 +155,43 @@ export default function SettingsScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <Switch
-        value={theme === 'light'}
-        onValueChange={() =>
-          setLocalTheme(localTheme === 'light' ? 'dark' : 'light')
-        }
-      />
+    <ScrollView
+      contentContainerStyle={[
+        styles.container,
+        { backgroundColor: Colors[theme].background },
+      ]}
+    >
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          backgroundColor: 'transparent',
+          gap:20
+        }}
+      >
+        <Text style={[styles.title, { width: 'auto' }]}>
+          {translations[appLang].toggleTheme}
+        </Text>
+        <Switch
+          value={theme === 'light'}
+          onValueChange={() =>
+            setLocalTheme(localTheme === 'light' ? 'dark' : 'light')
+          }
+          trackColor={{ false: '#767577', true: Colors[theme].buttonSecondary }}
+          thumbColor={theme === 'light' ? Colors[theme].button : '#f4f3f4'}
+          style={{
+            transform: [{ scaleX: 1.35 }, { scaleY: 1.35 }, { translateY: 4 }],
+          }}
+        />
+      </View>
+
       <Text style={styles.title}>
         {translations[appLang].chooseHomeLanguage}
       </Text>
-      <Text>{translations[appLang].homeLanguageInfo}</Text>
+      <Text style={[styles.smallText, { color: Colors[theme].text }]}>
+        {translations[appLang].homeLanguageInfo}
+      </Text>
 
       {(['en', 'pl'] as homeLanguages[]).map(lang => (
         <HomeOption
@@ -148,6 +199,7 @@ export default function SettingsScreen() {
           lang={lang}
           onPress={() => setLocalAppLang(lang)}
           isSelected={appLang === lang}
+          theme={theme}
         />
       ))}
 
@@ -167,24 +219,37 @@ export default function SettingsScreen() {
             lang={langCode}
             text={langText}
             onPress={() => handleSelectForeignLanguages(langCode)}
+            theme={theme}
           />
         )
       })}
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
     padding: 20,
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     marginTop: 20,
+    marginBottom: 10,
+    width: '90%',
+    maxWidth: 300,
+    textAlign: 'center',
+  },
+  smallText: {
+    width: '95%',
+    maxWidth: 300,
+    fontSize: 15,
+    marginBottom: 10,
+    marginTop: -5,
+    opacity: 0.7,
+    lineHeight: 20,
+    textAlign: 'center',
   },
   option: {
     padding: 10,
@@ -192,12 +257,18 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     backgroundColor: '#ddd',
     width: '80%',
+    maxWidth: 300,
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'center',
     gap: 10,
   },
-  pressed: {
-    backgroundColor: '#bbb',
+  optionView: {
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+    borderRadius: 5,
+    width: 110,
   },
 })

@@ -1,11 +1,13 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, Text } from 'react-native';
+import Slider from '@react-native-community/slider'
+import React, { useEffect, useRef, useState } from 'react'
+import { Button, Text } from 'react-native'
 
-import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys';
-import { homeLanguages, request, storedText } from '@/constants/Types';
-import { getValue } from '@/utils/async-storage';
-import useFetchText from '@/utils/useFetchText';
-import { Sentence } from './BottomSheets/BottomSheet';
+import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
+import { homeLanguages, request, storedText } from '@/constants/Types'
+import { getValue } from '@/utils/async-storage'
+import useFetchText from '@/utils/useFetchText'
+
+import { Sentence } from './BottomSheets/BottomSheet'
 
 export default function StoryViewer({
   appLang,
@@ -13,57 +15,73 @@ export default function StoryViewer({
   request,
   index,
 }: {
-  appLang?: homeLanguages;
-  setShowStory: React.Dispatch<React.SetStateAction<boolean>>;
-  request?: string;
-  index?: number;
+  appLang?: homeLanguages
+  setShowStory: React.Dispatch<React.SetStateAction<boolean>>
+  request?: string
+  index?: number
 }) {
-  const [shouldTranslate, setShouldTranslate] = useState(false);
-  const { res, setRes, fetchData } = useFetchText(appLang as homeLanguages);
+  const [shouldTranslate, setShouldTranslate] = useState(false)
+  const { res, setRes, fetchData } = useFetchText(appLang as homeLanguages)
 
   useEffect(() => {
     if (request) {
-      const req: request = JSON.parse(request as string);
-      fetchData(req);
-      return;
+      const req: request = JSON.parse(request as string)
+      fetchData(req)
+      return
     }
 
-    (async () => {
-      const lastTexts: storedText[] = await getValue(STORED_TEXTS_STORAGE_KEY);
-      setRes(lastTexts[index as number]);
-    })();
-  }, []);
+    ;(async () => {
+      const lastTexts: storedText[] = await getValue(STORED_TEXTS_STORAGE_KEY)
+      setRes(lastTexts[index as number])
+    })()
+  }, [])
 
-  const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null);
-  const [sentence, setSentence] = useState('');
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null); // index of the selected sentence
+  const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null)
+  const [sentence, setSentence] = useState('')
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null) // index of the selected sentence
 
   function handleSentencePress(sentence: string, i: number) {
-    setSentence(sentence);
-    setSelectedIndex(i); 
-    bottomSheetRef.current?.open();
+    setSentence(sentence)
+    setSelectedIndex(i)
+    bottomSheetRef.current?.open()
   }
 
   function handleClose() {
-    setSelectedIndex(null); 
+    setSelectedIndex(null)
   }
+
+  const [fontSize, setFontSize] = useState<number>(30)
 
   return (
     <React.Fragment>
       {res || index !== undefined ? (
         <React.Fragment>
+          {res && (
+            <Slider
+              style={{ width: 200, height: 40 }}
+              minimumValue={10}
+              maximumValue={50}
+              value={fontSize}
+              minimumTrackTintColor="#FFFFFF"
+              maximumTrackTintColor="#000000"
+              onValueChange={value => setFontSize(value)}
+            />
+          )}
           {shouldTranslate ? (
-            <Text style={{ fontSize: 30 }}>{res?.translation}</Text>
+            <Text style={{ fontSize }}>{res?.translation}</Text>
           ) : (
             <Text>
               {res?.text.split('.').map((sentence, i) => (
                 <Text
                   key={i}
                   style={{
-                    fontSize: 30,
-                    backgroundColor: selectedIndex === i ? 'green' : 'transparent', 
+                    fontSize,
+                    backgroundColor:
+                      selectedIndex === i ? 'green' : 'transparent',
                   }}
-                  onPress={() => handleSentencePress(res?.translation.split('.')[i], i)}
+                  onPress={() =>
+                    handleSentencePress(res?.translation.split('.')[i], i)
+                  }
                 >
                   {sentence}.
                 </Text>
@@ -79,8 +97,12 @@ export default function StoryViewer({
         <Text>Your read-venture is being generated</Text>
       )}
       <Button onPress={() => setShowStory(false)} title="go back" />
-      
-      <Sentence ref={bottomSheetRef} sentence={sentence} onClose={handleClose} />
+
+      <Sentence
+        ref={bottomSheetRef}
+        sentence={sentence}
+        onClose={handleClose}
+      />
     </React.Fragment>
-  );
+  )
 }

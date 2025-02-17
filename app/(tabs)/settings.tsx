@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Pressable, StyleSheet } from 'react-native'
 
 import { Text, View } from '@/components/Themed'
@@ -10,7 +10,7 @@ import { translations } from '@/constants/Translations'
 import { foreignLanguages, homeLanguages } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 import returnFlag from '@/utils/functions'
-import useFavLangs from '@/utils/useFavLangs'
+import useStoredData from '@/utils/useStoredData'
 import useStore from '@/utils/zustand'
 
 function HomeOption({
@@ -71,20 +71,31 @@ function ForeignOption({
 }
 
 export default function SettingsScreen() {
-  const appLang = useStore(state => state.appLang)
   const setAppLang = useStore(state => state.setAppLang)
-  const { loadFavLangs, favLangs, setFavLangs } = useFavLangs()
+  const appLang = useStore(state => state.appLang)
+  const {
+    loadFavLangs,
+    favLangs,
+    setFavLangs,
+    // for some fucking reason I must use helper variables and can't use global appLang directly because otherwise after refresh the retrieved from async storage data is not correct
+    localAppLang, // appLang that is a helper variable used only in this file
+    setLocalAppLang,
+    loadAppLang,
+  } = useStoredData()
 
   useEffect(() => {
     loadFavLangs()
+    loadAppLang()
   }, [])
 
   useEffect(() => {
+    // updating global appLang and storing it in the memory
     const saveAppLang = async () => {
-      await setValue(HOME_LANGUAGE_STORAGE_KEY, appLang)
+      await setValue(HOME_LANGUAGE_STORAGE_KEY, localAppLang)
     }
     saveAppLang()
-  }, [appLang])
+    setAppLang(localAppLang)
+  }, [localAppLang])
 
   async function handleSelectForeignLanguages(lang: foreignLanguages) {
     let interestLanguages = await getValue(FAV_LANGUAGES_STORAGE_KEY)
@@ -111,7 +122,7 @@ export default function SettingsScreen() {
         <HomeOption
           key={lang}
           lang={lang}
-          onPress={() => setAppLang(lang)}
+          onPress={() => setLocalAppLang(lang)}
           isSelected={appLang === lang}
         />
       ))}

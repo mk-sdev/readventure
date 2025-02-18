@@ -13,7 +13,7 @@ import {
   request,
 } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
-import returnFlag from '@/utils/functions'
+import { returnFlag, setButtonBg } from '@/utils/functions'
 import useStoredData from '@/utils/useStoredData'
 
 import { LanguagePickerBottomSheet } from './BottomSheets/LanguagePickerBottomSheet'
@@ -94,20 +94,6 @@ export default function StorySetup({
     setDropDownValue(dropDownValue || newItems[0]?.value)
   }, [favLangs, appLang])
 
-  function setButtonBackground(
-    isSelected: boolean,
-    pressed: boolean,
-    theme: 'dark' | 'light',
-  ) {
-    if (isSelected && !pressed && theme === 'light') return Colors[theme].button
-    if (!isSelected && !pressed && theme === 'light')
-      return Colors[theme].buttonSecondary
-    if (isSelected && pressed && theme === 'light')
-      return Colors[theme].buttonSecondary
-    if (!isSelected && pressed && theme === 'light')
-      return Colors[theme].buttonSecondary
-  }
-
   return (
     <React.Fragment>
       <Text style={styles.title}>
@@ -174,7 +160,7 @@ export default function StorySetup({
               styles.option,
               {
                 elevation: level === advancementLevel ? 3 : 1,
-                backgroundColor: setButtonBackground(
+                backgroundColor: setButtonBg(
                   level === advancementLevel,
                   pressed,
                   theme,

@@ -9,7 +9,7 @@ import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import { homeLanguages, storedText } from '@/constants/Types'
 import { clearAsyncStorage, getValue } from '@/utils/async-storage'
-import returnFlag from '@/utils/functions'
+import { returnFlag } from '@/utils/functions'
 
 export default function StoryList({
   setIndex,

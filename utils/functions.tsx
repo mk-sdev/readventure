@@ -1,9 +1,10 @@
 import { Image, StyleSheet } from 'react-native'
 
+import Colors from '@/constants/Colors'
 import { foreignLanguages } from '@/constants/Types'
 
 // https://flagpedia.net/download/icons
-export default function returnFlag(lang: foreignLanguages) {
+export function returnFlag(lang: foreignLanguages) {
   switch (lang) {
     case 'en':
       return (
@@ -58,3 +59,17 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(0,0,0,.1)',
   },
 })
+
+export function setButtonBg(
+  isSelected: boolean,
+  pressed: boolean,
+  theme: 'dark' | 'light',
+) {
+  if (isSelected && !pressed && theme === 'light') return Colors[theme].button
+  if (!isSelected && !pressed && theme === 'light')
+    return Colors[theme].buttonSecondary
+  if (isSelected && pressed && theme === 'light')
+    return Colors[theme].buttonSecondary
+  if (!isSelected && pressed && theme === 'light')
+    return Colors[theme].buttonSecondary
+}

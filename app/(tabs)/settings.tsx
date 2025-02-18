@@ -11,23 +11,9 @@ import {
 import { translations } from '@/constants/Translations'
 import { foreignLanguages, homeLanguages } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
-import returnFlag from '@/utils/functions'
+import { returnFlag, setButtonBg } from '@/utils/functions'
 import useStoredData from '@/utils/useStoredData'
 import useStore from '@/utils/zustand'
-
-function setButtonBackground(
-  isSelected: boolean,
-  pressed: boolean,
-  theme: 'dark' | 'light',
-) {
-  if (isSelected && !pressed && theme === 'light') return Colors[theme].button
-  if (!isSelected && !pressed && theme === 'light')
-    return Colors[theme].buttonSecondary
-  if (isSelected && pressed && theme === 'light')
-    return Colors[theme].buttonSecondary
-  if (!isSelected && pressed && theme === 'light')
-    return Colors[theme].buttonSecondary
-}
 
 function HomeOption({
   lang,
@@ -48,7 +34,7 @@ function HomeOption({
         styles.option,
         {
           elevation: isSelected ? 1 : 0,
-          backgroundColor: setButtonBackground(isSelected, pressed, theme),
+          backgroundColor: setButtonBg(isSelected, pressed, theme),
         },
       ]}
     >
@@ -80,7 +66,7 @@ function ForeignOption({
         styles.option,
         {
           elevation: selectedForeignLanguages.includes(lang) ? 1 : 0,
-          backgroundColor: setButtonBackground(
+          backgroundColor: setButtonBg(
             selectedForeignLanguages.includes(lang),
             pressed,
             theme,
@@ -167,7 +153,7 @@ export default function SettingsScreen() {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: 'transparent',
-          gap:20
+          gap: 20,
         }}
       >
         <Text style={[styles.title, { width: 'auto' }]}>

@@ -13,7 +13,7 @@ import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
 
 import Colors from '@/constants/Colors'
 import { foreignLanguages } from '@/constants/Types'
-import returnFlag from '@/utils/functions'
+import { returnFlag } from '@/utils/functions'
 
 type Props = {
   languages: { label: string; value: foreignLanguages }[]
@@ -55,7 +55,7 @@ export const LanguagePickerBottomSheet = forwardRef<
       backdropComponent={renderBackdrop}
       onChange={setCurrentIndex}
       handleIndicatorStyle={{
-        backgroundColor: Colors[theme].buttonSecondary
+        backgroundColor: Colors[theme].buttonSecondary,
       }}
     >
       <BottomSheetView style={styles.container}>

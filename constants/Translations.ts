@@ -9,7 +9,7 @@ export const translations = {
       "If you don't see your home language, choose the one you're the most familiar with",
     chooseForeignLanguage:
       'Which of these languages are you most interested in?',
-    chooseLevel: 'Choose the advencement level',
+    chooseLevel: 'Choose the advancement level',
     foreignLanguages: {
       de: 'German',
       it: 'Italian',
@@ -18,13 +18,15 @@ export const translations = {
     },
     textDescriptionLabel: 'Description of your text',
     textDescriptionInfo:
-      "If you don't sepcify anything, a random story will be generated",
+      "If you don't specify anything, a random story will be generated",
     textDescriptionPlaceholder:
-      'e.g., A story about a brave knight and its adventures',
+      'e.g., A story about a brave knight and his adventures',
     languageLabel: 'Choose a language',
     submit: 'Submit',
     submitAlert: 'The description must not exceed the specified length',
     lastStoriesLabel: 'Here are 10 most recently generated stories',
+    noStoriesTitle: 'No texts generated yet',
+    noStoriesCTA: 'Go to the Home tab and generate one',
   },
   pl: {
     settings: 'Ustawienia',
@@ -51,5 +53,7 @@ export const translations = {
     submit: 'Wyślij',
     submitAlert: 'Opis nie może przekraczać wyznaczonej długości',
     lastStoriesLabel: 'Tutaj znajduje się 10 ostatnio wygenerowanych historii',
+    noStoriesTitle: 'Niczego tu jeszcze nie ma',
+    noStoriesCTA: 'Przejdź do ekranu domowego, by coś wygenerować',
   },
 }

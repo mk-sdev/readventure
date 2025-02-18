@@ -1,7 +1,7 @@
 import { LinearGradient } from 'expo-linear-gradient'
 import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useState } from 'react'
-import { FlatList, Pressable, StyleSheet, View } from 'react-native'
+import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native'
 
 import { Text } from '@/components/Themed'
 import Colors from '@/constants/Colors'
@@ -70,17 +70,32 @@ export default function StoryList({
           />
         </React.Fragment>
       ) : (
-        <Text
+        <View
           style={{
-            fontSize: 20,
-            // flex: 1,
-            // justifyContent: 'center',
-            // alignItems: 'center',
-            // textAlign: 'center',
+            width: '100%',
+            height: '100%',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          No texts generated yet.
-        </Text>
+          <Image
+            style={{
+              width: '50%',
+              // resizeMode: 'cover',
+              // backgroundColor: 'red',
+              height: 'auto',
+              aspectRatio: 1,
+              opacity: theme === 'light' ? 1 : 0.5,
+            }}
+            source={require('@/assets/images/empty.png')}
+          ></Image>
+          <Text style={styles.title}>
+            {translations[appLang].noStoriesTitle}
+          </Text>
+          <Text style={styles.smallText}>
+            {translations[appLang].noStoriesCTA}
+          </Text>
+        </View>
       )}
     </React.Fragment>
   )
@@ -96,6 +111,16 @@ const styles = StyleSheet.create({
     maxWidth: 300,
     textAlign: 'center',
     alignSelf: 'center',
+  },
+  smallText: {
+    width: '95%',
+    maxWidth: 300,
+    fontSize: 15,
+    marginBottom: 10,
+    marginTop: -5,
+    opacity: 0.7,
+    lineHeight: 20,
+    textAlign: 'center',
   },
   separator: {
     marginVertical: 30,

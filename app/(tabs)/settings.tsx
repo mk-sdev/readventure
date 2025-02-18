@@ -165,8 +165,13 @@ export default function SettingsScreen() {
           onValueChange={() =>
             setLocalTheme(localTheme === 'light' ? 'dark' : 'light')
           }
-          trackColor={{ false: '#767577', true: Colors[theme].buttonSecondary }}
-          thumbColor={theme === 'light' ? Colors[theme].button : '#f4f3f4'}
+          trackColor={{
+            false: Colors[theme].buttonSecondary,
+            true: Colors[theme].buttonSecondary,
+          }}
+          thumbColor={
+            theme === 'light' ? Colors[theme].button : Colors[theme].text
+          }
           style={{
             transform: [{ scaleX: 1.35 }, { scaleY: 1.35 }, { translateY: 4 }],
           }}

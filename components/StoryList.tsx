@@ -41,7 +41,9 @@ export default function StoryList({
         <React.Fragment>
           <FlatList
             ListHeaderComponent={
-              <Text type="title">{translations[appLang].lastStoriesLabel}</Text>
+              <Text type="title" style={{ alignSelf: 'center' }}>
+                {translations[appLang].lastStoriesLabel}
+              </Text>
             }
             data={lastTexts}
             style={{ width: '100%' }}
@@ -87,12 +89,8 @@ export default function StoryList({
             }}
             source={require('@/assets/images/empty.png')}
           ></Image>
-          <Text type='title'>
-            {translations[appLang].noStoriesTitle}
-          </Text>
-          <Text type='small'>
-            {translations[appLang].noStoriesCTA}
-          </Text>
+          <Text type="title">{translations[appLang].noStoriesTitle}</Text>
+          <Text type="small">{translations[appLang].noStoriesCTA}</Text>
         </View>
       )}
     </React.Fragment>
@@ -133,7 +131,7 @@ const RenderItem = ({
         padding: 20,
         paddingBottom: 0,
         gap: 15,
-        elevation: 1,
+        elevation: theme === 'light' ? 1 : 4,
         marginBottom: 20,
         overflow: 'hidden',
         flexDirection: 'row',

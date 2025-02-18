@@ -41,7 +41,7 @@ export const LanguagePickerBottomSheet = forwardRef<
         {...props}
         disappearsOnIndex={-1}
         appearsOnIndex={0}
-        opacity={0.15}
+        opacity={theme === 'light' ? 0.15 : 0.35}
       />
     ),
     [],
@@ -58,8 +58,15 @@ export const LanguagePickerBottomSheet = forwardRef<
       handleIndicatorStyle={{
         backgroundColor: Colors[theme].buttonSecondary,
       }}
+      handleStyle={{ backgroundColor: 'transparent' }}
+      style={{ backgroundColor: Colors[theme].background }}
     >
-      <BottomSheetView style={styles.container}>
+      <BottomSheetView
+        style={[
+          styles.container,
+          { backgroundColor: Colors[theme].background },
+        ]}
+      >
         <FlatList
           data={languages}
           keyExtractor={item => item.value}

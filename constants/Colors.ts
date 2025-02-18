@@ -15,14 +15,13 @@ const Colors = {
   dark: {
     text: '#a5bab8',
     background: '#0e1318',
-    button: '#fff',
-    buttonSecondary: '#fff',
+    button: '#007367', // Ciemniejszy odcień zielonkawo-niebieskiego
+    buttonSecondary: '#122628', // Bardziej stonowany, mniej nasycony odcień
     tint: tintColorDark,
     tabIconDefault: '#a5bab8',
     tabIconSelected: tintColorDark,
-    inputBg: '#fff',
+    inputBg: '#122628',
   },
 }
-
 
 export default Colors

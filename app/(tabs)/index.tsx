@@ -5,6 +5,7 @@ import StorySetup from '@/components/StorySetup'
 import StoryViewer from '@/components/StoryViewer'
 import { setStory } from '@/utils/async-storage'
 import useStore from '@/utils/zustand'
+import Colors from '@/constants/Colors'
 
 export default function HomeScreen() {
   const appLang = useStore(state => state.appLang)
@@ -21,7 +22,7 @@ export default function HomeScreen() {
     <ScrollView
       contentContainerStyle={[
         styles.container,
-        { backgroundColor: theme === 'light' ? 'white' : 'black' },
+        { backgroundColor: Colors[theme].background},
       ]}
     >
       {showStory ? (

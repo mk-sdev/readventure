@@ -72,4 +72,12 @@ export function setButtonBg(
     return Colors[theme].buttonSecondary
   if (!isSelected && pressed && theme === 'light')
     return Colors[theme].buttonSecondary
+
+  if (isSelected && !pressed && theme === 'dark') return Colors[theme].button
+  if (!isSelected && !pressed && theme === 'dark')
+    return Colors[theme].buttonSecondary
+  if (isSelected && pressed && theme === 'dark')
+    return Colors[theme].buttonSecondary
+  if (!isSelected && pressed && theme === 'dark')
+    return Colors[theme].buttonSecondary
 }

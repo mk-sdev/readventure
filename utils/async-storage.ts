@@ -1,5 +1,4 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export async function getValue(key: string): Promise<any> {
   try {
@@ -43,9 +42,38 @@ export async function clearAsyncStorage() {
   }
 }
 
-export async function setStory(){
-  try{
-    const lastTexts = [{text: "Hello World", translation: "Witaj świecie"}]
+export async function setStory() {
+  try {
+    const lastTexts = [
+      {
+        lang: 'de',
+        level: 'A1',
+        text: 'Manchmal gehe ich mit meinem Hund spazieren. Er heißt Max und ist sehr verspielt. Wir gehen oft in den Park, wo er gerne mit anderen Hunden spielt. Gestern haben wir einen neuen Freund kennengelernt. Ein kleiner weißer Terrier, der so süß war! Max und der Terrier haben sofort miteinander gespielt und um die Wette gerannt. Ich habe mich gefreut, dass Max einen neuen Freund gefunden hat. Es ist immer schön, neue Bekanntschaften zu machen, auch für Hunde',
+        translation:
+          "Sometimes I go for a walk with my dog. His name is Max and he is very playful. We often go to the park, where he likes to play with other dogs. Yesterday we met a new friend. A little white terrier who was so cute! Max and the terrier started playing and racing each other immediately. I was happy that Max found a new friend. It's always nice to make new acquaintances, even for dogs.",
+      },
+      {
+        lang: 'de',
+        level: 'A1',
+        text: 'Manchmal gehe ich mit meinem Hund spazieren. Er heißt Max und ist sehr verspielt. Wir gehen oft in den Park, wo er gerne mit anderen Hunden spielt. Gestern haben wir einen neuen Freund kennengelernt. Ein kleiner weißer Terrier, der so süß war! Max und der Terrier haben sofort miteinander gespielt und um die Wette gerannt. Ich habe mich gefreut, dass Max einen neuen Freund gefunden hat. Es ist immer schön, neue Bekanntschaften zu machen, auch für Hunde',
+        translation:
+          "Sometimes I go for a walk with my dog. His name is Max and he is very playful. We often go to the park, where he likes to play with other dogs. Yesterday we met a new friend. A little white terrier who was so cute! Max and the terrier started playing and racing each other immediately. I was happy that Max found a new friend. It's always nice to make new acquaintances, even for dogs.",
+      },
+      {
+        lang: 'de',
+        level: 'A1',
+        text: 'Manchmal gehe ich mit meinem Hund spazieren. Er heißt Max und ist sehr verspielt. Wir gehen oft in den Park, wo er gerne mit anderen Hunden spielt. Gestern haben wir einen neuen Freund kennengelernt. Ein kleiner weißer Terrier, der so süß war! Max und der Terrier haben sofort miteinander gespielt und um die Wette gerannt. Ich habe mich gefreut, dass Max einen neuen Freund gefunden hat. Es ist immer schön, neue Bekanntschaften zu machen, auch für Hunde',
+        translation:
+          "Sometimes I go for a walk with my dog. His name is Max and he is very playful. We often go to the park, where he likes to play with other dogs. Yesterday we met a new friend. A little white terrier who was so cute! Max and the terrier started playing and racing each other immediately. I was happy that Max found a new friend. It's always nice to make new acquaintances, even for dogs.",
+      },
+      {
+        lang: 'de',
+        level: 'A1',
+        text: 'Manchmal gehe ich mit meinem Hund spazieren. Er heißt Max und ist sehr verspielt. Wir gehen oft in den Park, wo er gerne mit anderen Hunden spielt. Gestern haben wir einen neuen Freund kennengelernt. Ein kleiner weißer Terrier, der so süß war! Max und der Terrier haben sofort miteinander gespielt und um die Wette gerannt. Ich habe mich gefreut, dass Max einen neuen Freund gefunden hat. Es ist immer schön, neue Bekanntschaften zu machen, auch für Hunde',
+        translation:
+          "Sometimes I go for a walk with my dog. His name is Max and he is very playful. We often go to the park, where he likes to play with other dogs. Yesterday we met a new friend. A little white terrier who was so cute! Max and the terrier started playing and racing each other immediately. I was happy that Max found a new friend. It's always nice to make new acquaintances, even for dogs.",
+      },
+    ]
     await AsyncStorage.setItem('lastTexts', JSON.stringify(lastTexts))
   } catch (error) {
     console.error('Błąd podczas dodawania historyjki do AsyncStorage:', error)

@@ -15,4 +15,5 @@ export type storedText = {
   transLang: homeLanguages
   text: string
   translation: string
+  level: levels
 }

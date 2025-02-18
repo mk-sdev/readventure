@@ -5,6 +5,7 @@ import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import {
   foreignLanguages,
   homeLanguages,
+  levels,
   request,
   response,
   storedText,
@@ -32,8 +33,9 @@ export default function useFetchText(appLang: homeLanguages) {
       const text: string = response.data.text
       const translation: string = response.data.translation
       const lang: foreignLanguages = reqData.lang
+      const level: levels = reqData.level
       const transLang: homeLanguages = appLang as homeLanguages
-      const newText = { id, text, translation, lang, transLang }
+      const newText:storedText = { id, text, translation, lang, transLang, level }
       let lastTexts: storedText[] = await getValue(STORED_TEXTS_STORAGE_KEY)
 
       if (!lastTexts) lastTexts = [newText]

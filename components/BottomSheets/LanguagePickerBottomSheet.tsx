@@ -9,8 +9,9 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Pressable, StyleSheet } from 'react-native'
 
+import Text from '@/components/texts'
 import Colors from '@/constants/Colors'
 import { foreignLanguages } from '@/constants/Types'
 import { returnFlag } from '@/utils/functions'
@@ -59,7 +60,6 @@ export const LanguagePickerBottomSheet = forwardRef<
       }}
     >
       <BottomSheetView style={styles.container}>
-        {/* <Text style={styles.header}>Select a Language</Text> */}
         <FlatList
           data={languages}
           keyExtractor={item => item.value}

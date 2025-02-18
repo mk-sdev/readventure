@@ -2,7 +2,7 @@ import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native'
 
-import { Text } from '@/components/Themed'
+import Text from '@/components/texts'
 import Colors from '@/constants/Colors'
 import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
@@ -96,12 +96,8 @@ export default function StorySetup({
 
   return (
     <React.Fragment>
-      <Text style={styles.title}>
-        {translations[appLang].textDescriptionLabel}
-      </Text>
-      <Text style={styles.smallText}>
-        {translations[appLang].textDescriptionInfo}
-      </Text>
+      <Text type="title">{translations[appLang].textDescriptionLabel}</Text>
+      <Text type="small">{translations[appLang].textDescriptionInfo}</Text>
       <TextInput
         multiline
         numberOfLines={10}
@@ -130,10 +126,10 @@ export default function StorySetup({
           marginBottom: -10,
         }}
       >
-        {description.length}/{characterLimit}
+        {`${description.length} / ${characterLimit}`}
       </Text>
 
-      <Text style={styles.title}>{translations[appLang].languageLabel}</Text>
+      <Text type="title">{translations[appLang].languageLabel}</Text>
       <Pressable
         style={[
           styles.languageSelector,
@@ -150,7 +146,7 @@ export default function StorySetup({
         </Text>
       </Pressable>
 
-      <Text style={styles.title}>{translations[appLang].chooseLevel}</Text>
+      <Text type="title">{translations[appLang].chooseLevel}</Text>
       <View style={styles.levelContainer}>
         {levels.map(level => (
           <Pressable
@@ -168,7 +164,7 @@ export default function StorySetup({
               },
             ]}
           >
-            <Text style={[styles.level]}>{level}</Text>
+            <Text style={styles.level}>{level}</Text>
           </Pressable>
         ))}
       </View>
@@ -213,25 +209,6 @@ export default function StorySetup({
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-    width: '90%',
-    maxWidth: 300,
-    textAlign: 'center',
-  },
-  smallText: {
-    width: '95%',
-    maxWidth: 300,
-    fontSize: 15,
-    marginBottom: 10,
-    marginTop: -5,
-    opacity: 0.7,
-    lineHeight: 20,
-    textAlign: 'center',
-  },
   input: {
     height: 125,
     textAlignVertical: 'top',

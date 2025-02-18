@@ -3,7 +3,7 @@ import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native'
 
-import { Text } from '@/components/Themed'
+import Text from '@/components/texts'
 import Colors from '@/constants/Colors'
 import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
@@ -41,9 +41,7 @@ export default function StoryList({
         <React.Fragment>
           <FlatList
             ListHeaderComponent={
-              <Text style={styles.title}>
-                {translations[appLang].lastStoriesLabel}
-              </Text>
+              <Text type="title">{translations[appLang].lastStoriesLabel}</Text>
             }
             data={lastTexts}
             style={{ width: '100%' }}
@@ -89,10 +87,10 @@ export default function StoryList({
             }}
             source={require('@/assets/images/empty.png')}
           ></Image>
-          <Text style={styles.title}>
+          <Text type='title'>
             {translations[appLang].noStoriesTitle}
           </Text>
-          <Text style={styles.smallText}>
+          <Text type='small'>
             {translations[appLang].noStoriesCTA}
           </Text>
         </View>
@@ -102,26 +100,6 @@ export default function StoryList({
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-    width: '90%',
-    maxWidth: 300,
-    textAlign: 'center',
-    alignSelf: 'center',
-  },
-  smallText: {
-    width: '95%',
-    maxWidth: 300,
-    fontSize: 15,
-    marginBottom: 10,
-    marginTop: -5,
-    opacity: 0.7,
-    lineHeight: 20,
-    textAlign: 'center',
-  },
   separator: {
     marginVertical: 30,
     height: 1,

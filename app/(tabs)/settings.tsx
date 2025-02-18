@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { Pressable, ScrollView, StyleSheet, Switch } from 'react-native'
 
-import { Text, View } from '@/components/Themed'
+import Text from '@/components/texts'
+import { View } from '@/components/Themed'
 import Colors from '@/constants/Colors'
 import {
   COLOR_THEME_STORAGE_KEY,
@@ -156,7 +157,7 @@ export default function SettingsScreen() {
           gap: 20,
         }}
       >
-        <Text style={[styles.title, { width: 'auto' }]}>
+        <Text type="title" style={{ width: 'auto' }}>
           {translations[appLang].toggleTheme}
         </Text>
         <Switch
@@ -172,12 +173,8 @@ export default function SettingsScreen() {
         />
       </View>
 
-      <Text style={styles.title}>
-        {translations[appLang].chooseHomeLanguage}
-      </Text>
-      <Text style={[styles.smallText, { color: Colors[theme].text }]}>
-        {translations[appLang].homeLanguageInfo}
-      </Text>
+      <Text type="title">{translations[appLang].chooseHomeLanguage}</Text>
+      <Text type="small">{translations[appLang].homeLanguageInfo}</Text>
 
       {(['en', 'pl'] as homeLanguages[]).map(lang => (
         <HomeOption
@@ -189,9 +186,7 @@ export default function SettingsScreen() {
         />
       ))}
 
-      <Text style={styles.title}>
-        {translations[appLang].chooseForeignLanguage}
-      </Text>
+      <Text type="title">{translations[appLang].chooseForeignLanguage}</Text>
 
       {Object.keys(translations[appLang].foreignLanguages).map(key => {
         const langCode = key as foreignLanguages
@@ -217,25 +212,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     padding: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-    width: '90%',
-    maxWidth: 300,
-    textAlign: 'center',
-  },
-  smallText: {
-    width: '95%',
-    maxWidth: 300,
-    fontSize: 15,
-    marginBottom: 10,
-    marginTop: -5,
-    opacity: 0.7,
-    lineHeight: 20,
-    textAlign: 'center',
   },
   option: {
     padding: 10,

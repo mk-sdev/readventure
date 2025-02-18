@@ -1,6 +1,6 @@
 import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { Button, Pressable, StyleSheet, TextInput, View } from 'react-native'
+import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native'
 
 import { Text } from '@/components/Themed'
 import Colors from '@/constants/Colors'
@@ -40,7 +40,13 @@ export default function StorySetup({
     { label: string; value: foreignLanguages }[]
   >([])
 
+  const characterLimit = 150
+
   async function handleSubmit() {
+    if (description.length > characterLimit) {
+      Alert.alert(translations[appLang].submitAlert)
+      return
+    }
     const request: request = {
       description,
       lang: dropDownValue as foreignLanguages,
@@ -118,12 +124,28 @@ export default function StorySetup({
           styles.input,
           {
             backgroundColor: Colors[theme].inputBg,
-            borderColor: Colors[theme].button,
+            borderColor:
+              description.length > characterLimit
+                ? 'tomato'
+                : Colors[theme].button,
+            color:
+              description.length > characterLimit ? 'red' : Colors[theme].text,
           },
         ]}
         value={description}
         onChangeText={setDescription}
       />
+      <Text
+        style={{
+          color:
+            description.length > characterLimit ? 'red' : Colors[theme].text,
+          opacity: 0.7,
+          marginTop: 10,
+          marginBottom: -10,
+        }}
+      >
+        {description.length}/{characterLimit}
+      </Text>
 
       <Text style={styles.title}>{translations[appLang].languageLabel}</Text>
       <Pressable
@@ -151,7 +173,7 @@ export default function StorySetup({
             style={({ pressed }) => [
               styles.option,
               {
-                elevation: level === advancementLevel ? 5 : 0,
+                elevation: level === advancementLevel ? 3 : 1,
                 backgroundColor: setButtonBackground(
                   level === advancementLevel,
                   pressed,
@@ -198,6 +220,7 @@ export default function StorySetup({
         languages={dropDownItems}
         selectedLanguage={dropDownValue}
         onSelect={setDropDownValue}
+        theme={theme}
       />
     </React.Fragment>
   )

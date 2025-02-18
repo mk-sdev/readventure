@@ -9,7 +9,7 @@ export const translations = {
       "If you don't see your home language, choose the one you're the most familiar with",
     chooseForeignLanguage:
       'Which of these languages are you most interested in?',
-      chooseLevel: 'Choose the advencement level',
+    chooseLevel: 'Choose the advencement level',
     foreignLanguages: {
       de: 'German',
       it: 'Italian',
@@ -22,7 +22,9 @@ export const translations = {
     textDescriptionPlaceholder:
       'e.g., A story about a brave knight and its adventures',
     languageLabel: 'Choose a language',
-    submit: 'Submit'
+    submit: 'Submit',
+    submitAlert: 'The description must not exceed the specified length',
+    lastStoriesLabel: 'Here are 10 most recently generated stories',
   },
   pl: {
     settings: 'Ustawienia',
@@ -46,6 +48,8 @@ export const translations = {
     textDescriptionPlaceholder:
       'np. Opowieść o odważnym rycerzu i jego przygodach',
     languageLabel: 'Wybierz język',
-    submit: 'Wyślij'
+    submit: 'Wyślij',
+    submitAlert: 'Opis nie może przekraczać wyznaczonej długości',
+    lastStoriesLabel: 'Tutaj znajduje się 10 ostatnio wygenerowanych historii',
   },
 }

@@ -8,8 +8,8 @@ import React from 'react'
 import { useClientOnlyValue } from '@/components/useClientOnlyValue'
 import { useColorScheme } from '@/components/useColorScheme'
 import Colors from '@/constants/Colors'
-import useStore from '@/utils/zustand'
 import { translations } from '@/constants/Translations'
+import useStore from '@/utils/zustand'
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
 function TabBarIcon(props: {
@@ -31,14 +31,30 @@ function TabBarIcon(props: {
 export default function TabLayout() {
   const colorScheme = useColorScheme()
   const appLang = useStore(state => state.appLang)
-  
+  const theme = useStore(state => state.theme)
+
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         // Disable the static render of the header on web
         // to prevent a hydration error in React Navigation v6.
+        headerStyle: {
+          backgroundColor: Colors[theme].background,
+          elevation: 2
+        },
+        headerTintColor: Colors[theme].text,
         headerShown: useClientOnlyValue(false, true),
+
+        tabBarStyle: {
+          backgroundColor: Colors[theme].background,
+          height: 60,
+          borderTopWidth: 0,
+        },
+        tabBarActiveTintColor: Colors[theme].tabIconSelected,
+        tabBarInactiveTintColor: Colors[theme].tabIconDefault,
+        tabBarLabelStyle: {
+          fontSize: 14,
+        },
       }}
     >
       <Tabs.Screen

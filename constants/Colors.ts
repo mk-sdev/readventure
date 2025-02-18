@@ -1,5 +1,5 @@
-const tintColorLight = '#2f95dc'
-const tintColorDark = '#fff'
+const tintColorLight = '#06d0ba'
+const tintColorDark = '#01af9d'
 
 const Colors = {
   light: {
@@ -8,17 +8,17 @@ const Colors = {
     button: '#01af9d',
     buttonSecondary: '#d8e9e8',
     tint: tintColorLight,
-    tabIconDefault: '#ccc',
+    tabIconDefault: '#a5bab8',
     tabIconSelected: tintColorLight,
     inputBg: '#e4f0ef',
   },
   dark: {
-    text: '#fff',
-    background: '#000',
-    button: '',
+    text: '#a5bab8',
+    background: '#0e1318',
+    button: '#fff',
     buttonSecondary: '#fff',
     tint: tintColorDark,
-    tabIconDefault: '#ccc',
+    tabIconDefault: '#a5bab8',
     tabIconSelected: tintColorDark,
     inputBg: '#fff',
   },

@@ -11,17 +11,19 @@ import React, {
 import { StyleSheet } from 'react-native'
 
 import { Text } from '@/components/Themed'
+import Colors from '@/constants/Colors'
 
 // Definicja propsów
 type SentenceProps = {
   sentence: string
   onClose: () => void
+  theme: 'light' | 'dark'
 }
 
 export const Sentence = forwardRef<
   { open: () => void; close: () => void },
   SentenceProps
->(({ sentence, onClose }, ref) => {
+>(({ sentence, onClose, theme }, ref) => {
   const bottomSheetRef = useRef<BottomSheet>(null)
 
   useImperativeHandle(ref, () => ({
@@ -50,12 +52,22 @@ export const Sentence = forwardRef<
       enablePanDownToClose={true}
       ref={bottomSheetRef}
       index={-1}
-      snapPoints={['25%']}
+      snapPoints={['30%']}
       backdropComponent={renderBackdrop}
       onClose={onClose}
+      handleStyle={{ backgroundColor: Colors[theme].background }}
+      style={{ backgroundColor: Colors[theme].background }}
+      handleIndicatorStyle={{
+        backgroundColor: Colors[theme].buttonSecondary,
+      }}
     >
-      <BottomSheetView style={styles.contentContainer}>
-        <Text>{sentence}</Text>
+      <BottomSheetView
+        style={[
+          styles.contentContainer,
+          { backgroundColor: Colors[theme].background },
+        ]}
+      >
+        <Text style={{color: Colors[theme].text, fontSize: 20}}>{sentence}</Text>
       </BottomSheetView>
     </BottomSheet>
   )

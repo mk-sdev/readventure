@@ -78,7 +78,7 @@ export default function StoryViewer({
         {/* res || index !== undefined */}
         {res || index !== undefined ? (
           <React.Fragment>
-            {res && (
+            {/* {res && (
               <Slider
                 step={1}
                 style={{ width: 200, height: 40 }}
@@ -90,7 +90,7 @@ export default function StoryViewer({
                 thumbTintColor={Colors[theme].tint}
                 onValueChange={currentValue => setFontSize(currentValue)}
               />
-            )}
+            )} */}
             {shouldTranslate ? (
               <Text
                 style={[styles.text, { fontSize, color: Colors[theme].text }]}
@@ -174,6 +174,7 @@ export default function StoryViewer({
         ref={bottomSheetRef}
         sentence={sentence}
         onClose={handleClose}
+        theme={theme}
       />
     </React.Fragment>
   )

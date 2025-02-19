@@ -103,9 +103,7 @@ export default function StorySetup({
         numberOfLines={10}
         placeholder={translations[appLang].textDescriptionPlaceholder}
         placeholderTextColor={
-          theme === 'dark'
-            ? 'rgba(86, 107, 106, 0.5)'
-            : 'rgb(154, 174, 172)'
+          theme === 'dark' ? 'rgba(86, 107, 106, 0.5)' : 'rgb(154, 174, 172)'
         }
         style={[
           styles.input,
@@ -144,7 +142,15 @@ export default function StorySetup({
       >
         {dropDownValue && returnFlag(dropDownValue)}
         <Text
-          style={[styles.languageText, { color: Colors[theme].background }]}
+          style={[
+            styles.languageText,
+            {
+              color:
+                theme === 'light'
+                  ? Colors[theme].background
+                  : Colors[theme].text,
+            },
+          ]}
         >
           {dropDownItems.find(item => item.value === dropDownValue)?.label ||
             'Select Language'}
@@ -195,7 +201,8 @@ export default function StorySetup({
             textAlign: 'center',
             fontWeight: 'bold',
             opacity: 0.95,
-            color: Colors[theme].background,
+            color:
+              theme === 'light' ? Colors[theme].background : Colors[theme].text,
           }}
         >
           {translations[appLang].submit}

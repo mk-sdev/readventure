@@ -58,7 +58,7 @@ export const LanguagePickerBottomSheet = forwardRef<
       handleIndicatorStyle={{
         backgroundColor: Colors[theme].buttonSecondary,
       }}
-      handleStyle={{ backgroundColor: 'transparent' }}
+      handleStyle={{ backgroundColor: Colors[theme].background }}
       style={{ backgroundColor: Colors[theme].background }}
     >
       <BottomSheetView

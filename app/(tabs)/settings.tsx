@@ -217,6 +217,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     padding: 20,
+    minHeight: '100%',
   },
   option: {
     padding: 10,

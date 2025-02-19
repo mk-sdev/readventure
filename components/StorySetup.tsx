@@ -2,7 +2,7 @@ import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native'
 
-import { Text } from '@/components/Themed'
+import Text from '@/components/texts'
 import Colors from '@/constants/Colors'
 import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
@@ -13,7 +13,7 @@ import {
   request,
 } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
-import returnFlag from '@/utils/functions'
+import { returnFlag, setButtonBg } from '@/utils/functions'
 import useStoredData from '@/utils/useStoredData'
 
 import { LanguagePickerBottomSheet } from './BottomSheets/LanguagePickerBottomSheet'
@@ -94,32 +94,17 @@ export default function StorySetup({
     setDropDownValue(dropDownValue || newItems[0]?.value)
   }, [favLangs, appLang])
 
-  function setButtonBackground(
-    isSelected: boolean,
-    pressed: boolean,
-    theme: 'dark' | 'light',
-  ) {
-    if (isSelected && !pressed && theme === 'light') return Colors[theme].button
-    if (!isSelected && !pressed && theme === 'light')
-      return Colors[theme].buttonSecondary
-    if (isSelected && pressed && theme === 'light')
-      return Colors[theme].buttonSecondary
-    if (!isSelected && pressed && theme === 'light')
-      return Colors[theme].buttonSecondary
-  }
-
   return (
     <React.Fragment>
-      <Text style={styles.title}>
-        {translations[appLang].textDescriptionLabel}
-      </Text>
-      <Text style={styles.smallText}>
-        {translations[appLang].textDescriptionInfo}
-      </Text>
+      <Text type="title">{translations[appLang].textDescriptionLabel}</Text>
+      <Text type="small">{translations[appLang].textDescriptionInfo}</Text>
       <TextInput
         multiline
         numberOfLines={10}
         placeholder={translations[appLang].textDescriptionPlaceholder}
+        placeholderTextColor={
+          theme === 'dark' ? 'rgba(86, 107, 106, 0.5)' : 'rgb(154, 174, 172)'
+        }
         style={[
           styles.input,
           {
@@ -127,7 +112,7 @@ export default function StorySetup({
             borderColor:
               description.length > characterLimit
                 ? 'tomato'
-                : Colors[theme].button,
+                : Colors[theme].tint,
             color:
               description.length > characterLimit ? 'red' : Colors[theme].text,
           },
@@ -144,10 +129,10 @@ export default function StorySetup({
           marginBottom: -10,
         }}
       >
-        {description.length}/{characterLimit}
+        {`${description.length} / ${characterLimit}`}
       </Text>
 
-      <Text style={styles.title}>{translations[appLang].languageLabel}</Text>
+      <Text type="title">{translations[appLang].languageLabel}</Text>
       <Pressable
         style={[
           styles.languageSelector,
@@ -157,14 +142,22 @@ export default function StorySetup({
       >
         {dropDownValue && returnFlag(dropDownValue)}
         <Text
-          style={[styles.languageText, { color: Colors[theme].background }]}
+          style={[
+            styles.languageText,
+            {
+              color:
+                theme === 'light'
+                  ? Colors[theme].background
+                  : Colors[theme].text,
+            },
+          ]}
         >
           {dropDownItems.find(item => item.value === dropDownValue)?.label ||
             'Select Language'}
         </Text>
       </Pressable>
 
-      <Text style={styles.title}>{translations[appLang].chooseLevel}</Text>
+      <Text type="title">{translations[appLang].chooseLevel}</Text>
       <View style={styles.levelContainer}>
         {levels.map(level => (
           <Pressable
@@ -174,7 +167,7 @@ export default function StorySetup({
               styles.option,
               {
                 elevation: level === advancementLevel ? 3 : 1,
-                backgroundColor: setButtonBackground(
+                backgroundColor: setButtonBg(
                   level === advancementLevel,
                   pressed,
                   theme,
@@ -182,7 +175,7 @@ export default function StorySetup({
               },
             ]}
           >
-            <Text style={[styles.level]}>{level}</Text>
+            <Text style={styles.level}>{level}</Text>
           </Pressable>
         ))}
       </View>
@@ -208,7 +201,8 @@ export default function StorySetup({
             textAlign: 'center',
             fontWeight: 'bold',
             opacity: 0.95,
-            color: Colors[theme].background,
+            color:
+              theme === 'light' ? Colors[theme].background : Colors[theme].text,
           }}
         >
           {translations[appLang].submit}
@@ -227,25 +221,6 @@ export default function StorySetup({
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-    width: '90%',
-    maxWidth: 300,
-    textAlign: 'center',
-  },
-  smallText: {
-    width: '95%',
-    maxWidth: 300,
-    fontSize: 15,
-    marginBottom: 10,
-    marginTop: -5,
-    opacity: 0.7,
-    lineHeight: 20,
-    textAlign: 'center',
-  },
   input: {
     height: 125,
     textAlignVertical: 'top',

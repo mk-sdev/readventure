@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet } from 'react-native'
 
 import StorySetup from '@/components/StorySetup'
 import StoryViewer from '@/components/StoryViewer'
+import Colors from '@/constants/Colors'
 import { setStory } from '@/utils/async-storage'
 import useStore from '@/utils/zustand'
 
@@ -21,7 +22,7 @@ export default function HomeScreen() {
     <ScrollView
       contentContainerStyle={[
         styles.container,
-        { backgroundColor: theme === 'light' ? 'white' : 'black' },
+        { backgroundColor: Colors[theme].background },
       ]}
     >
       {showStory ? (
@@ -44,7 +45,6 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    // height: '100%',
-    // paddingBottom: 50
+    minHeight: '100%',
   },
 })

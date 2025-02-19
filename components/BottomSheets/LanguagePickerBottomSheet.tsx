@@ -9,11 +9,12 @@ import React, {
   useRef,
   useState,
 } from 'react'
-import { FlatList, Pressable, StyleSheet, Text, View } from 'react-native'
+import { FlatList, Pressable, StyleSheet } from 'react-native'
 
+import Text from '@/components/texts'
 import Colors from '@/constants/Colors'
 import { foreignLanguages } from '@/constants/Types'
-import returnFlag from '@/utils/functions'
+import { returnFlag } from '@/utils/functions'
 
 type Props = {
   languages: { label: string; value: foreignLanguages }[]
@@ -40,7 +41,7 @@ export const LanguagePickerBottomSheet = forwardRef<
         {...props}
         disappearsOnIndex={-1}
         appearsOnIndex={0}
-        opacity={0.15}
+        opacity={theme === 'light' ? 0.15 : 0.35}
       />
     ),
     [],
@@ -55,11 +56,17 @@ export const LanguagePickerBottomSheet = forwardRef<
       backdropComponent={renderBackdrop}
       onChange={setCurrentIndex}
       handleIndicatorStyle={{
-        backgroundColor: Colors[theme].buttonSecondary
+        backgroundColor: Colors[theme].buttonSecondary,
       }}
+      handleStyle={{ backgroundColor: Colors[theme].background }}
+      style={{ backgroundColor: Colors[theme].background }}
     >
-      <BottomSheetView style={styles.container}>
-        {/* <Text style={styles.header}>Select a Language</Text> */}
+      <BottomSheetView
+        style={[
+          styles.container,
+          { backgroundColor: Colors[theme].background },
+        ]}
+      >
         <FlatList
           data={languages}
           keyExtractor={item => item.value}

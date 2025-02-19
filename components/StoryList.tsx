@@ -3,13 +3,13 @@ import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native'
 
-import { Text } from '@/components/Themed'
+import Text from '@/components/texts'
 import Colors from '@/constants/Colors'
 import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import { homeLanguages, storedText } from '@/constants/Types'
 import { clearAsyncStorage, getValue } from '@/utils/async-storage'
-import returnFlag from '@/utils/functions'
+import { returnFlag } from '@/utils/functions'
 
 export default function StoryList({
   setIndex,
@@ -41,7 +41,7 @@ export default function StoryList({
         <React.Fragment>
           <FlatList
             ListHeaderComponent={
-              <Text style={styles.title}>
+              <Text type="title" style={{ alignSelf: 'center' }}>
                 {translations[appLang].lastStoriesLabel}
               </Text>
             }
@@ -89,12 +89,8 @@ export default function StoryList({
             }}
             source={require('@/assets/images/empty.png')}
           ></Image>
-          <Text style={styles.title}>
-            {translations[appLang].noStoriesTitle}
-          </Text>
-          <Text style={styles.smallText}>
-            {translations[appLang].noStoriesCTA}
-          </Text>
+          <Text type="title">{translations[appLang].noStoriesTitle}</Text>
+          <Text type="small">{translations[appLang].noStoriesCTA}</Text>
         </View>
       )}
     </React.Fragment>
@@ -102,26 +98,6 @@ export default function StoryList({
 }
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-    width: '90%',
-    maxWidth: 300,
-    textAlign: 'center',
-    alignSelf: 'center',
-  },
-  smallText: {
-    width: '95%',
-    maxWidth: 300,
-    fontSize: 15,
-    marginBottom: 10,
-    marginTop: -5,
-    opacity: 0.7,
-    lineHeight: 20,
-    textAlign: 'center',
-  },
   separator: {
     marginVertical: 30,
     height: 1,
@@ -155,7 +131,7 @@ const RenderItem = ({
         padding: 20,
         paddingBottom: 0,
         gap: 15,
-        elevation: 1,
+        elevation: theme === 'light' ? 1 : 4,
         marginBottom: 20,
         overflow: 'hidden',
         flexDirection: 'row',

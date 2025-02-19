@@ -13,10 +13,7 @@ export default function LastTextsScreen() {
   const theme = useStore(state => state.theme)
   return (
     <View
-      style={[
-        styles.container,
-        { backgroundColor: Colors[theme].background },
-      ]}
+      style={[styles.container, { backgroundColor: Colors[theme].background }]}
     >
       {!showStory ? (
         <StoryList
@@ -26,7 +23,11 @@ export default function LastTextsScreen() {
           appLang={appLang}
         ></StoryList>
       ) : (
-        <StoryViewer setShowStory={setShowStory} index={index}></StoryViewer>
+        <StoryViewer
+          appLang={appLang}
+          setShowStory={setShowStory}
+          index={index}
+        ></StoryViewer>
       )}
     </View>
   )

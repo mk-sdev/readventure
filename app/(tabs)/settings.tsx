@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { Pressable, ScrollView, StyleSheet, Switch } from 'react-native'
 
-import { Text, View } from '@/components/Themed'
+import Text from '@/components/texts'
+import { View } from '@/components/Themed'
 import Colors from '@/constants/Colors'
 import {
   COLOR_THEME_STORAGE_KEY,
@@ -11,23 +12,9 @@ import {
 import { translations } from '@/constants/Translations'
 import { foreignLanguages, homeLanguages } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
-import returnFlag from '@/utils/functions'
+import { returnFlag, setButtonBg } from '@/utils/functions'
 import useStoredData from '@/utils/useStoredData'
 import useStore from '@/utils/zustand'
-
-function setButtonBackground(
-  isSelected: boolean,
-  pressed: boolean,
-  theme: 'dark' | 'light',
-) {
-  if (isSelected && !pressed && theme === 'light') return Colors[theme].button
-  if (!isSelected && !pressed && theme === 'light')
-    return Colors[theme].buttonSecondary
-  if (isSelected && pressed && theme === 'light')
-    return Colors[theme].buttonSecondary
-  if (!isSelected && pressed && theme === 'light')
-    return Colors[theme].buttonSecondary
-}
 
 function HomeOption({
   lang,
@@ -48,7 +35,7 @@ function HomeOption({
         styles.option,
         {
           elevation: isSelected ? 1 : 0,
-          backgroundColor: setButtonBackground(isSelected, pressed, theme),
+          backgroundColor: setButtonBg(isSelected, pressed, theme),
         },
       ]}
     >
@@ -80,7 +67,7 @@ function ForeignOption({
         styles.option,
         {
           elevation: selectedForeignLanguages.includes(lang) ? 1 : 0,
-          backgroundColor: setButtonBackground(
+          backgroundColor: setButtonBg(
             selectedForeignLanguages.includes(lang),
             pressed,
             theme,
@@ -167,10 +154,10 @@ export default function SettingsScreen() {
           justifyContent: 'center',
           alignItems: 'center',
           backgroundColor: 'transparent',
-          gap:20
+          gap: 20,
         }}
       >
-        <Text style={[styles.title, { width: 'auto' }]}>
+        <Text type="title" style={{ width: 'auto' }}>
           {translations[appLang].toggleTheme}
         </Text>
         <Switch
@@ -178,20 +165,21 @@ export default function SettingsScreen() {
           onValueChange={() =>
             setLocalTheme(localTheme === 'light' ? 'dark' : 'light')
           }
-          trackColor={{ false: '#767577', true: Colors[theme].buttonSecondary }}
-          thumbColor={theme === 'light' ? Colors[theme].button : '#f4f3f4'}
+          trackColor={{
+            false: Colors[theme].buttonSecondary,
+            true: Colors[theme].buttonSecondary,
+          }}
+          thumbColor={
+            theme === 'light' ? Colors[theme].button : Colors[theme].text
+          }
           style={{
             transform: [{ scaleX: 1.35 }, { scaleY: 1.35 }, { translateY: 4 }],
           }}
         />
       </View>
 
-      <Text style={styles.title}>
-        {translations[appLang].chooseHomeLanguage}
-      </Text>
-      <Text style={[styles.smallText, { color: Colors[theme].text }]}>
-        {translations[appLang].homeLanguageInfo}
-      </Text>
+      <Text type="title">{translations[appLang].chooseHomeLanguage}</Text>
+      <Text type="small">{translations[appLang].homeLanguageInfo}</Text>
 
       {(['en', 'pl'] as homeLanguages[]).map(lang => (
         <HomeOption
@@ -203,9 +191,7 @@ export default function SettingsScreen() {
         />
       ))}
 
-      <Text style={styles.title}>
-        {translations[appLang].chooseForeignLanguage}
-      </Text>
+      <Text type="title">{translations[appLang].chooseForeignLanguage}</Text>
 
       {Object.keys(translations[appLang].foreignLanguages).map(key => {
         const langCode = key as foreignLanguages
@@ -231,25 +217,7 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     padding: 20,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: 20,
-    marginBottom: 10,
-    width: '90%',
-    maxWidth: 300,
-    textAlign: 'center',
-  },
-  smallText: {
-    width: '95%',
-    maxWidth: 300,
-    fontSize: 15,
-    marginBottom: 10,
-    marginTop: -5,
-    opacity: 0.7,
-    lineHeight: 20,
-    textAlign: 'center',
+    minHeight: '100%',
   },
   option: {
     padding: 10,

@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const generatedText = await generateText(description, lang, homeLang, level)
     const [text, translation] = generatedText.split('###')
 
-    return Response.json({ text, translation })
+    return Response.json({ text, translation: translation.trimStart() })
   } catch (error) {
     console.error('Error generating text:', error)
     return Response.json(
@@ -35,13 +35,13 @@ async function generateText(
   level: levels,
 ): Promise<string> {
   const content = description
-    ? `Napisz historyjkę na około sto słów na podany temat: ${description} w języku ${lang} na poziomie: ${level}. Następnie na jej końcu postaw znaki "###". Po nich podaj tłumaczenie na język: ${homeLang} odwzorowując strukturę zdań.`
-    : `Napisz historyjkę na około sto słów na dowolny temat w języku ${lang} na poziomie: ${level}. Następnie na jej końcu postaw znaki "###". Po nich podaj tłumaczenie na język: ${homeLang} odwzorowując strukturę zdań.`
+    ? `Write a short story of approximately one hundred words on the given topic: ${description} in ${lang} at the ${level} level. Then, at the end, place the characters "###". After that, provide a translation into ${homeLang}, maintaining the sentence structure.`
+    : `Write a short story of approximately one hundred words on any topic in ${lang} at the ${level} level. Then, at the end, place the characters "###". After that, provide a translation into ${homeLang}, maintaining the sentence structure.`
 
   const data = {
-    model: 'gpt-3.5-turbo', 
+    model: 'gpt-3.5-turbo',
     messages: [{ role: 'user', content }],
-    max_tokens: 350, 
+    max_tokens: 350,
   }
 
   try {

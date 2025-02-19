@@ -27,6 +27,10 @@ export const translations = {
     lastStoriesLabel: 'Here are 10 most recently generated stories',
     noStoriesTitle: 'No texts generated yet',
     noStoriesCTA: 'Go to the Home tab and generate one',
+    translate: "Translate",
+    showOriginal:'Show original text',
+    close: "Close",
+    waitingText: "Your read-venture is being generated!"
   },
   pl: {
     settings: 'Ustawienia',
@@ -55,5 +59,9 @@ export const translations = {
     lastStoriesLabel: 'Tutaj znajduje się 10 ostatnio wygenerowanych historii',
     noStoriesTitle: 'Niczego tu jeszcze nie ma',
     noStoriesCTA: 'Przejdź do ekranu domowego, by coś wygenerować',
+    translate: "Przetłumacz",
+    showOriginal:'Pokaż oryginał',
+    close: "Zamknij",
+    waitingText: "Twój tekst jest właśnie generowany!"
   },
 }

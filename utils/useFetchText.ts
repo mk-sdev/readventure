@@ -18,7 +18,7 @@ export default function useFetchText(appLang: homeLanguages) {
 
   const fetchData = async (reqData: request) => {
     try {
-      const response = await axios.post('http://localhost:8082/api/hello', {
+      const response = await axios.post('http://localhost:8081/api/hello', {
         params: {
           description: reqData.description,
           lang: reqData.lang,

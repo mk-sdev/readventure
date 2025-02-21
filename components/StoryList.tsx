@@ -128,6 +128,8 @@ const RenderItem = ({
         height: 120,
         backgroundColor: Colors[theme].inputBg,
         borderRadius: 10,
+        borderWidth: 2,
+        borderColor: Colors[theme].buttonSecondary,
         padding: 20,
         paddingBottom: 0,
         gap: 15,
@@ -159,7 +161,7 @@ const RenderItem = ({
         {story?.text}
       </Text>
       <LinearGradient
-        colors={[Colors[theme].inputBg, 'transparent']}
+        colors={[Colors[theme].buttonSecondary, 'transparent']}
         start={{ x: 1, y: 1 }}
         end={{ x: 1, y: 0 }}
         style={{

@@ -13,7 +13,7 @@ const Colors = {
     inputBg: '#e4f0ef',
   },
   dark: {
-    text: '#a5bab8',
+    text: '#edfffe',
     background: '#0e1318',
     button: '#007367', // Ciemniejszy odcień zielonkawo-niebieskiego
     buttonSecondary: '#122628', // Bardziej stonowany, mniej nasycony odcień

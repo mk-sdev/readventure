@@ -1,4 +1,6 @@
+import Feather from '@expo/vector-icons/Feather'
 import Slider from '@react-native-community/slider'
+import * as Clipboard from 'expo-clipboard'
 import React, { useEffect, useRef, useState } from 'react'
 import {
   Button,
@@ -16,6 +18,7 @@ import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import { homeLanguages, request, storedText } from '@/constants/Types'
 import { getValue } from '@/utils/async-storage'
+import { returnFlag } from '@/utils/functions'
 import useFetchText from '@/utils/useFetchText'
 import useStore from '@/utils/zustand'
 
@@ -69,6 +72,16 @@ export default function StoryViewer({
   useEffect(() => {
     // setSliderValue(fontSize)
   }, [fontSize])
+
+  const [showCopyText, setShowCopyText] = useState<unknown>(true)
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(res?.text as string)
+    setShowCopyText(false)
+    setTimeout(() => {
+      setShowCopyText(true)
+    }, 2000)
+  }
+
   return (
     <React.Fragment>
       <ScrollView
@@ -78,19 +91,69 @@ export default function StoryViewer({
         {/* res || index !== undefined */}
         {res || index !== undefined ? (
           <React.Fragment>
-            {/* {res && (
-              <Slider
-                step={1}
-                style={{ width: 200, height: 40 }}
-                minimumValue={18}
-                maximumValue={40}
-                value={sliderValue}
-                minimumTrackTintColor={Colors[theme].button}
-                maximumTrackTintColor={Colors[theme].button}
-                thumbTintColor={Colors[theme].tint}
-                onValueChange={currentValue => setFontSize(currentValue)}
-              />
-            )} */}
+            <View
+              style={{
+                width: '90%',
+                maxWidth: 400,
+                padding: 10,
+                flexDirection: 'row',
+                gap: 10,
+                marginVertical: 20,
+                // backgroundColor: 'red',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+              }}
+            >
+              <View
+                style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}
+              >
+                {returnFlag(res?.lang as homeLanguages)}
+                <Text
+                  //@ts-ignore
+                  style={{
+                    color: Colors[theme].text,
+                    fontWeight: 'bold',
+                    lineHeight: '100%',
+                  }}
+                >
+                  {res?.level}
+                </Text>
+              </View>
+              {res && (
+                <Slider
+                  step={1}
+                  style={{ flexBasis: 175 }}
+                  minimumValue={18}
+                  maximumValue={40}
+                  value={sliderValue}
+                  minimumTrackTintColor={Colors[theme].button}
+                  maximumTrackTintColor={Colors[theme].buttonSecondary}
+                  thumbTintColor={Colors[theme].tint}
+                  onValueChange={currentValue => setFontSize(currentValue)}
+                />
+              )}
+              <Pressable onPress={() => copyToClipboard()}>
+                <View
+                  style={{
+                    height: '100%',
+                    alignItems: 'center',
+                    width: 50,
+                    // backgroundColor: 'red',
+                  }}
+                >
+                  <Feather
+                    name={showCopyText ? 'copy' : 'check-circle'}
+                    size={25}
+                    color={Colors[theme].tint}
+                  />
+                  <Text
+                    style={[styles.copyText, { color: Colors[theme].tint }]}
+                  >
+                    {showCopyText ? 'Copy' : 'Copied!'}
+                  </Text>
+                </View>
+              </Pressable>
+            </View>
             {shouldTranslate ? (
               <Text
                 style={[styles.text, { fontSize, color: Colors[theme].text }]}
@@ -99,7 +162,7 @@ export default function StoryViewer({
               </Text>
             ) : (
               <Text style={[styles.text, { color: Colors[theme].text }]}>
-                {res?.text.split('.').map((sentence, i) => (
+                {res?.text.split('. ').map((sentence, i, arr) => (
                   <Text
                     key={i}
                     style={{
@@ -113,31 +176,20 @@ export default function StoryViewer({
                       handleSentencePress(res?.translation.split('.')[i], i)
                     }
                   >
-                    {sentence}.
+                    {sentence}
+                    {i !== arr.length - 1 && '. '}
                   </Text>
                 ))}
               </Text>
             )}
             <Pressable
-              style={[
-                styles.button,
-                {
-                  backgroundColor: Colors[theme].button,
-                },
-              ]}
+              style={[styles.button, { backgroundColor: Colors[theme].button }]}
               onPress={() => {
                 console.log('first')
                 setShouldTranslate(prev => !prev)
               }}
             >
-              <Text
-                style={[
-                  styles.buttonText,
-                  {
-                    color: Colors[theme].text,
-                  },
-                ]}
-              >
+              <Text style={[styles.buttonText, { color: Colors[theme].text }]}>
                 {shouldTranslate
                   ? translations[appLang].showOriginal
                   : translations[appLang].translate}
@@ -152,9 +204,7 @@ export default function StoryViewer({
         <Pressable
           style={[
             styles.button,
-            {
-              backgroundColor: Colors[theme].buttonSecondary,
-            },
+            { backgroundColor: Colors[theme].buttonSecondary },
           ]}
           onPress={() => setShowStory(false)}
         >
@@ -184,6 +234,7 @@ const styles = StyleSheet.create({
   text: {
     width: '90%',
     maxWidth: 400,
+    opacity: 0.8,
   },
   button: {
     borderRadius: 9,
@@ -197,5 +248,10 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  copyText: {
+    fontWeight: 'bold',
+    fontSize: 13,
+    opacity: 0.75,
   },
 })

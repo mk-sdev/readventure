@@ -11,7 +11,12 @@ export async function POST(request: Request) {
     const generatedText = await generateText(description, lang, homeLang, level)
     const [text, translation] = generatedText.split('###')
 
-    return Response.json({ text: text.trim(), translation: translation.replace(/^translation:\s*/i, '').trim() })
+    return Response.json({
+      text: text.trim(),
+      translation: translation.replace(/^translation:\s*/i, '').trim(),
+      lang,
+      level,
+    })
   } catch (error) {
     console.error('Error generating text:', error)
     return Response.json(

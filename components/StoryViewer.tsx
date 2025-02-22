@@ -3,17 +3,15 @@ import Slider from '@react-native-community/slider'
 import * as Clipboard from 'expo-clipboard'
 import React, { useEffect, useRef, useState } from 'react'
 import {
-  Button,
   Pressable,
   ScrollView,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native'
 
 import StyledText from '@/components/texts'
 import Colors from '@/constants/Colors'
-// import Text from '@/components/texts'
 import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import { homeLanguages, request, storedText } from '@/constants/Types'
@@ -86,26 +84,22 @@ export default function StoryViewer({
     <React.Fragment>
       <ScrollView
         style={{ width: '100%' }}
-        contentContainerStyle={{ alignItems: 'center', paddingBottom: 20 }}
+        contentContainerStyle={{
+          alignItems: 'center',
+          paddingBottom: 20,
+          justifyContent: 'space-between',
+          minHeight: '100%',
+        }}
       >
-        {/* res || index !== undefined */}
-        {res || index !== undefined ? (
-          <React.Fragment>
-            <View
-              style={{
-                width: '90%',
-                maxWidth: 400,
-                padding: 10,
-                flexDirection: 'row',
-                gap: 10,
-                marginVertical: 20,
-                // backgroundColor: 'red',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}
-            >
+        {(res || index !== undefined) && (
+          <View style={{ alignItems: 'center' }}>
+            <View style={styles.header}>
               <View
-                style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 10,
+                }}
               >
                 {returnFlag(res?.lang as homeLanguages)}
                 <Text
@@ -138,7 +132,6 @@ export default function StoryViewer({
                     height: '100%',
                     alignItems: 'center',
                     width: 50,
-                    // backgroundColor: 'red',
                   }}
                 >
                   <Feather
@@ -182,6 +175,17 @@ export default function StoryViewer({
                 ))}
               </Text>
             )}
+          </View>
+        )}
+
+        {!(res || index !== undefined) && (
+          <StyledText type="title" style={{ height: '100%' }}>
+            {translations[appLang].waitingText}
+          </StyledText>
+        )}
+
+        <View style={styles.bottomButtonsView}>
+          {(res || index !== undefined) && (
             <Pressable
               style={[styles.button, { backgroundColor: Colors[theme].button }]}
               onPress={() => {
@@ -195,30 +199,20 @@ export default function StoryViewer({
                   : translations[appLang].translate}
               </Text>
             </Pressable>
-          </React.Fragment>
-        ) : (
-          <StyledText type="title" style={{ height: '100%' }}>
-            {translations[appLang].waitingText}
-          </StyledText>
-        )}
-        <Pressable
-          style={[
-            styles.button,
-            { backgroundColor: Colors[theme].buttonSecondary },
-          ]}
-          onPress={() => setShowStory(false)}
-        >
-          <Text
+          )}
+
+          <Pressable
             style={[
-              styles.buttonText,
-              {
-                color: Colors[theme].text,
-              },
+              styles.button,
+              { backgroundColor: Colors[theme].buttonSecondary },
             ]}
+            onPress={() => setShowStory(false)}
           >
-            {translations[appLang].close}
-          </Text>
-        </Pressable>
+            <Text style={[styles.buttonText, { color: Colors[theme].text }]}>
+              {translations[appLang].close}
+            </Text>
+          </Pressable>
+        </View>
       </ScrollView>
       <Sentence
         ref={bottomSheetRef}
@@ -231,6 +225,20 @@ export default function StoryViewer({
 }
 
 const styles = StyleSheet.create({
+  header: {
+    width: '90%',
+    maxWidth: 400,
+    padding: 10,
+    flexDirection: 'row',
+    gap: 10,
+    marginVertical: 20,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  bottomButtonsView: {
+    width: '100%',
+    alignItems: 'center',
+  },
   text: {
     width: '90%',
     maxWidth: 400,

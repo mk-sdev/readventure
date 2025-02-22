@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     const generatedText = await generateText(description, lang, homeLang, level)
     const [text, translation] = generatedText.split('###')
 
-    return Response.json({ text, translation: translation.trimStart() })
+    return Response.json({ text: text.trim(), translation: translation.replace(/^translation:\s*/i, '').trim() })
   } catch (error) {
     console.error('Error generating text:', error)
     return Response.json(
@@ -28,6 +28,21 @@ const headers = {
   Authorization: `Bearer ${apiKey}`,
 }
 
+function returnFullLanguageName(lang: homeLanguages | foreignLanguages) {
+  switch (lang) {
+    case 'de':
+      return 'German'
+    case 'en':
+      return 'English'
+    case 'es':
+      return 'Spanish'
+    case 'it':
+      return 'Italian'
+    case 'pl':
+      return 'Polish'
+  }
+}
+
 async function generateText(
   description: string,
   lang: foreignLanguages,
@@ -35,8 +50,8 @@ async function generateText(
   level: levels,
 ): Promise<string> {
   const content = description
-    ? `Write a short story of approximately one hundred words on the given topic: ${description} in ${lang} at the ${level} level. Then, at the end, place the characters "###". After that, provide a translation into ${homeLang}, maintaining the sentence structure.`
-    : `Write a short story of approximately one hundred words on any topic in ${lang} at the ${level} level. Then, at the end, place the characters "###". After that, provide a translation into ${homeLang}, maintaining the sentence structure.`
+    ? `Write a short story of approximately one hundred words on the given topic: ${description} in ${returnFullLanguageName(lang)} at the ${level} level. Then, at the end, place the characters "###". After that, provide a translation into ${returnFullLanguageName(homeLang)}, maintaining the sentence structure.`
+    : `Write a short story of approximately one hundred words on any topic in ${returnFullLanguageName(lang)} at the ${level} level. Then, at the end, place the characters "###". After that, provide a translation into ${returnFullLanguageName(homeLang)}, maintaining the sentence structure.`
 
   const data = {
     model: 'gpt-3.5-turbo',

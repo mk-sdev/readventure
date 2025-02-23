@@ -17,6 +17,7 @@ import { returnFlag, setButtonBg } from '@/utils/functions'
 import useStoredData from '@/utils/useStoredData'
 
 import { LanguagePickerBottomSheet } from './BottomSheets/LanguagePickerBottomSheet'
+import Button from './Button'
 
 export default function StorySetup({
   appLang,
@@ -37,7 +38,7 @@ export default function StorySetup({
 
   const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null)
   const [dropDownItems, setDropDownItems] = useState<
-    { label: string; value: foreignLanguages }[]
+    { label: string; value: foreignLanguages; isFav: boolean }[]
   >([])
 
   const characterLimit = 150
@@ -83,6 +84,7 @@ export default function StorySetup({
       ([key, value]) => ({
         label: value,
         value: key as foreignLanguages,
+        isFav: favLangs && favLangs.includes(key as foreignLanguages),
       }),
     )
 
@@ -91,7 +93,7 @@ export default function StorySetup({
       ...newItems.filter(item => !favLangs.includes(item.value)),
     ]
     setDropDownItems(newItems)
-    setDropDownValue(dropDownValue || newItems[0]?.value)
+    setDropDownValue(newItems[0]?.value || dropDownValue)
   }, [favLangs, appLang])
 
   return (
@@ -102,9 +104,7 @@ export default function StorySetup({
         multiline
         numberOfLines={10}
         placeholder={translations[appLang].textDescriptionPlaceholder}
-        placeholderTextColor={
-          theme === 'dark' ? 'rgba(86, 107, 106, 0.5)' : 'rgb(154, 174, 172)'
-        }
+        placeholderTextColor={Colors[theme].placeholder}
         style={[
           styles.input,
           {
@@ -112,7 +112,7 @@ export default function StorySetup({
             borderColor:
               description.length > characterLimit
                 ? 'tomato'
-                : Colors[theme].tint,
+                : Colors[theme].inputBorder,
             color:
               description.length > characterLimit ? 'red' : Colors[theme].text,
           },
@@ -180,7 +180,8 @@ export default function StorySetup({
         ))}
       </View>
 
-      <Pressable
+      <Button onPress={handleSubmit} text={translations[appLang].submit} />
+      {/* <Pressable
         onPress={handleSubmit}
         style={({ pressed }) => [
           {
@@ -207,7 +208,7 @@ export default function StorySetup({
         >
           {translations[appLang].submit}
         </Text>
-      </Pressable>
+      </Pressable> */}
 
       <LanguagePickerBottomSheet
         ref={bottomSheetRef}

@@ -10,7 +10,7 @@ import React, {
 } from 'react'
 import { StyleSheet } from 'react-native'
 
-import { Text } from '@/components/Themed'
+import Text from '@/components/texts'
 import Colors from '@/constants/Colors'
 
 // Definicja propsów
@@ -58,7 +58,7 @@ export const Sentence = forwardRef<
       handleStyle={{ backgroundColor: Colors[theme].background }}
       style={{ backgroundColor: Colors[theme].background }}
       handleIndicatorStyle={{
-        backgroundColor: Colors[theme].buttonSecondary,
+        backgroundColor: Colors[theme].bottomSheetHandle,
       }}
     >
       <BottomSheetView
@@ -67,7 +67,9 @@ export const Sentence = forwardRef<
           { backgroundColor: Colors[theme].background },
         ]}
       >
-        <Text style={{color: Colors[theme].text, fontSize: 20}}>{sentence}</Text>
+        <Text style={{ color: Colors[theme].text, fontSize: 20 }}>
+          {sentence}
+        </Text>
       </BottomSheetView>
     </BottomSheet>
   )

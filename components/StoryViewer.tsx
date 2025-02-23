@@ -1,25 +1,21 @@
+import Feather from '@expo/vector-icons/Feather'
 import Slider from '@react-native-community/slider'
+import * as Clipboard from 'expo-clipboard'
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  Button,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 import StyledText from '@/components/texts'
 import Colors from '@/constants/Colors'
-// import Text from '@/components/texts'
 import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import { homeLanguages, request, storedText } from '@/constants/Types'
 import { getValue } from '@/utils/async-storage'
+import { returnFlag } from '@/utils/functions'
 import useFetchText from '@/utils/useFetchText'
 import useStore from '@/utils/zustand'
 
 import { Sentence } from './BottomSheets/BottomSheet'
+import Button from './Button'
 
 export default function StoryViewer({
   appLang,
@@ -66,31 +62,92 @@ export default function StoryViewer({
 
   const [fontSize, setFontSize] = useState<number>(22)
   const [sliderValue, setSliderValue] = useState(22)
-  useEffect(() => {
-    // setSliderValue(fontSize)
-  }, [fontSize])
+  // useEffect(() => {
+  //   // setSliderValue(fontSize)
+  // }, [fontSize])
+
+  const [showCopyText, setShowCopyText] = useState<unknown>(true)
+  const copyToClipboard = async () => {
+    await Clipboard.setStringAsync(res?.text as string)
+    setShowCopyText(false)
+    setTimeout(() => {
+      setShowCopyText(true)
+    }, 2000)
+  }
+
   return (
     <React.Fragment>
       <ScrollView
         style={{ width: '100%' }}
-        contentContainerStyle={{ alignItems: 'center', paddingBottom: 20 }}
+        contentContainerStyle={{
+          alignItems: 'center',
+          paddingBottom: 20,
+          justifyContent: 'space-between',
+          minHeight: '100%',
+        }}
       >
-        {/* res || index !== undefined */}
-        {res || index !== undefined ? (
-          <React.Fragment>
-            {/* {res && (
-              <Slider
-                step={1}
-                style={{ width: 200, height: 40 }}
-                minimumValue={18}
-                maximumValue={40}
-                value={sliderValue}
-                minimumTrackTintColor={Colors[theme].button}
-                maximumTrackTintColor={Colors[theme].button}
-                thumbTintColor={Colors[theme].tint}
-                onValueChange={currentValue => setFontSize(currentValue)}
-              />
-            )} */}
+        {(res || index !== undefined) && (
+          <View style={{ alignItems: 'center' }}>
+            <View style={styles.header}>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 10,
+                }}
+              >
+                {returnFlag(res?.lang as homeLanguages)}
+                <Text
+                  //@ts-ignore
+                  style={{
+                    color: Colors[theme].text,
+                    fontWeight: 'bold',
+                    lineHeight: '100%',
+                  }}
+                >
+                  {res?.level}
+                </Text>
+              </View>
+              {res && (
+                <Slider
+                  step={1}
+                  style={{ flexBasis: 175 }}
+                  minimumValue={18}
+                  maximumValue={40}
+                  value={sliderValue}
+                  minimumTrackTintColor={Colors[theme].sliderLeft}
+                  maximumTrackTintColor={Colors[theme].sliderRight}
+                  thumbTintColor={Colors[theme].sliderThumb}
+                  onValueChange={currentValue => setFontSize(currentValue)}
+                />
+              )}
+              <Pressable onPress={() => copyToClipboard()}>
+                <View
+                  style={{
+                    height: '100%',
+                    alignItems: 'center',
+                    width: 50,
+                  }}
+                >
+                  <Feather
+                    name={showCopyText ? 'copy' : 'check-circle'}
+                    size={25}
+                    color={Colors[theme].tint}
+                  />
+                  <Text
+                    style={[
+                      styles.copyText,
+                      {
+                        color: Colors[theme].tint,
+                        opacity: theme === 'dark' ? 0.75 : 0.85,
+                      },
+                    ]}
+                  >
+                    {showCopyText ? 'Copy' : 'Copied!'}
+                  </Text>
+                </View>
+              </Pressable>
+            </View>
             {shouldTranslate ? (
               <Text
                 style={[styles.text, { fontSize, color: Colors[theme].text }]}
@@ -99,7 +156,7 @@ export default function StoryViewer({
               </Text>
             ) : (
               <Text style={[styles.text, { color: Colors[theme].text }]}>
-                {res?.text.split('.').map((sentence, i) => (
+                {res?.text.split('. ').map((sentence, i, arr) => (
                   <Text
                     key={i}
                     style={{
@@ -113,62 +170,39 @@ export default function StoryViewer({
                       handleSentencePress(res?.translation.split('.')[i], i)
                     }
                   >
-                    {sentence}.
+                    {sentence}
+                    {i !== arr.length - 1 && '. '}
                   </Text>
                 ))}
               </Text>
             )}
-            <Pressable
-              style={[
-                styles.button,
-                {
-                  backgroundColor: Colors[theme].button,
-                },
-              ]}
-              onPress={() => {
-                console.log('first')
-                setShouldTranslate(prev => !prev)
-              }}
-            >
-              <Text
-                style={[
-                  styles.buttonText,
-                  {
-                    color: Colors[theme].text,
-                  },
-                ]}
-              >
-                {shouldTranslate
-                  ? translations[appLang].showOriginal
-                  : translations[appLang].translate}
-              </Text>
-            </Pressable>
-          </React.Fragment>
-        ) : (
+          </View>
+        )}
+
+        {!(res || index !== undefined) && (
           <StyledText type="title" style={{ height: '100%' }}>
             {translations[appLang].waitingText}
           </StyledText>
         )}
-        <Pressable
-          style={[
-            styles.button,
-            {
-              backgroundColor: Colors[theme].buttonSecondary,
-            },
-          ]}
-          onPress={() => setShowStory(false)}
-        >
-          <Text
-            style={[
-              styles.buttonText,
-              {
-                color: Colors[theme].text,
-              },
-            ]}
-          >
-            {translations[appLang].close}
-          </Text>
-        </Pressable>
+
+        <View style={styles.bottomButtonsView}>
+          {(res || index !== undefined) && (
+            <Button
+              text={
+                shouldTranslate
+                  ? translations[appLang].showOriginal
+                  : translations[appLang].translate
+              }
+              onPress={() => setShouldTranslate(prev => !prev)}
+            />
+          )}
+
+          <Button
+            type="secondary"
+            text={translations[appLang].close}
+            onPress={() => setShowStory(false)}
+          />
+        </View>
       </ScrollView>
       <Sentence
         ref={bottomSheetRef}
@@ -181,9 +215,24 @@ export default function StoryViewer({
 }
 
 const styles = StyleSheet.create({
-  text: {
+  header: {
     width: '90%',
     maxWidth: 400,
+    padding: 10,
+    flexDirection: 'row',
+    gap: 10,
+    marginVertical: 20,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  bottomButtonsView: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  text: {
+    width: '90%',
+    maxWidth: 700,
+    opacity: 0.8,
   },
   button: {
     borderRadius: 9,
@@ -197,5 +246,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  copyText: {
+    fontWeight: 'bold',
+    fontSize: 13,
   },
 })

@@ -40,7 +40,9 @@ export default function TabLayout() {
         // to prevent a hydration error in React Navigation v6.
         headerStyle: {
           backgroundColor: Colors[theme].background,
-          elevation: 2
+          elevation: 2,
+          borderBottomWidth: 1,
+          borderBottomColor: Colors[theme].headerBorder,
         },
         headerTintColor: Colors[theme].text,
         headerShown: useClientOnlyValue(false, true),

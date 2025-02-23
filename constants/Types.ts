@@ -8,7 +8,12 @@ export type request = {
   homeLang: homeLanguages
   level: levels
 }
-export type response = { text: string; translation: string }
+export type response = {
+  text: string
+  translation: string
+  lang: foreignLanguages
+  level: levels
+}
 export type storedText = {
   id: string
   lang: foreignLanguages

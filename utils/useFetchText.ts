@@ -18,7 +18,7 @@ export default function useFetchText(appLang: homeLanguages) {
 
   const fetchData = async (reqData: request) => {
     try {
-      const response = await axios.post('http://localhost:8081/api/hello', {
+      const response = await axios.post('http://localhost:8081/api/generate', {
         params: {
           description: reqData.description,
           lang: reqData.lang,
@@ -40,7 +40,7 @@ export default function useFetchText(appLang: homeLanguages) {
 
       if (!lastTexts) lastTexts = [newText]
       else lastTexts.unshift(newText)
-      if (lastTexts.length > 3) lastTexts.pop()
+      if (lastTexts.length > 10) lastTexts.pop()
 
       await setValue(STORED_TEXTS_STORAGE_KEY, lastTexts)
     } catch (error) {

@@ -1,3 +1,4 @@
+import Feather from '@expo/vector-icons/Feather'
 import { useEffect } from 'react'
 import { Pressable, ScrollView, StyleSheet, Switch } from 'react-native'
 
@@ -155,27 +156,71 @@ export default function SettingsScreen() {
           alignItems: 'center',
           backgroundColor: 'transparent',
           gap: 20,
+          margin: 20,
         }}
       >
-        <Text type="title" style={{ width: 'auto' }}>
+        <Text
+          type="title"
+          style={{
+            width: 'auto',
+            marginTop: 10,
+          }}
+        >
           {translations[appLang].toggleTheme}
         </Text>
-        <Switch
-          value={theme === 'light'}
-          onValueChange={() =>
-            setLocalTheme(localTheme === 'light' ? 'dark' : 'light')
-          }
-          trackColor={{
-            false: Colors[theme].buttonSecondary,
-            true: Colors[theme].buttonSecondary,
-          }}
-          thumbColor={
-            theme === 'light' ? Colors[theme].button : Colors[theme].text
-          }
+        <View
           style={{
-            transform: [{ scaleX: 1.35 }, { scaleY: 1.35 }, { translateY: 4 }],
+            backgroundColor: 'transparent',
+            flexDirection: 'row',
+            height: 50,
+            width: 100,
+            borderRadius: 15,
+            overflow: 'hidden',
           }}
-        />
+        >
+          <Pressable
+            style={{
+              flex: 1,
+              backgroundColor:
+                localTheme === 'dark'
+                  ? Colors[theme].buttonSecondary
+                  : Colors[theme].button,
+              justifyContent: 'center',
+            }}
+            onPress={() => setLocalTheme('light')}
+          >
+            <Feather
+              name="sun"
+              size={24}
+              style={{
+                alignSelf: 'center',
+                opacity: localTheme === 'dark' ? 0.5 : 1,
+              }}
+              color={Colors[theme].text}
+            />
+          </Pressable>
+          <Pressable
+            style={{
+              flex: 1,
+              backgroundColor:
+                localTheme === 'dark'
+                  ? Colors[theme].button
+                  : Colors[theme].buttonSecondary,
+              justifyContent: 'center',
+            }}
+            onPress={() => setLocalTheme('dark')}
+          >
+            <Feather
+              name="moon"
+              size={24}
+              style={{
+                alignSelf: 'center',
+                opacity: localTheme === 'dark' ? 1 : 0.5,
+              }}
+              color={Colors[theme].text}
+            />
+          </Pressable>
+        </View>
       </View>
 
       <Text type="title">{translations[appLang].chooseHomeLanguage}</Text>

@@ -94,7 +94,7 @@ export default function StorySetup({
       ...newItems.filter(item => !favLangs.includes(item.value)),
     ]
     setDropDownItems(newItems)
-    setDropDownValue(dropDownValue || newItems[0]?.value)
+    setDropDownValue(newItems[0]?.value || dropDownValue)
   }, [favLangs, appLang])
 
   return (

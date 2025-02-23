@@ -15,6 +15,7 @@ import useFetchText from '@/utils/useFetchText'
 import useStore from '@/utils/zustand'
 
 import { Sentence } from './BottomSheets/BottomSheet'
+import Button from './Button'
 
 export default function StoryViewer({
   appLang,
@@ -186,32 +187,21 @@ export default function StoryViewer({
 
         <View style={styles.bottomButtonsView}>
           {(res || index !== undefined) && (
-            <Pressable
-              style={[styles.button, { backgroundColor: Colors[theme].button }]}
-              onPress={() => {
-                console.log('first')
-                setShouldTranslate(prev => !prev)
-              }}
-            >
-              <Text style={[styles.buttonText, { color: Colors[theme].text }]}>
-                {shouldTranslate
+            <Button
+              text={
+                shouldTranslate
                   ? translations[appLang].showOriginal
-                  : translations[appLang].translate}
-              </Text>
-            </Pressable>
+                  : translations[appLang].translate
+              }
+              onPress={() => setShouldTranslate(prev => !prev)}
+            />
           )}
 
-          <Pressable
-            style={[
-              styles.button,
-              { backgroundColor: Colors[theme].buttonSecondary },
-            ]}
+          <Button
+            type="secondary"
+            text={translations[appLang].close}
             onPress={() => setShowStory(false)}
-          >
-            <Text style={[styles.buttonText, { color: Colors[theme].text }]}>
-              {translations[appLang].close}
-            </Text>
-          </Pressable>
+          />
         </View>
       </ScrollView>
       <Sentence
@@ -241,7 +231,7 @@ const styles = StyleSheet.create({
   },
   text: {
     width: '90%',
-    maxWidth: 400,
+    maxWidth: 700,
     opacity: 0.8,
   },
   button: {

@@ -4,9 +4,7 @@ import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native'
 
 import Text from '@/components/texts'
 import Colors from '@/constants/Colors'
-import {
-  ADVANCEMENT_LEVELS_STORAGE_KEY
-} from '@/constants/StorageKeys'
+import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import {
   foreignLanguages,
@@ -19,6 +17,7 @@ import { returnFlag, setButtonBg } from '@/utils/functions'
 import useStoredData from '@/utils/useStoredData'
 
 import { LanguagePickerBottomSheet } from './BottomSheets/LanguagePickerBottomSheet'
+import Button from './Button'
 
 export default function StorySetup({
   appLang,
@@ -181,7 +180,8 @@ export default function StorySetup({
         ))}
       </View>
 
-      <Pressable
+      <Button onPress={handleSubmit} text={translations[appLang].submit} />
+      {/* <Pressable
         onPress={handleSubmit}
         style={({ pressed }) => [
           {
@@ -208,7 +208,7 @@ export default function StorySetup({
         >
           {translations[appLang].submit}
         </Text>
-      </Pressable>
+      </Pressable> */}
 
       <LanguagePickerBottomSheet
         ref={bottomSheetRef}

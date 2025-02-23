@@ -56,7 +56,7 @@ export const LanguagePickerBottomSheet = forwardRef<
       backdropComponent={renderBackdrop}
       onChange={setCurrentIndex}
       handleIndicatorStyle={{
-        backgroundColor: Colors[theme].buttonSecondary,
+        backgroundColor: Colors[theme].bottomSheetHandle,
       }}
       handleStyle={{ backgroundColor: Colors[theme].background }}
       style={{ backgroundColor: Colors[theme].background }}
@@ -112,8 +112,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     paddingLeft: 40,
-    // borderBottomWidth: 1,
-    // borderBottomColor: '#ddd',
     borderRadius: 8,
   },
   selectedItem: {

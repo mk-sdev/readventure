@@ -103,7 +103,7 @@ export default function StorySetup({
         numberOfLines={10}
         placeholder={translations[appLang].textDescriptionPlaceholder}
         placeholderTextColor={
-          theme === 'dark' ? 'rgba(86, 107, 106, 0.5)' : 'rgb(154, 174, 172)'
+          Colors[theme].placeholder
         }
         style={[
           styles.input,
@@ -112,7 +112,7 @@ export default function StorySetup({
             borderColor:
               description.length > characterLimit
                 ? 'tomato'
-                : Colors[theme].tint,
+                : Colors[theme].inputBorder,
             color:
               description.length > characterLimit ? 'red' : Colors[theme].text,
           },

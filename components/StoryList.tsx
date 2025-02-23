@@ -126,10 +126,10 @@ const RenderItem = ({
         width: '90%',
         maxWidth: 500,
         height: 120,
-        backgroundColor: Colors[theme].inputBg,
+        backgroundColor: Colors[theme].tileBg,
         borderRadius: 10,
         borderWidth: 2,
-        borderColor: Colors[theme].buttonSecondary,
+        borderColor: Colors[theme].tileBorder,
         padding: 20,
         paddingBottom: 0,
         gap: 15,
@@ -161,7 +161,7 @@ const RenderItem = ({
         {story?.text}
       </Text>
       <LinearGradient
-        colors={[Colors[theme].buttonSecondary, 'transparent']}
+        colors={[Colors[theme].tileGradient, 'transparent']}
         start={{ x: 1, y: 1 }}
         end={{ x: 1, y: 0 }}
         style={{

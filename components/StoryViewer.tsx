@@ -2,13 +2,7 @@ import Feather from '@expo/vector-icons/Feather'
 import Slider from '@react-native-community/slider'
 import * as Clipboard from 'expo-clipboard'
 import React, { useEffect, useRef, useState } from 'react'
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native'
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native'
 
 import StyledText from '@/components/texts'
 import Colors from '@/constants/Colors'
@@ -67,9 +61,9 @@ export default function StoryViewer({
 
   const [fontSize, setFontSize] = useState<number>(22)
   const [sliderValue, setSliderValue] = useState(22)
-  useEffect(() => {
-    // setSliderValue(fontSize)
-  }, [fontSize])
+  // useEffect(() => {
+  //   // setSliderValue(fontSize)
+  // }, [fontSize])
 
   const [showCopyText, setShowCopyText] = useState<unknown>(true)
   const copyToClipboard = async () => {
@@ -120,9 +114,9 @@ export default function StoryViewer({
                   minimumValue={18}
                   maximumValue={40}
                   value={sliderValue}
-                  minimumTrackTintColor={Colors[theme].button}
-                  maximumTrackTintColor={Colors[theme].buttonSecondary}
-                  thumbTintColor={Colors[theme].tint}
+                  minimumTrackTintColor={Colors[theme].sliderLeft}
+                  maximumTrackTintColor={Colors[theme].sliderRight}
+                  thumbTintColor={Colors[theme].sliderThumb}
                   onValueChange={currentValue => setFontSize(currentValue)}
                 />
               )}
@@ -140,7 +134,13 @@ export default function StoryViewer({
                     color={Colors[theme].tint}
                   />
                   <Text
-                    style={[styles.copyText, { color: Colors[theme].tint }]}
+                    style={[
+                      styles.copyText,
+                      {
+                        color: Colors[theme].tint,
+                        opacity: theme === 'dark' ? 0.75 : 0.85,
+                      },
+                    ]}
                   >
                     {showCopyText ? 'Copy' : 'Copied!'}
                   </Text>
@@ -260,6 +260,5 @@ const styles = StyleSheet.create({
   copyText: {
     fontWeight: 'bold',
     fontSize: 13,
-    opacity: 0.75,
   },
 })

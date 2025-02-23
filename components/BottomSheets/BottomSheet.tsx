@@ -58,7 +58,7 @@ export const Sentence = forwardRef<
       handleStyle={{ backgroundColor: Colors[theme].background }}
       style={{ backgroundColor: Colors[theme].background }}
       handleIndicatorStyle={{
-        backgroundColor: Colors[theme].buttonSecondary,
+        backgroundColor: Colors[theme].bottomSheetHandle,
       }}
     >
       <BottomSheetView

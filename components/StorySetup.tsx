@@ -4,7 +4,9 @@ import { Alert, Pressable, StyleSheet, TextInput, View } from 'react-native'
 
 import Text from '@/components/texts'
 import Colors from '@/constants/Colors'
-import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
+import {
+  ADVANCEMENT_LEVELS_STORAGE_KEY
+} from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import {
   foreignLanguages,
@@ -37,7 +39,7 @@ export default function StorySetup({
 
   const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null)
   const [dropDownItems, setDropDownItems] = useState<
-    { label: string; value: foreignLanguages }[]
+    { label: string; value: foreignLanguages; isFav: boolean }[]
   >([])
 
   const characterLimit = 150
@@ -83,6 +85,7 @@ export default function StorySetup({
       ([key, value]) => ({
         label: value,
         value: key as foreignLanguages,
+        isFav: favLangs && favLangs.includes(key as foreignLanguages),
       }),
     )
 
@@ -102,9 +105,7 @@ export default function StorySetup({
         multiline
         numberOfLines={10}
         placeholder={translations[appLang].textDescriptionPlaceholder}
-        placeholderTextColor={
-          Colors[theme].placeholder
-        }
+        placeholderTextColor={Colors[theme].placeholder}
         style={[
           styles.input,
           {

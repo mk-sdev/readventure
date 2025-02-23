@@ -1,3 +1,4 @@
+import AntDesign from '@expo/vector-icons/AntDesign'
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetView,
@@ -17,7 +18,7 @@ import { foreignLanguages } from '@/constants/Types'
 import { returnFlag } from '@/utils/functions'
 
 type Props = {
-  languages: { label: string; value: foreignLanguages }[]
+  languages: { label: string; value: foreignLanguages; isFav: boolean }[]
   selectedLanguage: foreignLanguages | null
   onSelect: (language: foreignLanguages) => void
   theme: 'light' | 'dark'
@@ -90,6 +91,14 @@ export const LanguagePickerBottomSheet = forwardRef<
             >
               {returnFlag(item.value)}
               <Text style={styles.text}>{item.label}</Text>
+              {item.isFav && (
+                <AntDesign
+                  name="star"
+                  size={20}
+                  color={theme === 'light' ? 'orange' : 'gold'}
+                  style={{ opacity: 0.85, right: 40, position: 'absolute' }}
+                />
+              )}
             </Pressable>
           )}
         />

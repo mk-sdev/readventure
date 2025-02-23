@@ -1,9 +1,8 @@
 import Feather from '@expo/vector-icons/Feather'
 import { useEffect } from 'react'
-import { Pressable, ScrollView, StyleSheet, Switch } from 'react-native'
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native'
 
 import Text from '@/components/texts'
-import { View } from '@/components/Themed'
 import Colors from '@/constants/Colors'
 import {
   COLOR_THEME_STORAGE_KEY,

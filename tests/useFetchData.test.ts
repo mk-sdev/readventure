@@ -26,7 +26,7 @@ describe('useFetchText', () => {
       translation: 'Translated Text',
     }
 
-    mockAxios.onPost('http://localhost:8081/api/hello').reply(200, mockData)
+    mockAxios.onPost('http://localhost:8081/api/generate').reply(200, mockData)
     ;(getValue as jest.Mock).mockResolvedValueOnce([])
     ;(setValue as jest.Mock).mockResolvedValueOnce(undefined)
 
@@ -54,7 +54,7 @@ describe('useFetchText', () => {
   })
 
   it('should handle errors during the fetch operation', async () => {
-    mockAxios.onPost('http://localhost:8081/api/hello').reply(500)
+    mockAxios.onPost('http://localhost:8081/api/generate').reply(500)
 
     const { result } = renderHook(() => useFetchText('en'))
 

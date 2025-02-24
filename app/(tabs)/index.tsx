@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 
 import StorySetup from '@/components/StorySetup/StorySetup'
-import StoryViewer from '@/components/StoryViewer'
+import StoryViewer from '@/components/StoryViewer/StoryViewer'
 import Colors from '@/constants/Colors'
 import { setStory } from '@/utils/async-storage'
 import useStore from '@/utils/zustand'
@@ -46,6 +46,6 @@ const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     minHeight: '100%',
-    paddingBottom: 20
+    paddingBottom: 20,
   },
 })

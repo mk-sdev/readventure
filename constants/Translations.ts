@@ -30,7 +30,9 @@ export const translations = {
     translate: "Translate",
     showOriginal:'Show original text',
     close: "Close",
-    waitingText: "Your read-venture is being generated!"
+    waitingText: "Your read-venture is being generated!",
+    copy: 'Copy',
+    copied: 'Copied!'
   },
   pl: {
     settings: 'Ustawienia',
@@ -62,6 +64,8 @@ export const translations = {
     translate: "Przetłumacz",
     showOriginal:'Pokaż oryginał',
     close: "Zamknij",
-    waitingText: "Twój tekst jest właśnie generowany!"
+    waitingText: "Twój tekst jest właśnie generowany!",
+    copy: 'Skopiuj',
+    copied: 'Skopiowano!'
   },
 }

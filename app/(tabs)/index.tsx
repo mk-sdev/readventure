@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 
-import StorySetup from '@/components/StorySetup'
+import StorySetup from '@/components/StorySetup/StorySetup'
 import StoryViewer from '@/components/StoryViewer'
 import Colors from '@/constants/Colors'
 import { setStory } from '@/utils/async-storage'

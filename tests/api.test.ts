@@ -2,7 +2,7 @@ import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import dotenv from 'dotenv'
 
-import { POST } from '../app/api/hello+api'
+import { POST } from '../app/api/generate+api'
 
 jest.mock('axios')
 dotenv.config()

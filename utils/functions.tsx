@@ -81,3 +81,15 @@ export function setButtonBg(
   if (!isSelected && pressed && theme === 'dark')
     return Colors[theme].buttonSecondary
 }
+
+export function transformGeneratedText(
+  generatedText: string,
+): [string, string] {
+  const [text, translation] = generatedText.split('###')
+  const trimmedText = text.trim()
+  const trimmedTranslation = translation
+    .replace(/^\s*translation:\s*/i, '')
+    .trim()
+
+  return [trimmedText, trimmedTranslation]
+}

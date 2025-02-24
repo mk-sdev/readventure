@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import { foreignLanguages, homeLanguages, levels } from '@/constants/Types'
+import { transformGeneratedText } from '@/utils/functions'
 
 export async function POST(request: Request) {
   const { description, lang, homeLang, level } = await request
@@ -9,11 +10,10 @@ export async function POST(request: Request) {
 
   try {
     const generatedText = await generateText(description, lang, homeLang, level)
-    const [text, translation] = generatedText.split('###')
-
+    const [text, translation] = transformGeneratedText(generatedText)
     return Response.json({
-      text: text.trim(),
-      translation: translation.replace(/^translation:\s*/i, '').trim(),
+      text,
+      translation,
       lang,
       level,
     })

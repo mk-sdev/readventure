@@ -10,7 +10,7 @@ Readventure is a **React Native** app built with **Expo** that helps users learn
 - ✅ User interface available in **English** and **Polish**  
 
 ## 🛠 Tech Stack  
-- **Bun** 
+- **Bun** 1.2.2
 - **React Native** 0.76.7
 - **Expo** ~52.0.33  
 - **Expo Router** ~4.0.17  
@@ -18,5 +18,4 @@ Readventure is a **React Native** app built with **Expo** that helps users learn
 - **Zustand** ^5.0.3 
 - **AsyncStorage**   
 
-https://github.com/user-attachments/assets/d6c5827f-e2a7-42d3-8634-bce97901974d
-
+https://github.com/user-attachments/assets/8fd2dbcf-8c14-461b-b6df-9912e9cdb1e5

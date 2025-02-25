@@ -2,10 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 
 import StyledText from '@/components/Text'
-import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
+import {
+  FONT_SIZE_STORAGE_KEY,
+  STORED_TEXTS_STORAGE_KEY,
+} from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import { homeLanguages, request, storedText } from '@/constants/Types'
-import { getValue } from '@/utils/async-storage'
+import { getValue, setValue } from '@/utils/async-storage'
 import useFetchText from '@/utils/useFetchText'
 import useStore from '@/utils/zustand'
 
@@ -56,9 +59,16 @@ export default function StoryViewer({
   }
 
   const theme = useStore(state => state.theme)
+  const fontSize = useStore(state => state.fontSize)
+  const setFontSize = useStore(state => state.setFontSize)
 
-  const [fontSize, setFontSize] = useState<number>(22)
-  const [sliderValue, setSliderValue] = useState(22)
+  useEffect(() => {
+    ;(async () => {
+      await setValue(FONT_SIZE_STORAGE_KEY, fontSize)
+    })()
+  }, [fontSize])
+
+  const [sliderValue, setSliderValue] = useState(fontSize)
 
   return (
     <React.Fragment>

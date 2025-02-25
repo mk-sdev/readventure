@@ -14,6 +14,7 @@ import 'react-native-reanimated'
 import { useColorScheme } from '@/components/useColorScheme'
 import {
   COLOR_THEME_STORAGE_KEY,
+  FONT_SIZE_STORAGE_KEY,
   HOME_LANGUAGE_STORAGE_KEY,
 } from '@/constants/StorageKeys'
 import { getValue } from '@/utils/async-storage'
@@ -61,6 +62,7 @@ function RootLayoutNav() {
 
   const setAppLang = useStore(state => state.setAppLang)
   const setTheme = useStore(state => state.setTheme)
+  const setFontSize = useStore(state => state.setFontSize)
 
   useEffect(() => {
     ;(async () => {
@@ -69,6 +71,10 @@ function RootLayoutNav() {
 
       const storedTheme = await getValue(COLOR_THEME_STORAGE_KEY)
       if (storedTheme) setTheme(storedTheme)
+
+      const storedFontSize = await getValue(FONT_SIZE_STORAGE_KEY)
+      if (storedFontSize) setFontSize(storedFontSize)
+
       // else if (colorScheme) setTheme(colorScheme)
       //console.log('🚀 ~ ; ~ storedHomeLang:', storedHomeLang)
     })()

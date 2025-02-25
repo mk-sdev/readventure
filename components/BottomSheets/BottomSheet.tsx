@@ -10,7 +10,7 @@ import React, {
 } from 'react'
 import { StyleSheet } from 'react-native'
 
-import Text from '@/components/texts'
+import Text from '@/components/Text'
 import Colors from '@/constants/Colors'
 
 // Definicja propsów

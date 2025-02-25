@@ -2,7 +2,7 @@ import Feather from '@expo/vector-icons/Feather'
 import React from 'react'
 import { Pressable, View } from 'react-native'
 
-import Text from '@/components/texts'
+import Text from '@/components/Text'
 import Colors from '@/constants/Colors'
 import { translations } from '@/constants/Translations'
 import { homeLanguages } from '@/constants/Types'

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 
-import Text from '@/components/texts'
+import Text from '@/components/Text'
 import { translations } from '@/constants/Translations'
 import { levels } from '@/constants/Types'
 import { setButtonBg } from '@/utils/functions'

@@ -4,7 +4,6 @@ import { ScrollView, StyleSheet } from 'react-native'
 import StorySetup from '@/components/StorySetup/StorySetup'
 import StoryViewer from '@/components/StoryViewer/StoryViewer'
 import Colors from '@/constants/Colors'
-import { setStory } from '@/utils/async-storage'
 import useStore from '@/utils/zustand'
 
 export default function HomeScreen() {

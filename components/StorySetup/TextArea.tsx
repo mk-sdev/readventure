@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, TextInput } from 'react-native'
 
-import Text from '@/components/texts'
+import Text from '@/components/Text'
 import Colors from '@/constants/Colors'
 import { translations } from '@/constants/Translations'
 import useStore from '@/utils/zustand'

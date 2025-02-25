@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 
-import StyledText from '@/components/texts'
+import StyledText from '@/components/Text'
 import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import { homeLanguages, request, storedText } from '@/constants/Types'

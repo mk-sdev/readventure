@@ -1,12 +1,12 @@
 import React from 'react'
 import { Pressable, View } from 'react-native'
 
-import Text from '@/components/texts'
+import Text from '@/components/Text'
 import { translations } from '@/constants/Translations'
 import { homeLanguages } from '@/constants/Types'
 import { returnFlag, setButtonBg } from '@/utils/functions'
 
-import { OptionStyles } from './OptionStyles'
+import { OptionStyles } from './option_styles'
 
 export default function HomeLanguages({
   theme,

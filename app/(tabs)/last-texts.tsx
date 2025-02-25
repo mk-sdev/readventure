@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 
 import StoryList from '@/components/StoryList'
 import StoryViewer from '@/components/StoryViewer/StoryViewer'

@@ -3,7 +3,7 @@ import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useState } from 'react'
 import { FlatList, Image, Pressable, StyleSheet, View } from 'react-native'
 
-import Text from '@/components/texts'
+import Text from '@/components/Text'
 import Colors from '@/constants/Colors'
 import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
@@ -41,7 +41,10 @@ export default function StoryList({
         <React.Fragment>
           <FlatList
             ListHeaderComponent={
-              <Text type="title" style={{ alignSelf: 'center', marginBottom:40 }}>
+              <Text
+                type="title"
+                style={{ alignSelf: 'center', marginBottom: 40 }}
+              >
                 {`${translations[appLang].lastStoriesLabel}:`}
               </Text>
             }

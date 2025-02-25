@@ -41,8 +41,8 @@ export default function StoryList({
         <React.Fragment>
           <FlatList
             ListHeaderComponent={
-              <Text type="title" style={{ alignSelf: 'center' }}>
-                {translations[appLang].lastStoriesLabel}
+              <Text type="title" style={{ alignSelf: 'center', marginBottom:40 }}>
+                {`${translations[appLang].lastStoriesLabel}:`}
               </Text>
             }
             data={lastTexts}
@@ -128,7 +128,7 @@ const RenderItem = ({
         height: 120,
         backgroundColor: Colors[theme].tileBg,
         borderRadius: 10,
-        borderWidth: 2,
+        borderWidth: 3,
         borderColor: Colors[theme].tileBorder,
         padding: 20,
         paddingBottom: 0,

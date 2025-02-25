@@ -2,7 +2,7 @@ export const translations = {
   en: {
     settings: 'Settings',
     home: 'Home',
-    lastTexts: 'Last texts',
+    lastTexts: 'Recent',
     toggleTheme: 'Toggle theme',
     chooseHomeLanguage: 'Choose your home language',
     homeLanguageInfo:
@@ -24,7 +24,7 @@ export const translations = {
     languageLabel: 'Choose a language',
     submit: 'Submit',
     submitAlert: 'The description must not exceed the specified length',
-    lastStoriesLabel: 'Here are 10 most recently generated stories',
+    lastStoriesLabel: 'Here are 10 recently generated stories',
     noStoriesTitle: 'No texts generated yet',
     noStoriesCTA: 'Go to the Home tab and generate one',
     translate: "Translate",

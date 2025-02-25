@@ -7,7 +7,7 @@ const surfaceLight = '#e4f0ef'
 
 const primaryDark = '#007367'
 const secondaryDark = '#122628'
-const surfaceDark = '#122628'
+const surfaceDark = '#173033'
 
 const Colors = {
   light: {

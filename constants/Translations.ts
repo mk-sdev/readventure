@@ -32,7 +32,8 @@ export const translations = {
     close: "Close",
     waitingText: "Your read-venture is being generated!",
     copy: 'Copy',
-    copied: 'Copied!'
+    copied: 'Copied!',
+    noInternet: 'no Internet connection'
   },
   pl: {
     settings: 'Ustawienia',
@@ -66,6 +67,7 @@ export const translations = {
     close: "Zamknij",
     waitingText: "Twój tekst jest właśnie generowany!",
     copy: 'Skopiuj',
-    copied: 'Skopiowano!'
+    copied: 'Skopiowano!',
+    noInternet: 'brak zasięgu'
   },
 }

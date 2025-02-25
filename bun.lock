@@ -8,6 +8,7 @@
         "@gorhom/bottom-sheet": "^5.1.1",
         "@gorhom/portal": "^1.0.14",
         "@react-native-async-storage/async-storage": "^2.1.1",
+        "@react-native-community/netinfo": "^11.4.1",
         "@react-native-community/slider": "^4.5.5",
         "@react-navigation/native": "^7.0.14",
         "@testing-library/react": "^16.2.0",
@@ -430,6 +431,8 @@
     "@radix-ui/react-slot": ["@radix-ui/react-slot@1.0.1", "", { "dependencies": { "@babel/runtime": "^7.13.10", "@radix-ui/react-compose-refs": "1.0.0" }, "peerDependencies": { "react": "^16.8 || ^17.0 || ^18.0" } }, "sha512-avutXAFL1ehGvAXtPquu0YK5oz6ctS474iM3vNGQIkswrVhdrS52e3uoMQBzZhNRAIE0jBnUyXWNmSjGHhCFcw=="],
 
     "@react-native-async-storage/async-storage": ["@react-native-async-storage/async-storage@2.1.1", "", { "dependencies": { "merge-options": "^3.0.4" }, "peerDependencies": { "react-native": "^0.0.0-0 || >=0.65 <1.0" } }, "sha512-UqlnxddwM3rlCHvteFz+HpIXjqhQM7GkBgVQ9sMvMdl8QVOJQDjG7BODCUvabysMDw+9QfMFlLiOI8U6c0VzzQ=="],
+
+    "@react-native-community/netinfo": ["@react-native-community/netinfo@11.4.1", "", { "peerDependencies": { "react-native": ">=0.59" } }, "sha512-B0BYAkghz3Q2V09BF88RA601XursIEA111tnc2JOaN7axJWmNefmfjZqw/KdSxKZp7CZUuPpjBmz/WCR9uaHYg=="],
 
     "@react-native-community/slider": ["@react-native-community/slider@4.5.5", "", {}, "sha512-x2N415pg4ZxIltArOKczPwn7JEYh+1OxQ4+hTnafomnMsqs65HZuEWcX+Ch8c5r8V83DiunuQUf5hWGWlw8hQQ=="],
 

@@ -29,6 +29,8 @@ const Colors = {
     sliderThumb: primaryLight,
     sliderLeft: tintColorLight,
     sliderRight: secondaryLight,
+    alertBg: 'rgba(250, 110, 110, .95)',
+    alertBorder: 'rgb(250, 50, 50)',
   },
   dark: {
     text: '#edfffe',
@@ -49,6 +51,8 @@ const Colors = {
     sliderThumb: tintColorDark,
     sliderLeft: primaryDark,
     sliderRight: secondaryDark,
+    alertBg: 'rgba(160, 0, 0, .95)',
+    alertBorder: 'rgb(200, 0, 0)',
   },
 }
 

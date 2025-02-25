@@ -1,10 +1,11 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 
 import StorySetup from '@/components/StorySetup/StorySetup'
 import StoryViewer from '@/components/StoryViewer/StoryViewer'
 import Colors from '@/constants/Colors'
 import useStore from '@/utils/zustand'
+import { PortalHost } from '@gorhom/portal'
 
 export default function HomeScreen() {
   const [showStory, setShowStory] = useState(false)
@@ -17,21 +18,24 @@ export default function HomeScreen() {
   const theme = useStore(state => state.theme)
 
   return (
-    <ScrollView
-      contentContainerStyle={[
-        styles.container,
-        { backgroundColor: Colors[theme].background },
-      ]}
-    >
-      {showStory ? (
-        <StoryViewer
-          setShowStory={setShowStory}
-          request={request}
-        ></StoryViewer>
-      ) : (
-        <StorySetup setRequest={setRequest}></StorySetup>
-      )}
-    </ScrollView>
+    <React.Fragment>
+      <PortalHost name="NetInfoHost" />
+      <ScrollView
+        contentContainerStyle={[
+          styles.container,
+          { backgroundColor: Colors[theme].background },
+        ]}
+      >
+        {showStory ? (
+          <StoryViewer
+            setShowStory={setShowStory}
+            request={request}
+          ></StoryViewer>
+        ) : (
+          <StorySetup setRequest={setRequest}></StorySetup>
+        )}
+      </ScrollView>
+    </React.Fragment>
   )
 }
 

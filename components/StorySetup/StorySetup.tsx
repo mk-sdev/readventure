@@ -1,7 +1,9 @@
+import NetInfo from '@react-native-community/netinfo'
 import { useFocusEffect } from 'expo-router'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { Alert } from 'react-native'
 
+import Snackbar from '@/components/Snackbar'
 import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import { foreignLanguages, levels, request } from '@/constants/Types'
@@ -36,7 +38,16 @@ export default function StorySetup({
 
   const characterLimit = 150
 
+  const [shake, setShake] = useState(false)
+  const [isConnected, setIsConnected] = useState(true)
+
   async function handleSubmit() {
+    if (!isConnected) {
+      setShake(true)
+      setTimeout(() => setShake(false), 500)
+      return
+    }
+
     if (description.length > characterLimit) {
       Alert.alert(translations[appLang].submitAlert)
       return
@@ -89,8 +100,18 @@ export default function StorySetup({
     setDropDownValue(newItems[0]?.value || dropDownValue)
   }, [favLangs, appLang])
 
+  useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      //@ts-ignore
+      setIsConnected(state.isConnected)
+    })
+    return () => unsubscribe()
+  }, [])
+
   return (
     <React.Fragment>
+      <Snackbar isConnected={isConnected} shake={shake} />
+
       <TextArea
         description={description}
         setDescription={setDescription}

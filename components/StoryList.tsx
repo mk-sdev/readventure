@@ -7,23 +7,21 @@ import Text from '@/components/Text'
 import Colors from '@/constants/Colors'
 import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
-import { homeLanguages, storedText } from '@/constants/Types'
-import { clearAsyncStorage, getValue } from '@/utils/async-storage'
+import { storedText } from '@/constants/Types'
+import { getValue } from '@/utils/async-storage'
 import { returnFlag } from '@/utils/functions'
+import useStore from '@/utils/zustand'
 
 export default function StoryList({
   setIndex,
   setShowStory,
-  theme,
-  appLang,
 }: {
   setIndex: React.Dispatch<React.SetStateAction<number>>
   setShowStory: React.Dispatch<React.SetStateAction<boolean>>
-  theme: 'light' | 'dark'
-  appLang: homeLanguages
 }) {
   const [lastTexts, setLastTexts] = useState<storedText[]>([])
-
+  const appLang = useStore(state => state.appLang)
+  const theme = useStore(state => state.theme)
   useFocusEffect(
     useCallback(() => {
       ;(async () => {

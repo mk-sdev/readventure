@@ -19,12 +19,9 @@ export default function LastTextsScreen() {
         <StoryList
           setIndex={setIndex}
           setShowStory={setShowStory}
-          theme={theme}
-          appLang={appLang}
         ></StoryList>
       ) : (
         <StoryViewer
-          appLang={appLang}
           setShowStory={setShowStory}
           index={index}
         ></StoryViewer>

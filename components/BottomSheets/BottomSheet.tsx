@@ -13,20 +13,20 @@ import { StyleSheet } from 'react-native'
 
 import Text from '@/components/Text'
 import Colors from '@/constants/Colors'
+import useStore from '@/utils/zustand'
 
 // Definicja propsów
 type SentenceProps = {
   sentence: string
   onClose: () => void
-  theme: 'light' | 'dark'
 }
 
 export const Sentence = forwardRef<
   { open: () => void; close: () => void },
   SentenceProps
->(({ sentence, onClose, theme }, ref) => {
+>(({ sentence, onClose }, ref) => {
   const bottomSheetRef = useRef<BottomSheet>(null)
-
+  const theme = useStore(state => state.theme)
   useImperativeHandle(ref, () => ({
     open: () => bottomSheetRef.current?.snapToIndex(0),
     close: () => {

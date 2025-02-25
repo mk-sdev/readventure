@@ -7,7 +7,6 @@ import Colors from '@/constants/Colors'
 import useStore from '@/utils/zustand'
 
 export default function HomeScreen() {
-  const appLang = useStore(state => state.appLang)
   const [showStory, setShowStory] = useState(false)
   const [request, setRequest] = useState('')
 
@@ -16,7 +15,7 @@ export default function HomeScreen() {
   }, [request])
 
   const theme = useStore(state => state.theme)
-  // setStory()
+
   return (
     <ScrollView
       contentContainerStyle={[
@@ -26,16 +25,11 @@ export default function HomeScreen() {
     >
       {showStory ? (
         <StoryViewer
-          appLang={appLang}
           setShowStory={setShowStory}
           request={request}
         ></StoryViewer>
       ) : (
-        <StorySetup
-          theme={theme}
-          appLang={appLang}
-          setRequest={setRequest}
-        ></StorySetup>
+        <StorySetup setRequest={setRequest}></StorySetup>
       )}
     </ScrollView>
   )

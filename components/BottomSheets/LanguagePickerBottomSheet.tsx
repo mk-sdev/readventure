@@ -1,8 +1,7 @@
 import AntDesign from '@expo/vector-icons/AntDesign'
 import BottomSheet, {
   BottomSheetBackdrop,
-  BottomSheetScrollView,
-  BottomSheetView,
+  BottomSheetScrollView
 } from '@gorhom/bottom-sheet'
 import { Portal } from '@gorhom/portal'
 import React, {
@@ -18,21 +17,21 @@ import Text from '@/components/Text'
 import Colors from '@/constants/Colors'
 import { foreignLanguages } from '@/constants/Types'
 import { returnFlag } from '@/utils/functions'
+import useStore from '@/utils/zustand'
 
 type Props = {
   languages: { label: string; value: foreignLanguages; isFav: boolean }[]
   selectedLanguage: foreignLanguages | null
   onSelect: (language: foreignLanguages) => void
-  theme: 'light' | 'dark'
 }
 
 export const LanguagePickerBottomSheet = forwardRef<
   { open: () => void; close: () => void },
   Props
->(({ languages, selectedLanguage, onSelect, theme }, ref) => {
+>(({ languages, selectedLanguage, onSelect }, ref) => {
   const bottomSheetRef = useRef<BottomSheet>(null)
   const [currentIndex, setCurrentIndex] = useState<number>(-1)
-
+  const theme = useStore(state => state.theme)
   useImperativeHandle(ref, () => ({
     open: () => bottomSheetRef.current?.snapToIndex(0),
     close: () => bottomSheetRef.current?.close(),

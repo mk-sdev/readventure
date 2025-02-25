@@ -18,16 +18,15 @@ import Header from './Header'
 import Story from './Story'
 
 export default function StoryViewer({
-  appLang,
   setShowStory,
   request,
   index,
 }: {
-  appLang: homeLanguages
   setShowStory: React.Dispatch<React.SetStateAction<boolean>>
   request?: string
   index?: number
 }) {
+  const appLang = useStore(state => state.appLang)
   const [shouldTranslate, setShouldTranslate] = useState(false)
   const { res, setRes, fetchData } = useFetchText(appLang as homeLanguages)
 
@@ -128,7 +127,6 @@ export default function StoryViewer({
         ref={bottomSheetRef}
         sentence={sentence}
         onClose={handleClose}
-        theme={theme}
       />
     </React.Fragment>
   )

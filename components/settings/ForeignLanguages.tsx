@@ -4,23 +4,23 @@ import { Pressable, View } from 'react-native'
 import Text from '@/components/Text'
 import { FAV_LANGUAGES_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
-import { foreignLanguages, homeLanguages } from '@/constants/Types'
+import { foreignLanguages } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 import { returnFlag, setButtonBg } from '@/utils/functions'
+import useStore from '@/utils/zustand'
 
 import { OptionStyles } from './option_styles'
 
 export default function ForeignLanguages({
-  appLang,
-  theme,
   favLangs,
   setFavLangs,
 }: {
-  appLang: homeLanguages
-  theme: 'light' | 'dark'
   favLangs: foreignLanguages[]
   setFavLangs: Function
 }) {
+  const appLang = useStore(state => state.appLang)
+  const theme = useStore(state => state.theme)
+
   async function handleSelectForeignLanguages(lang: foreignLanguages) {
     let interestLanguages = await getValue(FAV_LANGUAGES_STORAGE_KEY)
     interestLanguages ||= []

@@ -65,24 +65,11 @@ export default function SettingsScreen() {
         { backgroundColor: Colors[theme].background },
       ]}
     >
-      <ToggleTheme
-        appLang={appLang}
-        localTheme={localTheme}
-        setLocalTheme={setLocalTheme}
-      />
+      <ToggleTheme localTheme={localTheme} setLocalTheme={setLocalTheme} />
 
-      <HomeLanguages
-        theme={theme}
-        appLang={appLang}
-        setLocalAppLang={setLocalAppLang}
-      />
+      <HomeLanguages setLocalAppLang={setLocalAppLang} />
 
-      <ForeignLanguages
-        theme={theme}
-        appLang={appLang}
-        favLangs={favLangs}
-        setFavLangs={setFavLangs}
-      />
+      <ForeignLanguages favLangs={favLangs} setFavLangs={setFavLangs} />
 
       {__DEV__ && (
         <Button

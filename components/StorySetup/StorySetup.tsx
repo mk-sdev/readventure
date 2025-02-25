@@ -4,14 +4,10 @@ import { Alert } from 'react-native'
 
 import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
-import {
-  foreignLanguages,
-  homeLanguages,
-  levels,
-  request,
-} from '@/constants/Types'
+import { foreignLanguages, levels, request } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 import useStoredData from '@/utils/useStoredData'
+import useStore from '@/utils/zustand'
 
 import { LanguagePickerBottomSheet } from '../BottomSheets/LanguagePickerBottomSheet'
 import Button from '../Button'
@@ -20,14 +16,11 @@ import LevelButtons from './LevelButtons'
 import TextArea from './TextArea'
 
 export default function StorySetup({
-  appLang,
   setRequest,
-  theme,
 }: {
-  appLang: homeLanguages
   setRequest: React.Dispatch<React.SetStateAction<string>>
-  theme: 'dark' | 'light'
 }) {
+  const appLang = useStore(state => state.appLang)
   const [description, setDescription] = useState('')
   const [dropDownValue, setDropDownValue] = useState<foreignLanguages | null>(
     null,
@@ -123,7 +116,6 @@ export default function StorySetup({
         languages={dropDownItems}
         selectedLanguage={dropDownValue}
         onSelect={setDropDownValue}
-        theme={theme}
       />
     </React.Fragment>
   )

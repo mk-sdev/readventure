@@ -5,18 +5,17 @@ import Text from '@/components/Text'
 import { translations } from '@/constants/Translations'
 import { homeLanguages } from '@/constants/Types'
 import { returnFlag, setButtonBg } from '@/utils/functions'
+import useStore from '@/utils/zustand'
 
 import { OptionStyles } from './option_styles'
 
 export default function HomeLanguages({
-  theme,
-  appLang,
   setLocalAppLang,
 }: {
-  theme: 'light' | 'dark'
-  appLang: homeLanguages
   setLocalAppLang: Function
 }) {
+  const appLang = useStore(state => state.appLang)
+  const theme = useStore(state => state.theme)
   return (
     <>
       <Text type="title">{translations[appLang].chooseHomeLanguage}</Text>

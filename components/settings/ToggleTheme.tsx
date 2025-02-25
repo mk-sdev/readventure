@@ -5,17 +5,16 @@ import { Pressable, View } from 'react-native'
 import Text from '@/components/Text'
 import Colors from '@/constants/Colors'
 import { translations } from '@/constants/Translations'
-import { homeLanguages } from '@/constants/Types'
+import useStore from '@/utils/zustand'
 
 export default function ToggleTheme({
-  appLang,
   localTheme,
   setLocalTheme,
 }: {
-  appLang: homeLanguages
   localTheme: 'light' | 'dark'
   setLocalTheme: Function
 }) {
+  const appLang = useStore(state => state.appLang)
   return (
     <View
       style={{

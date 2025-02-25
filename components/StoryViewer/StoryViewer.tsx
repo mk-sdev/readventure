@@ -28,7 +28,9 @@ export default function StoryViewer({
 }) {
   const appLang = useStore(state => state.appLang)
   const [shouldTranslate, setShouldTranslate] = useState(false)
-  const { res, setRes, fetchData } = useFetchText(appLang as homeLanguages)
+  const { res, setRes, fetchData, error } = useFetchText(
+    appLang as homeLanguages,
+  )
 
   useEffect(() => {
     if (request) {
@@ -98,9 +100,15 @@ export default function StoryViewer({
           </View>
         )}
 
-        {!(res || index !== undefined) && (
+        {!(res || index !== undefined) && !error && (
           <StyledText type="title" style={{ height: '100%' }}>
             {translations[appLang].waitingText}
+          </StyledText>
+        )}
+
+        {error && (
+          <StyledText type="title" style={{ color: 'red', padding: 20 }}>
+            Something went wrong :(
           </StyledText>
         )}
 

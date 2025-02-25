@@ -2,6 +2,7 @@ import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
+import { Portal } from '@gorhom/portal'
 import React, {
   forwardRef,
   useCallback,
@@ -48,30 +49,32 @@ export const Sentence = forwardRef<
   )
 
   return (
-    <BottomSheet
-      enablePanDownToClose={true}
-      ref={bottomSheetRef}
-      index={-1}
-      snapPoints={['30%']}
-      backdropComponent={renderBackdrop}
-      onClose={onClose}
-      handleStyle={{ backgroundColor: Colors[theme].background }}
-      style={{ backgroundColor: Colors[theme].background }}
-      handleIndicatorStyle={{
-        backgroundColor: Colors[theme].bottomSheetHandle,
-      }}
-    >
-      <BottomSheetView
-        style={[
-          styles.contentContainer,
-          { backgroundColor: Colors[theme].background },
-        ]}
+    <Portal hostName="PortalHost">
+      <BottomSheet
+        enablePanDownToClose={true}
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={['30%']}
+        backdropComponent={renderBackdrop}
+        onClose={onClose}
+        handleStyle={{ backgroundColor: Colors[theme].background }}
+        style={{ backgroundColor: Colors[theme].background }}
+        handleIndicatorStyle={{
+          backgroundColor: Colors[theme].bottomSheetHandle,
+        }}
       >
-        <Text style={{ color: Colors[theme].text, fontSize: 20 }}>
-          {sentence}
-        </Text>
-      </BottomSheetView>
-    </BottomSheet>
+        <BottomSheetView
+          style={[
+            styles.contentContainer,
+            { backgroundColor: Colors[theme].background },
+          ]}
+        >
+          <Text style={{ color: Colors[theme].text, fontSize: 20 }}>
+            {sentence}
+          </Text>
+        </BottomSheetView>
+      </BottomSheet>
+    </Portal>
   )
 })
 

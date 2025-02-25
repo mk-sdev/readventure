@@ -1,8 +1,10 @@
 import AntDesign from '@expo/vector-icons/AntDesign'
 import BottomSheet, {
   BottomSheetBackdrop,
+  BottomSheetScrollView,
   BottomSheetView,
 } from '@gorhom/bottom-sheet'
+import { Portal } from '@gorhom/portal'
 import React, {
   forwardRef,
   useCallback,
@@ -49,61 +51,63 @@ export const LanguagePickerBottomSheet = forwardRef<
   )
 
   return (
-    <BottomSheet
-      enablePanDownToClose
-      ref={bottomSheetRef}
-      index={-1}
-      snapPoints={['50%']}
-      backdropComponent={renderBackdrop}
-      onChange={setCurrentIndex}
-      handleIndicatorStyle={{
-        backgroundColor: Colors[theme].bottomSheetHandle,
-      }}
-      handleStyle={{ backgroundColor: Colors[theme].background }}
-      style={{ backgroundColor: Colors[theme].background }}
-    >
-      <BottomSheetView
-        style={[
-          styles.container,
-          { backgroundColor: Colors[theme].background },
-        ]}
+    <Portal hostName="PortalHost">
+      <BottomSheet
+        enablePanDownToClose
+        ref={bottomSheetRef}
+        index={-1}
+        snapPoints={['50%']}
+        backdropComponent={renderBackdrop}
+        onChange={setCurrentIndex}
+        handleIndicatorStyle={{
+          backgroundColor: Colors[theme].bottomSheetHandle,
+        }}
+        handleStyle={{ backgroundColor: Colors[theme].background }}
+        style={{ backgroundColor: Colors[theme].background }}
       >
-        <FlatList
-          data={languages}
-          keyExtractor={item => item.value}
-          renderItem={({ item }) => (
-            <Pressable
-              style={[
-                styles.item,
-                {
-                  backgroundColor:
-                    selectedLanguage === item.value
-                      ? Colors[theme].buttonSecondary
-                      : 'transparent',
-                },
-              ]}
-              onPress={() => {
-                if (currentIndex === 0) {
-                  onSelect(item.value)
-                  bottomSheetRef.current?.close()
-                }
-              }}
-            >
-              {returnFlag(item.value)}
-              <Text style={styles.text}>{item.label}</Text>
-              {item.isFav && (
-                <AntDesign
-                  name="star"
-                  size={20}
-                  color={theme === 'light' ? 'orange' : 'gold'}
-                  style={{ opacity: 0.85, right: 40, position: 'absolute' }}
-                />
-              )}
-            </Pressable>
-          )}
-        />
-      </BottomSheetView>
-    </BottomSheet>
+        <BottomSheetScrollView
+          style={[
+            styles.container,
+            { backgroundColor: Colors[theme].background },
+          ]}
+        >
+          <FlatList
+            data={languages}
+            keyExtractor={item => item.value}
+            renderItem={({ item }) => (
+              <Pressable
+                style={[
+                  styles.item,
+                  {
+                    backgroundColor:
+                      selectedLanguage === item.value
+                        ? Colors[theme].buttonSecondary
+                        : 'transparent',
+                  },
+                ]}
+                onPress={() => {
+                  if (currentIndex === 0) {
+                    onSelect(item.value)
+                    bottomSheetRef.current?.close()
+                  }
+                }}
+              >
+                {returnFlag(item.value)}
+                <Text style={styles.text}>{item.label}</Text>
+                {item.isFav && (
+                  <AntDesign
+                    name="star"
+                    size={20}
+                    color={theme === 'light' ? 'orange' : 'gold'}
+                    style={{ opacity: 0.85, right: 40, position: 'absolute' }}
+                  />
+                )}
+              </Pressable>
+            )}
+          />
+        </BottomSheetScrollView>
+      </BottomSheet>
+    </Portal>
   )
 })
 

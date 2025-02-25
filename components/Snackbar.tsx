@@ -37,7 +37,6 @@ export default function Snackbar({ isConnected, shake }: SnackbarProps) {
     }
   }, [isConnected])
 
-  // Efekt drgania
   useEffect(() => {
     if (shake) {
       shakeX.value = withSequence(
@@ -53,6 +52,7 @@ export default function Snackbar({ isConnected, shake }: SnackbarProps) {
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ translateY: translateY.value }, { translateX: shakeX.value }],
     opacity: opacity.value,
+    display: opacity.value === 0 ? 'none' : 'flex',
   }))
 
   return (
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
     right: 0,
     zIndex: 1,
     alignItems: 'center',
+    backgroundColor: 'red',
   },
   snackbar: {
     flexDirection: 'row',

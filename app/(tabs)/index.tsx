@@ -11,9 +11,9 @@ export default function HomeScreen() {
   const [showStory, setShowStory] = useState(false)
   const [request, setRequest] = useState('')
 
-  useEffect(() => {
-    if (request) setShowStory(true)
-  }, [request])
+  // useEffect(() => {
+  //   if (request) setShowStory(true)
+  // }, [request])
 
   const theme = useStore(state => state.theme)
 
@@ -32,7 +32,7 @@ export default function HomeScreen() {
             request={request}
           ></StoryViewer>
         ) : (
-          <StorySetup setRequest={setRequest}></StorySetup>
+          <StorySetup setRequest={setRequest} setShowStory={setShowStory}></StorySetup>
         )}
       </ScrollView>
     </React.Fragment>

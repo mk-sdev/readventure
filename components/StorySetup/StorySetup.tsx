@@ -19,8 +19,10 @@ import TextArea from './TextArea'
 
 export default function StorySetup({
   setRequest,
+  setShowStory,
 }: {
   setRequest: React.Dispatch<React.SetStateAction<string>>
+  setShowStory: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const appLang = useStore(state => state.appLang)
   const [description, setDescription] = useState('')
@@ -59,13 +61,15 @@ export default function StorySetup({
       level: advancementLevel,
     }
     setRequest(JSON.stringify(request))
-
+    
     let storedLevels: Record<string, levels> = await getValue(
       ADVANCEMENT_LEVELS_STORAGE_KEY,
     )
     if (!storedLevels) storedLevels = {}
     storedLevels[dropDownValue as string] = advancementLevel
     setValue(ADVANCEMENT_LEVELS_STORAGE_KEY, storedLevels)
+    
+    setShowStory(true) 
   }
 
   useEffect(() => {

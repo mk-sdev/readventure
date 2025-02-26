@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { Image, ScrollView, StyleSheet, View } from 'react-native'
 
 import StyledText from '@/components/Text'
 import {
@@ -101,15 +101,27 @@ export default function StoryViewer({
         )}
 
         {!(res || index !== undefined) && !error && (
-          <StyledText type="title" style={{ height: '100%' }}>
-            {translations[appLang].waitingText}
-          </StyledText>
+          <View style={styles.waitingView}>
+            <StyledText type="title" style={{ padding: 20, width: '100%' }}>
+              {translations[appLang].waitingText}
+            </StyledText>
+            <Image
+              style={[styles.image, { opacity: theme === 'light' ? 1 : 0.3 }]}
+              source={require('../../assets/images/sparkles.png')}
+            />
+          </View>
         )}
 
         {error && (
-          <StyledText type="title" style={{ color: 'red', padding: 20 }}>
-            Something went wrong :(
-          </StyledText>
+          <View style={styles.waitingView}>
+            <StyledText type="title" style={{ padding: 20, width: '100%' }}>
+              {translations[appLang].error}
+            </StyledText>
+            <Image
+              style={styles.image}
+              source={require('../../assets/images/error.png')}
+            />
+          </View>
         )}
 
         <View style={styles.bottomButtonsView}>
@@ -157,5 +169,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     textAlign: 'center',
+  },
+  waitingView: {
+    flex: 1,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  image: {
+    width: '50%',
+    height: 'auto',
+    aspectRatio: 1,
+    opacity: 0.5,
   },
 })

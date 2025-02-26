@@ -33,7 +33,8 @@ export const translations = {
     waitingText: "Your read-venture is being generated!",
     copy: 'Copy',
     copied: 'Copied!',
-    noInternet: 'no Internet connection'
+    noInternet: 'no Internet connection',
+    error: "Something went wrong :("
   },
   pl: {
     settings: 'Ustawienia',
@@ -68,6 +69,7 @@ export const translations = {
     waitingText: "Twój tekst jest właśnie generowany!",
     copy: 'Skopiuj',
     copied: 'Skopiowano!',
-    noInternet: 'brak zasięgu'
+    noInternet: 'brak zasięgu',
+    error: "Coś poszło nie tak :("
   },
 }

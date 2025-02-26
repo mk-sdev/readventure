@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '50%',
+    maxWidth: 200,
     height: 'auto',
     aspectRatio: 1,
     opacity: 0.5,

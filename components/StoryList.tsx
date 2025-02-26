@@ -82,8 +82,7 @@ export default function StoryList({
           <Image
             style={{
               width: '50%',
-              // resizeMode: 'cover',
-              // backgroundColor: 'red',
+              maxWidth: 200,
               height: 'auto',
               aspectRatio: 1,
               opacity: theme === 'light' ? 1 : 0.5,

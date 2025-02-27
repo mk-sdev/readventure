@@ -14,6 +14,8 @@ export type response = {
   lang: foreignLanguages
   level: levels
 }
+
+// a story remembered in the local storage
 export type storedText = {
   id: string
   lang: foreignLanguages
@@ -21,4 +23,11 @@ export type storedText = {
   text: string
   translation: string
   level: levels
+}
+
+// the element inside DropDown list
+export type languageItem = {
+  label: string // full name of a language - e.g., "Polish"
+  value: foreignLanguages // abbreviation of a language - e.g., "pl"
+  isFav: boolean
 }

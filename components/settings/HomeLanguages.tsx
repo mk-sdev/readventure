@@ -20,6 +20,7 @@ export default function HomeLanguages({
     <>
       <Text type="title">{translations[appLang].chooseHomeLanguage}</Text>
       <Text type="small">{translations[appLang].homeLanguageInfo}</Text>
+      {/* todo: change to other data structure */}
       {(['en', 'pl'] as homeLanguages[]).map(lang => (
         <HomeOption
           key={lang}

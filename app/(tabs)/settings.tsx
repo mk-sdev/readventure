@@ -17,7 +17,6 @@ import useStore from '@/utils/zustand'
 export default function SettingsScreen() {
   const setAppLang = useStore(state => state.setAppLang)
   const setTheme = useStore(state => state.setTheme)
-  const appLang = useStore(state => state.appLang)
   const theme = useStore(state => state.theme)
 
   const {

@@ -22,32 +22,45 @@ export default function StoryViewer({
   request,
   index,
 }: {
-  setShowStory: React.Dispatch<React.SetStateAction<boolean>>
-  request?: string
-  index?: number
+  setShowStory: React.Dispatch<React.SetStateAction<boolean>> // for unmounting
+  request?: string // present only if inside StorySetup
+  index?: number // present only if inside StoryList
 }) {
   const appLang = useStore(state => state.appLang)
+  const theme = useStore(state => state.theme)
+  const fontSize = useStore(state => state.fontSize)
+  const setFontSize = useStore(state => state.setFontSize)
   const [shouldTranslate, setShouldTranslate] = useState(false)
-  const { res, setRes, fetchData, error } = useFetchText(
+  const [sliderValue, setSliderValue] = useState(fontSize)
+  const [sentence, setSentence] = useState('')
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null) // index of the selected sentence
+
+  const { response, setResponse, fetchData, error } = useFetchText(
     appLang as homeLanguages,
-  )
+  ) //used when inside StorySetup
+
+  const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null)
+  const storyExists = response || index !== undefined
 
   useEffect(() => {
+    //if inside StorySetup - perform an API call
     if (request) {
-      const req: request = JSON.parse(request as string)
-      fetchData(req)
+      fetchData(JSON.parse(request as string))
       return
     }
 
+    //if inside StoryList - retrieve from the storage
     ;(async () => {
       const lastTexts: storedText[] = await getValue(STORED_TEXTS_STORAGE_KEY)
-      setRes(lastTexts[index as number])
+      setResponse(lastTexts[index as number])
     })()
   }, [])
 
-  const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null)
-  const [sentence, setSentence] = useState('')
-  const [selectedIndex, setSelectedIndex] = useState<number | null>(null) // index of the selected sentence
+  useEffect(() => {
+    ;(async () => {
+      await setValue(FONT_SIZE_STORAGE_KEY, fontSize)
+    })()
+  }, [fontSize])
 
   function handleSentencePress(sentence: string, i: number) {
     setSentence(sentence)
@@ -58,18 +71,6 @@ export default function StoryViewer({
   function handleClose() {
     setSelectedIndex(null)
   }
-
-  const theme = useStore(state => state.theme)
-  const fontSize = useStore(state => state.fontSize)
-  const setFontSize = useStore(state => state.setFontSize)
-
-  useEffect(() => {
-    ;(async () => {
-      await setValue(FONT_SIZE_STORAGE_KEY, fontSize)
-    })()
-  }, [fontSize])
-
-  const [sliderValue, setSliderValue] = useState(fontSize)
 
   return (
     <React.Fragment>
@@ -82,16 +83,16 @@ export default function StoryViewer({
           minHeight: '100%',
         }}
       >
-        {(res || index !== undefined) && (
+        {storyExists && (
           <View style={{ alignItems: 'center' }}>
             <Header
-              res={res}
+              response={response}
               sliderValue={sliderValue}
               setFontSize={setFontSize}
             />
 
             <Story
-              res={res}
+              response={response}
               fontSize={fontSize}
               shouldTranslate={shouldTranslate}
               selectedIndex={selectedIndex}
@@ -100,7 +101,8 @@ export default function StoryViewer({
           </View>
         )}
 
-        {!(res || index !== undefined) && !error && (
+        {!storyExists && !error && (
+          // waiting screen displayed while the story is still being generated
           <View style={styles.waitingView}>
             <StyledText type="title" style={{ padding: 20, width: '100%' }}>
               {translations[appLang].waitingText}
@@ -125,7 +127,7 @@ export default function StoryViewer({
         )}
 
         <View style={styles.bottomButtonsView}>
-          {(res || index !== undefined) && (
+          {storyExists && (
             <Button
               text={
                 shouldTranslate
@@ -136,6 +138,7 @@ export default function StoryViewer({
             />
           )}
 
+          {/* closing button is always present */}
           <Button
             type="secondary"
             text={translations[appLang].close}

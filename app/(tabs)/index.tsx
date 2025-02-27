@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
 
 import StorySetup from '@/components/StorySetup/StorySetup'
@@ -10,10 +10,6 @@ import { PortalHost } from '@gorhom/portal'
 export default function HomeScreen() {
   const [showStory, setShowStory] = useState(false)
   const [request, setRequest] = useState('')
-
-  // useEffect(() => {
-  //   if (request) setShowStory(true)
-  // }, [request])
 
   const theme = useStore(state => state.theme)
 

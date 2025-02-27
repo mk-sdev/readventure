@@ -8,23 +8,16 @@ import useStore from '@/utils/zustand'
 
 export default function LastTextsScreen() {
   const [showStory, setShowStory] = useState(false)
-  const [index, setIndex] = useState(0)
-  const appLang = useStore(state => state.appLang)
+  const [index, setIndex] = useState(0) // index of a story from the list
   const theme = useStore(state => state.theme)
   return (
     <View
       style={[styles.container, { backgroundColor: Colors[theme].background }]}
     >
       {!showStory ? (
-        <StoryList
-          setIndex={setIndex}
-          setShowStory={setShowStory}
-        ></StoryList>
+        <StoryList setIndex={setIndex} setShowStory={setShowStory}></StoryList>
       ) : (
-        <StoryViewer
-          setShowStory={setShowStory}
-          index={index}
-        ></StoryViewer>
+        <StoryViewer setShowStory={setShowStory} index={index}></StoryViewer>
       )}
     </View>
   )
@@ -34,7 +27,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-    //height: '100%',
-    // justifyContent: 'center',
   },
 })

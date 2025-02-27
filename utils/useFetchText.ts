@@ -14,8 +14,8 @@ import {
 import { getValue, setValue } from './async-storage'
 
 export default function useFetchText(appLang: homeLanguages) {
-  const [res, setRes] = useState<response | storedText | null>(null)
-  const [error, setError] = useState<string | null>(null) 
+  const [response, setResponse] = useState<response | storedText | null>(null)
+  const [error, setError] = useState(false)
 
   const fetchData = async (reqData: request) => {
     try {
@@ -28,8 +28,7 @@ export default function useFetchText(appLang: homeLanguages) {
         },
       })
       console.log(response.data)
-      setRes(response.data)
-      setError(null) // Reset błędu, gdy dane zostały pobrane poprawnie
+      setResponse(response.data)
 
       const id = JSON.stringify(Math.random())
       const text: string = response.data.text
@@ -53,9 +52,9 @@ export default function useFetchText(appLang: homeLanguages) {
 
       await setValue(STORED_TEXTS_STORAGE_KEY, lastTexts)
     } catch (error) {
-      console.error('Błąd podczas pobierania danych:', error)
-      setError('Wystąpił problem z połączeniem. Spróbuj ponownie później.')
+      console.error('Error while fetching data:', error)
+      setError(true)
     }
   }
-  return { res, setRes, fetchData, error }
+  return { response, setResponse, fetchData, error }
 }

@@ -21,6 +21,7 @@ export default function ForeignLanguages({
   const appLang = useStore(state => state.appLang)
   const theme = useStore(state => state.theme)
 
+  // updates async storage
   async function handleSelectForeignLanguages(lang: foreignLanguages) {
     let interestLanguages = await getValue(FAV_LANGUAGES_STORAGE_KEY)
     interestLanguages ||= []
@@ -37,7 +38,7 @@ export default function ForeignLanguages({
   return (
     <>
       <Text type="title">{translations[appLang].chooseForeignLanguage}</Text>
-
+      // todo: change to other data structure
       {Object.keys(translations[appLang].foreignLanguages).map(key => {
         const langCode = key as foreignLanguages
         let langText: string =

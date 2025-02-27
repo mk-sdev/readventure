@@ -8,13 +8,13 @@ import useStore from '@/utils/zustand'
 export default function Story({
   shouldTranslate,
   fontSize,
-  res,
+  response,
   selectedIndex,
   handleSentencePress,
 }: {
   shouldTranslate: boolean
   fontSize: number
-  res: response | null
+  response: response | null
   selectedIndex: number | null
   handleSentencePress: (a: string, i: number) => void
 }) {
@@ -24,11 +24,11 @@ export default function Story({
     <>
       {shouldTranslate ? (
         <Text style={[styles.text, { fontSize, color: Colors[theme].text }]}>
-          {res?.translation}
+          {response?.translation}
         </Text>
       ) : (
         <Text style={[styles.text, { color: Colors[theme].text }]}>
-          {res?.text.split('. ').map((sentence, i, arr) => (
+          {response?.text.split('. ').map((sentence, i, arr) => (
             <Text
               key={i}
               style={{
@@ -37,7 +37,7 @@ export default function Story({
                   selectedIndex === i ? Colors[theme].button : 'transparent',
               }}
               onPress={() =>
-                handleSentencePress(res?.translation.split('.')[i], i)
+                handleSentencePress(response?.translation.split('.')[i], i)
               }
             >
               {sentence}

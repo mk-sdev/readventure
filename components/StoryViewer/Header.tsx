@@ -11,11 +11,11 @@ import { returnFlag } from '@/utils/functions'
 import useStore from '@/utils/zustand'
 
 export default function Header({
-  res,
+  response,
   sliderValue,
   setFontSize,
 }: {
-  res: response | null
+  response: response | null
   sliderValue: number
   setFontSize: Function
 }) {
@@ -24,7 +24,7 @@ export default function Header({
   const [showCopyText, setShowCopyText] = useState<unknown>(true)
 
   const copyToClipboard = async () => {
-    await Clipboard.setStringAsync(res?.text as string)
+    await Clipboard.setStringAsync(response?.text as string)
     setShowCopyText(false)
     setTimeout(() => {
       setShowCopyText(true)
@@ -40,7 +40,7 @@ export default function Header({
           gap: 10,
         }}
       >
-        {returnFlag(res?.lang as homeLanguages)}
+        {returnFlag(response?.lang as homeLanguages)}
         <Text
           //@ts-ignore
           style={{
@@ -49,10 +49,10 @@ export default function Header({
             lineHeight: '100%',
           }}
         >
-          {res?.level}
+          {response?.level}
         </Text>
       </View>
-      {res && (
+      {response && (
         <Slider
           step={1}
           style={{ flexBasis: 175 }}

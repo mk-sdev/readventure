@@ -6,7 +6,12 @@ import { Alert } from 'react-native'
 import Snackbar from '@/components/Snackbar'
 import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
-import { foreignLanguages, levels, request } from '@/constants/Types'
+import {
+  foreignLanguages,
+  languageItem,
+  levels,
+  request,
+} from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 import useStoredData from '@/utils/useStoredData'
 import useStore from '@/utils/zustand'
@@ -26,60 +31,18 @@ export default function StorySetup({
 }) {
   const appLang = useStore(state => state.appLang)
   const [description, setDescription] = useState('')
-  const [dropDownValue, setDropDownValue] = useState<foreignLanguages | null>(
-    null,
-  )
+  const [topLanguage, setTopLanguage] = useState<foreignLanguages | null>(null) // a language that appears on the language picker button at first
   const { loadFavLangs, favLangs } = useStoredData()
   const [advancementLevel, setAdvancementLevel] = useState<levels>('A1')
   const levels: levels[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const
 
   const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null)
-  const [dropDownItems, setDropDownItems] = useState<
-    { label: string; value: foreignLanguages; isFav: boolean }[]
-  >([])
+  const [languageItems, setLanguageItems] = useState<languageItem[]>([])
 
   const characterLimit = 150
 
-  const [shake, setShake] = useState(false)
-  const [isConnected, setIsConnected] = useState(true)
-
-  async function handleSubmit() {
-    if (!isConnected) {
-      setShake(true)
-      setTimeout(() => setShake(false), 500)
-      return
-    }
-
-    if (description.length > characterLimit) {
-      Alert.alert(translations[appLang].submitAlert)
-      return
-    }
-    const request: request = {
-      description,
-      lang: dropDownValue as foreignLanguages,
-      homeLang: appLang,
-      level: advancementLevel,
-    }
-    setRequest(JSON.stringify(request))
-    
-    let storedLevels: Record<string, levels> = await getValue(
-      ADVANCEMENT_LEVELS_STORAGE_KEY,
-    )
-    if (!storedLevels) storedLevels = {}
-    storedLevels[dropDownValue as string] = advancementLevel
-    setValue(ADVANCEMENT_LEVELS_STORAGE_KEY, storedLevels)
-    
-    setShowStory(true) 
-  }
-
-  useEffect(() => {
-    ;(async () => {
-      let storedLevels: Record<string, levels> = await getValue(
-        ADVANCEMENT_LEVELS_STORAGE_KEY,
-      )
-      setAdvancementLevel(storedLevels?.[dropDownValue as string] ?? 'A1')
-    })()
-  }, [dropDownValue])
+  const [shake, setShake] = useState(false) // whether to shake the "no internet" snackbar or not
+  const [isConnected, setIsConnected] = useState(true) // whether is the Internet connection or not
 
   useFocusEffect(
     useCallback(() => {
@@ -88,6 +51,25 @@ export default function StorySetup({
   )
 
   useEffect(() => {
+    const unsubscribe = NetInfo.addEventListener(state => {
+      //@ts-ignore
+      setIsConnected(state.isConnected)
+    })
+    return () => unsubscribe()
+  }, [])
+
+  useEffect(() => {
+    // if the user chooses another language, its remembered advancement level is being set to the state
+    ;(async () => {
+      let storedLevels: Record<string, levels> = await getValue(
+        ADVANCEMENT_LEVELS_STORAGE_KEY,
+      )
+      setAdvancementLevel(storedLevels?.[topLanguage as string] ?? 'A1')
+    })()
+  }, [topLanguage])
+
+  useEffect(() => {
+    // setting the languageItems for the bottom shit in a correct order (alphabetic, favourite first)
     let newItems = Object.entries(translations[appLang].foreignLanguages).map(
       ([key, value]) => ({
         label: value,
@@ -100,17 +82,43 @@ export default function StorySetup({
       ...newItems.filter(item => favLangs.includes(item.value)),
       ...newItems.filter(item => !favLangs.includes(item.value)),
     ]
-    setDropDownItems(newItems)
-    setDropDownValue(newItems[0]?.value || dropDownValue)
+    setLanguageItems(newItems)
+    setTopLanguage(newItems[0]?.value || topLanguage)
   }, [favLangs, appLang])
 
-  useEffect(() => {
-    const unsubscribe = NetInfo.addEventListener(state => {
-      //@ts-ignore
-      setIsConnected(state.isConnected)
-    })
-    return () => unsubscribe()
-  }, [])
+  async function handleSubmit() {
+    // must be connected to the Internet
+    if (!isConnected) {
+      setShake(true)
+      setTimeout(() => setShake(false), 500)
+      return
+    }
+
+    // must not exceed the character limit of the description
+    if (description.length > characterLimit) {
+      Alert.alert(translations[appLang].submitAlert)
+      return
+    }
+
+    // creating the request object for POST operation
+    const request: request = {
+      description,
+      lang: topLanguage as foreignLanguages,
+      homeLang: appLang,
+      level: advancementLevel,
+    }
+    setRequest(JSON.stringify(request))
+
+    // remember chosen advancement level of that language - so that user doesn't have to pick it each time manually
+    let storedLevels: Record<string, levels> = await getValue(
+      ADVANCEMENT_LEVELS_STORAGE_KEY,
+    )
+    if (!storedLevels) storedLevels = {}
+    storedLevels[topLanguage as string] = advancementLevel
+    setValue(ADVANCEMENT_LEVELS_STORAGE_KEY, storedLevels)
+
+    setShowStory(true) // show the StoryViewer component
+  }
 
   return (
     <React.Fragment>
@@ -123,8 +131,8 @@ export default function StorySetup({
       />
 
       <LanguageButton
-        dropDownValue={dropDownValue}
-        dropDownItems={dropDownItems}
+        topLanguage={topLanguage}
+        languageItems={languageItems}
         onPress={() => bottomSheetRef.current?.open()}
       />
 
@@ -138,9 +146,9 @@ export default function StorySetup({
 
       <LanguagePickerBottomSheet
         ref={bottomSheetRef}
-        languages={dropDownItems}
-        selectedLanguage={dropDownValue}
-        onSelect={setDropDownValue}
+        languages={languageItems}
+        selectedLanguage={topLanguage}
+        onSelect={setTopLanguage}
       />
     </React.Fragment>
   )

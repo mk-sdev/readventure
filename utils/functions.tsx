@@ -1,10 +1,10 @@
 import { Image, StyleSheet } from 'react-native'
 
 import Colors from '@/constants/Colors'
-import { foreignLanguages } from '@/constants/Types'
+import { foreignLanguage } from '@/constants/Types'
 
 // https://flagpedia.net/download/icons
-export function returnFlag(lang: foreignLanguages) {
+export function returnFlag(lang: foreignLanguage) {
   switch (lang) {
     case 'en':
       return (

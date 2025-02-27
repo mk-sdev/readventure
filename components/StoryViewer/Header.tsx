@@ -6,7 +6,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native'
 
 import Colors from '@/constants/Colors'
 import { translations } from '@/constants/Translations'
-import { homeLanguages, response } from '@/constants/Types'
+import { homeLanguage, response } from '@/constants/Types'
 import { returnFlag } from '@/utils/functions'
 import useStore from '@/utils/zustand'
 
@@ -40,7 +40,7 @@ export default function Header({
           gap: 10,
         }}
       >
-        {returnFlag(response?.lang as homeLanguages)}
+        {returnFlag(response?.lang as homeLanguage)}
         <Text
           //@ts-ignore
           style={{

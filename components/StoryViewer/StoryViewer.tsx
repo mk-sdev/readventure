@@ -7,7 +7,7 @@ import {
   STORED_TEXTS_STORAGE_KEY,
 } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
-import { homeLanguages, request, storedText } from '@/constants/Types'
+import { homeLanguage, request, storedText } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 import useFetchText from '@/utils/useFetchText'
 import useStore from '@/utils/zustand'
@@ -36,7 +36,7 @@ export default function StoryViewer({
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null) // index of the selected sentence
 
   const { response, setResponse, fetchData, error } = useFetchText(
-    appLang as homeLanguages,
+    appLang as homeLanguage,
   ) //used when inside StorySetup
 
   const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null)

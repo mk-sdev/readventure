@@ -3,9 +3,9 @@ import { useState } from 'react'
 
 import { STORED_TEXTS_STORAGE_KEY } from '@/constants/StorageKeys'
 import {
-  foreignLanguages,
-  homeLanguages,
-  levels,
+  foreignLanguage,
+  homeLanguage,
+  level,
   request,
   response,
   storedText,
@@ -13,7 +13,7 @@ import {
 
 import { getValue, setValue } from './async-storage'
 
-export default function useFetchText(appLang: homeLanguages) {
+export default function useFetchText(appLang: homeLanguage) {
   const [response, setResponse] = useState<response | storedText | null>(null)
   const [error, setError] = useState(false)
 
@@ -33,9 +33,9 @@ export default function useFetchText(appLang: homeLanguages) {
       const id = JSON.stringify(Math.random())
       const text: string = response.data.text
       const translation: string = response.data.translation
-      const lang: foreignLanguages = reqData.lang
-      const level: levels = reqData.level
-      const transLang: homeLanguages = appLang as homeLanguages
+      const lang: foreignLanguage = reqData.lang
+      const level: level = reqData.level
+      const transLang: homeLanguage = appLang as homeLanguage
       const newText: storedText = {
         id,
         text,

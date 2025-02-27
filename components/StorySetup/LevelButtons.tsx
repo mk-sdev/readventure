@@ -3,7 +3,7 @@ import { Pressable, StyleSheet, View } from 'react-native'
 
 import Text from '@/components/Text'
 import { translations } from '@/constants/Translations'
-import { levels } from '@/constants/Types'
+import { level } from '@/constants/Types'
 import { setButtonBg } from '@/utils/functions'
 import useStore from '@/utils/zustand'
 
@@ -12,9 +12,9 @@ export default function LevelButtons({
   advancementLevel,
   setAdvancementLevel,
 }: {
-  levels: levels[]
-  advancementLevel: levels
-  setAdvancementLevel: React.Dispatch<React.SetStateAction<levels>>
+  levels: readonly level[]
+  advancementLevel: level
+  setAdvancementLevel: React.Dispatch<React.SetStateAction<level>>
 }) {
   const appLang = useStore(state => state.appLang)
   const theme = useStore(state => state.theme)
@@ -55,15 +55,12 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   option: {
-    // padding: 10,
     marginVertical: 5,
     borderRadius: 10,
-    // backgroundColor: '#ddd',
     width: 40,
     height: 40,
     alignItems: 'center',
     textAlign: 'center',
-    // flexDirection: 'row',
     justifyContent: 'center',
     gap: 10,
   },

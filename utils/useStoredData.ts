@@ -5,17 +5,17 @@ import {
   FAV_LANGUAGES_STORAGE_KEY,
   HOME_LANGUAGE_STORAGE_KEY,
 } from '@/constants/StorageKeys'
-import { foreignLanguages, homeLanguages } from '@/constants/Types'
+import { foreignLanguage, homeLanguage } from '@/constants/Types'
 
 import { getValue } from './async-storage'
 
 export default function useStoredData() {
-  const [favLangs, setFavLangs] = useState<foreignLanguages[]>([])
-  const [localAppLang, setLocalAppLang] = useState<homeLanguages>('en')
+  const [favLangs, setFavLangs] = useState<foreignLanguage[]>([])
+  const [localAppLang, setLocalAppLang] = useState<homeLanguage>('en')
   const [localTheme, setLocalTheme] = useState<'dark' | 'light'>('light')
 
   const loadFavLangs = async () => {
-    const storedForeignLangs: foreignLanguages[] = await getValue(
+    const storedForeignLangs: foreignLanguage[] = await getValue(
       FAV_LANGUAGES_STORAGE_KEY,
     )
     setFavLangs(storedForeignLangs ? storedForeignLangs : [])

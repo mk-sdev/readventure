@@ -7,8 +7,9 @@ import Snackbar from '@/components/Snackbar'
 import { ADVANCEMENT_LEVELS_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
 import {
-  foreignLanguages,
+  foreignLanguage,
   languageItem,
+  level,
   levels,
   request,
 } from '@/constants/Types'
@@ -31,10 +32,9 @@ export default function StorySetup({
 }) {
   const appLang = useStore(state => state.appLang)
   const [description, setDescription] = useState('')
-  const [topLanguage, setTopLanguage] = useState<foreignLanguages | null>(null) // a language that appears on the language picker button at first
+  const [topLanguage, setTopLanguage] = useState<foreignLanguage | null>(null) // a language that appears on the language picker button at first
   const { loadFavLangs, favLangs } = useStoredData()
-  const [advancementLevel, setAdvancementLevel] = useState<levels>('A1')
-  const levels: levels[] = ['A1', 'A2', 'B1', 'B2', 'C1', 'C2'] as const
+  const [advancementLevel, setAdvancementLevel] = useState<level>('A1')
 
   const bottomSheetRef = useRef<{ open: () => void; close: () => void }>(null)
   const [languageItems, setLanguageItems] = useState<languageItem[]>([])
@@ -61,7 +61,7 @@ export default function StorySetup({
   useEffect(() => {
     // if the user chooses another language, its remembered advancement level is being set to the state
     ;(async () => {
-      let storedLevels: Record<string, levels> = await getValue(
+      let storedLevels: Record<string, level> = await getValue(
         ADVANCEMENT_LEVELS_STORAGE_KEY,
       )
       setAdvancementLevel(storedLevels?.[topLanguage as string] ?? 'A1')
@@ -73,8 +73,8 @@ export default function StorySetup({
     let newItems = Object.entries(translations[appLang].foreignLanguages).map(
       ([key, value]) => ({
         label: value,
-        value: key as foreignLanguages,
-        isFav: favLangs && favLangs.includes(key as foreignLanguages),
+        value: key as foreignLanguage,
+        isFav: favLangs && favLangs.includes(key as foreignLanguage),
       }),
     )
 
@@ -103,14 +103,14 @@ export default function StorySetup({
     // creating the request object for POST operation
     const request: request = {
       description,
-      lang: topLanguage as foreignLanguages,
+      lang: topLanguage as foreignLanguage,
       homeLang: appLang,
       level: advancementLevel,
     }
     setRequest(JSON.stringify(request))
 
     // remember chosen advancement level of that language - so that user doesn't have to pick it each time manually
-    let storedLevels: Record<string, levels> = await getValue(
+    let storedLevels: Record<string, level> = await getValue(
       ADVANCEMENT_LEVELS_STORAGE_KEY,
     )
     if (!storedLevels) storedLevels = {}

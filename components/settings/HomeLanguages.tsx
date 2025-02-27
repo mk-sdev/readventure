@@ -3,7 +3,7 @@ import { Pressable, View } from 'react-native'
 
 import Text from '@/components/Text'
 import { translations } from '@/constants/Translations'
-import { homeLanguages } from '@/constants/Types'
+import { homeLanguage, homeLanguages } from '@/constants/Types'
 import { returnFlag, setButtonBg } from '@/utils/functions'
 import useStore from '@/utils/zustand'
 
@@ -20,8 +20,7 @@ export default function HomeLanguages({
     <>
       <Text type="title">{translations[appLang].chooseHomeLanguage}</Text>
       <Text type="small">{translations[appLang].homeLanguageInfo}</Text>
-      {/* todo: change to other data structure */}
-      {(['en', 'pl'] as homeLanguages[]).map(lang => (
+      {homeLanguages.map(lang => (
         <HomeOption
           key={lang}
           lang={lang}
@@ -40,7 +39,7 @@ function HomeOption({
   isSelected,
   theme,
 }: {
-  lang: homeLanguages
+  lang: homeLanguage
   onPress: () => void
   isSelected: boolean
   theme: 'light' | 'dark'

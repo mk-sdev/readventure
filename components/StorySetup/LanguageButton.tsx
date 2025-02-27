@@ -4,12 +4,12 @@ import { Pressable, StyleSheet } from 'react-native'
 import Text from '@/components/Text'
 import Colors from '@/constants/Colors'
 import { translations } from '@/constants/Translations'
-import { foreignLanguages, languageItem } from '@/constants/Types'
+import { foreignLanguage, languageItem } from '@/constants/Types'
 import { returnFlag } from '@/utils/functions'
 import useStore from '@/utils/zustand'
 
 type LanguageButtonProps = {
-  topLanguage: foreignLanguages | null
+  topLanguage: foreignLanguage | null
   languageItems: languageItem[]
   onPress: () => void
 }

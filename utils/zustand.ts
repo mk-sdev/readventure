@@ -1,12 +1,12 @@
 import { create } from 'zustand'
 
-import { homeLanguages } from '@/constants/Types'
+import { homeLanguage } from '@/constants/Types'
 
 interface StoreState {
-  appLang: homeLanguages
+  appLang: homeLanguage
   theme: 'dark' | 'light'
   fontSize: number
-  setAppLang: (newLang: homeLanguages) => void
+  setAppLang: (newLang: homeLanguage) => void
   setTheme: (newTheme: 'dark' | 'light') => void
   setFontSize: (newSize: number) => void
 }

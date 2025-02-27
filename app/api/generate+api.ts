@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-import { foreignLanguages, homeLanguages, levels } from '@/constants/Types'
+import { foreignLanguage, homeLanguage, level } from '@/constants/Types'
 import { transformGeneratedText } from '@/utils/functions'
 
 export async function POST(request: Request) {
@@ -33,7 +33,7 @@ const headers = {
   Authorization: `Bearer ${apiKey}`,
 }
 
-function returnFullLanguageName(lang: homeLanguages | foreignLanguages) {
+function returnFullLanguageName(lang: homeLanguage | foreignLanguage) {
   switch (lang) {
     case 'de':
       return 'German'
@@ -50,9 +50,9 @@ function returnFullLanguageName(lang: homeLanguages | foreignLanguages) {
 
 async function generateText(
   description: string,
-  lang: foreignLanguages,
-  homeLang: homeLanguages,
-  level: levels,
+  lang: foreignLanguage,
+  homeLang: homeLanguage,
+  level: level,
 ): Promise<string> {
   const content = description
     ? `Write a short story of approximately one hundred words on the given topic: ${description} in ${returnFullLanguageName(lang)} at the ${level} level. Then, at the end, place the characters "###". After that, provide a translation into ${returnFullLanguageName(homeLang)}, maintaining the sentence structure.`

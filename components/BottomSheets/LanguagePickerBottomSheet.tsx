@@ -1,7 +1,7 @@
 import AntDesign from '@expo/vector-icons/AntDesign'
 import BottomSheet, {
   BottomSheetBackdrop,
-  BottomSheetScrollView
+  BottomSheetScrollView,
 } from '@gorhom/bottom-sheet'
 import { Portal } from '@gorhom/portal'
 import React, {
@@ -15,14 +15,14 @@ import { FlatList, Pressable, StyleSheet } from 'react-native'
 
 import Text from '@/components/Text'
 import Colors from '@/constants/Colors'
-import { foreignLanguages } from '@/constants/Types'
+import { foreignLanguage, languageItem } from '@/constants/Types'
 import { returnFlag } from '@/utils/functions'
 import useStore from '@/utils/zustand'
 
 type Props = {
-  languages: { label: string; value: foreignLanguages; isFav: boolean }[]
-  selectedLanguage: foreignLanguages | null
-  onSelect: (language: foreignLanguages) => void
+  languages: languageItem[]
+  selectedLanguage: foreignLanguage | null
+  onSelect: (language: foreignLanguage) => void
 }
 
 export const LanguagePickerBottomSheet = forwardRef<

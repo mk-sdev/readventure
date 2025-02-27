@@ -4,7 +4,7 @@ import { Pressable, View } from 'react-native'
 import Text from '@/components/Text'
 import { FAV_LANGUAGES_STORAGE_KEY } from '@/constants/StorageKeys'
 import { translations } from '@/constants/Translations'
-import { foreignLanguages } from '@/constants/Types'
+import { foreignLanguage, foreignLanguages } from '@/constants/Types'
 import { getValue, setValue } from '@/utils/async-storage'
 import { returnFlag, setButtonBg } from '@/utils/functions'
 import useStore from '@/utils/zustand'
@@ -15,19 +15,19 @@ export default function ForeignLanguages({
   favLangs,
   setFavLangs,
 }: {
-  favLangs: foreignLanguages[]
+  favLangs: foreignLanguage[]
   setFavLangs: Function
 }) {
   const appLang = useStore(state => state.appLang)
   const theme = useStore(state => state.theme)
 
   // updates async storage
-  async function handleSelectForeignLanguages(lang: foreignLanguages) {
+  async function handleSelectForeignLanguages(lang: foreignLanguage) {
     let interestLanguages = await getValue(FAV_LANGUAGES_STORAGE_KEY)
     interestLanguages ||= []
     if (interestLanguages.includes(lang)) {
       interestLanguages = interestLanguages.filter(
-        (item: foreignLanguages) => item !== lang,
+        (item: foreignLanguage) => item !== lang,
       )
     } else {
       interestLanguages.push(lang)
@@ -38,9 +38,8 @@ export default function ForeignLanguages({
   return (
     <>
       <Text type="title">{translations[appLang].chooseForeignLanguage}</Text>
-      // todo: change to other data structure
-      {Object.keys(translations[appLang].foreignLanguages).map(key => {
-        const langCode = key as foreignLanguages
+      {foreignLanguages.filter(lang=>lang!==appLang).map(key => {
+        const langCode = key as foreignLanguage
         let langText: string =
           // @ts-ignore
           translations[appLang].foreignLanguages[langCode]
@@ -66,9 +65,9 @@ function ForeignOption({
   text,
   theme,
 }: {
-  lang: foreignLanguages
+  lang: foreignLanguage
   onPress: () => void
-  selectedForeignLanguages: foreignLanguages[]
+  selectedForeignLanguages: foreignLanguage[]
   text: string
   theme: 'light' | 'dark'
 }) {

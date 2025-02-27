@@ -1,7 +1,8 @@
 import { Image, StyleSheet } from 'react-native'
 
 import Colors from '@/constants/Colors'
-import { foreignLanguage } from '@/constants/Types'
+import { foreignLanguage, homeLanguage } from '@/constants/Types'
+import { translations } from '@/constants/Translations'
 
 // https://flagpedia.net/download/icons
 export function returnFlag(lang: foreignLanguage) {
@@ -92,4 +93,11 @@ export function transformGeneratedText(
     .trim()
 
   return [trimmedText, trimmedTranslation]
+}
+
+export function returnFullLanguageName(lang: homeLanguage | foreignLanguage) {
+  const languageEntry = Object.entries(translations.en.foreignLanguages).find(
+    ([key]) => key === lang,
+  )
+  return languageEntry ? languageEntry[1] : 'English'
 }

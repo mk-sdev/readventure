@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 import { foreignLanguage, homeLanguage, level } from '@/constants/Types'
+import { returnFullLanguageName } from '@/utils/functions'
 import { transformGeneratedText } from '@/utils/functions'
 
 export async function POST(request: Request) {
@@ -31,21 +32,6 @@ const apiKey = process.env.OPENAI_API_KEY
 const headers = {
   'Content-Type': 'application/json',
   Authorization: `Bearer ${apiKey}`,
-}
-
-function returnFullLanguageName(lang: homeLanguage | foreignLanguage) {
-  switch (lang) {
-    case 'de':
-      return 'German'
-    case 'en':
-      return 'English'
-    case 'es':
-      return 'Spanish'
-    case 'it':
-      return 'Italian'
-    case 'pl':
-      return 'Polish'
-  }
 }
 
 async function generateText(

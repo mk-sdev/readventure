@@ -1,7 +1,7 @@
 export const homeLanguages = ['en', 'pl'] as const
 export type homeLanguage = (typeof homeLanguages)[number]
 
-// when adding a new language, only this place, translations object and api switch must be updated
+// when adding a new language, only this place and translations object must be updated
 export const foreignLanguages = ['en', 'pl', 'es', 'it', 'de'] as const
 export type foreignLanguage = (typeof foreignLanguages)[number]
 

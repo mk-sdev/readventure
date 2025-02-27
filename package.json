@@ -8,7 +8,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "test:1": "jest -i tests/transformGeneratedText.test.ts -t"
+    "test:f": "jest -i tests/functions.test.ts -t"
   },
   "jest": {
     "preset": "jest-expo"

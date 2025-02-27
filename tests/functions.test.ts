@@ -1,4 +1,7 @@
-import { transformGeneratedText } from '@/utils/functions'
+import {
+  returnFullLanguageName,
+  transformGeneratedText,
+} from '@/utils/functions'
 
 describe('transformGeneratedText', () => {
   test('normal case', () => {
@@ -25,5 +28,14 @@ describe('transformGeneratedText', () => {
     const generatedText = 'Hello, World. ### translation: Witaj świecie.     '
     const expectedOutput = 'Witaj świecie.'
     expect(transformGeneratedText(generatedText)[1]).toBe(expectedOutput)
+  })
+})
+
+describe('returnFullLanguageName', () => {
+  it('should return Polish', () => {
+    expect(returnFullLanguageName('pl')).toBe('Polish')
+  })
+  it('should return English', () => {
+    expect(returnFullLanguageName('en')).toBe('English')
   })
 })
